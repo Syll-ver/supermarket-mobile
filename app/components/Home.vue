@@ -48,6 +48,14 @@
                             <Label :text="del.company_address"></Label>
                           </StackLayout>
                         </GridLayout>
+
+                          <!-- <ListView for="item in del.items">
+                             <v-template>
+                               <Label :text="item.barcode"></Label>
+                               <Label :text="item.product_description"></Label>
+                             </v-template>
+                          </ListView> -->
+
                       </GridLayout>
 
 

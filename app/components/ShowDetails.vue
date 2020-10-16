@@ -30,26 +30,39 @@
                 
             </StackLayout> -->
                 
-                <ScrollView>
+                <!-- <ScrollView> -->
                     <StackLayout>
+                        <!-- working -->
                         <Label :text="$props.dr_no"></Label>
+                        {{ $props.dr_no }}
                         <Label :text="$props.company_name"></Label>
                         <Label :text="$props.company_address"></Label>
-                        <Label :text="$props.items.dtransaction_items_code"></Label>
+                        <!-- <Label :text="$props.items[0].product_description"></Label> -->
+                        <Label text="Items: "></Label>
+                        <ListView row="1" for="item in $props.items">
+                          
+                          <v-template>
+                            <!-- {{item}} -->
+                           
+                              <StackLayout row="1" class="content">
+                                <Label :text="item.barcode"></Label>
+                                <Label :text="item.product_description"></Label>
+                                <Label :text="item.qty"></Label>
+                                <Label :text="item.unit_cost"></Label>
+                              </StackLayout>
+                            
+                          </v-template>
+                        </ListView>
+
                         <!-- <GridLayout for="item in $props.items">
                             <Label :text="item.barcode"></Label>
                         </GridLayout> -->
 
-                        <GridLayout>
-                            {{$props.items.dtransaction_items_code}}
-                            <!-- <Label :text="item.barcode"></Label> -->
-                        </GridLayout>
+                        
 
-                        <!-- <GridLayout for="item in listOfItems">
-                            <Label :text="item.barcode"></Label>
-                        </GridLayout> -->
+                        
                     </StackLayout>
-                </ScrollView>
+                <!-- </ScrollView> -->
 
                 <!-- <ListView row="1" class="list-group"
                   for="del in delivery" >
@@ -94,6 +107,7 @@
 
   export default {
     props: [
+        // 'details'
         'dr_no',
         'supplier_id',
         'company_name',
@@ -103,7 +117,7 @@
     ],
     data(){
       return {
-        listOfItems: this.items
+        listOfItems: this.$props.items
       }
     },
     mounted() {
