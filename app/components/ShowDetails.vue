@@ -1,6 +1,6 @@
 <template>
     <Page class="page">
-      <ActionBar class="action-bar banner">
+      <ActionBar title="Delivery Transactions Details" class="action-bar banner">
           <!--
           Use the NavigationButton as a side-drawer button in Android
           because ActionItems are shown on the right side of the ActionBar
@@ -30,7 +30,28 @@
                 
             </StackLayout> -->
                 
-                <ListView row="1" class="list-group"
+                <ScrollView>
+                    <StackLayout>
+                        <Label :text="$props.dr_no"></Label>
+                        <Label :text="$props.company_name"></Label>
+                        <Label :text="$props.company_address"></Label>
+                        <Label :text="$props.items.dtransaction_items_code"></Label>
+                        <!-- <GridLayout for="item in $props.items">
+                            <Label :text="item.barcode"></Label>
+                        </GridLayout> -->
+
+                        <GridLayout>
+                            {{$props.items.dtransaction_items_code}}
+                            <!-- <Label :text="item.barcode"></Label> -->
+                        </GridLayout>
+
+                        <!-- <GridLayout for="item in listOfItems">
+                            <Label :text="item.barcode"></Label>
+                        </GridLayout> -->
+                    </StackLayout>
+                </ScrollView>
+
+                <!-- <ListView row="1" class="list-group"
                   for="del in delivery" >
                     <v-template>
                       <GridLayout @tap="show(del)">
@@ -48,7 +69,7 @@
                             <Label :text="del.company_address"></Label>
                           </StackLayout>
                         </GridLayout>
-                      </GridLayout>
+                      </GridLayout> -->
 
 
                       <!-- <GridLayout rows="auto,*,*" columns="*,*,auto"
@@ -58,9 +79,9 @@
                           
                           
                       </GridLayout> -->
-                    </v-template>
+                    <!-- </v-template> -->
 
-                </ListView>
+                <!-- </ListView> -->
 
             </StackLayout>
       </GridLayout>
@@ -72,13 +93,21 @@
   import SelectedPageService from "../shared/selected-page-service";
 
   export default {
+    props: [
+        'dr_no',
+        'supplier_id',
+        'company_name',
+        'company_address',
+        'dtransaction_date',
+        'items'
+    ],
     data(){
       return {
-        delivery: []
+        listOfItems: this.items
       }
     },
     mounted() {
-      SelectedPageService.getInstance().updateSelectedPage("Home");
+      SelectedPageService.getInstance().updateSelectedPage("ShowDetails");
     },
     computed: {
       message() {

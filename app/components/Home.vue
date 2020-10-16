@@ -70,6 +70,7 @@
 <script>
   import * as utils from "~/shared/utils";
   import SelectedPageService from "../shared/selected-page-service";
+  import ShowDetails from "./ShowDetails.vue";
 
   export default {
     data(){
@@ -206,6 +207,19 @@
         args.view = nativeView;
       },
       show(del){
+        this.$navigateTo(ShowDetails, {
+          props: {
+            // details: del
+            dr_no: del.dr_no,
+            supplier_id: del.supplier_id,
+            company_name: del.company_name,
+            company_address: del.company_address,
+            dtransaction_date: del.dtransaction_date,
+            total_cost: del.total_cost,
+            items: del.items
+
+          }
+        })
         console.log("clicked!", del);
       }
       
