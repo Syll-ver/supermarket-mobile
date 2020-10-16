@@ -22,13 +22,6 @@
           <!-- <Label class="page__content-icon fas" text.decode="&#xf015;"/> -->
           <!-- <Label class="page__content-placeholder" :text="message"/> -->
           <StackLayout>
-
-            <!-- <StackLayout for="del in delivery">
-                <v-template>
-                  <Label :text="del.dr_no" textWrap="true" />
-                </v-template>
-                
-            </StackLayout> -->
                 
                 <ListView row="1" class="list-group"
                   for="del in delivery" >
@@ -49,23 +42,8 @@
                           </StackLayout>
                         </GridLayout>
 
-                          <!-- <ListView for="item in del.items">
-                             <v-template>
-                               <Label :text="item.barcode"></Label>
-                               <Label :text="item.product_description"></Label>
-                             </v-template>
-                          </ListView> -->
-
                       </GridLayout>
 
-
-                      <!-- <GridLayout rows="auto,*,*" columns="*,*,auto"
-                        class="list-group">
-                          <Label row="1" col="1" class="text-main" :text="del.company_name" textWrap="true" />
-                          <Label row="2" col="1" class="text-sub" :text="del.dtransaction_date" textWrap="true" />
-                          
-                          
-                      </GridLayout> -->
                     </v-template>
 
                 </ListView>
@@ -199,7 +177,7 @@
       }
     },
     mounted() {
-      SelectedPageService.getInstance().updateSelectedPage("Home");
+      SelectedPageService.getInstance().updateSelectedPage("Delivery");
     },
     computed: {
       message() {

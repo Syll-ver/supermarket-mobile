@@ -221,7 +221,7 @@
       }
     },
     mounted() {
-      SelectedPageService.getInstance().updateSelectedPage("Home");
+      SelectedPageService.getInstance().updateSelectedPage("Sales");
     },
     computed: {
       message() {

@@ -15,22 +15,36 @@
                       android:visibility="collapsed"
                       @tap="onDrawerButtonTap"
                       ios.position="left"/>
-          <Label class="action-bar-title titles" text="Roles"/>
+          <Label class="action-bar-title titles" text="Suppliers"/>
       </ActionBar>
 
       <GridLayout class="page__content">
           <!-- <Label class="page__content-icon fas" text.decode="&#xf015;"/> -->
           <!-- <Label class="page__content-placeholder" :text="message"/> -->
           <StackLayout>
+
+            <!-- <StackLayout for="del in delivery">
+                <v-template>
+                  <Label :text="del.dr_no" textWrap="true" />
+                </v-template>
+                
+            </StackLayout> -->
                 
                 <ListView row="1" class="list-group"
-                  for="role in roles" >
+                  for="user in users" >
                     <v-template>
                       <GridLayout >
                         <GridLayout rows="*,*,*" columns="*,auto">
+                          <!-- <Label horizontalAlignment="right" class="text-sub sub-header">
+                            <FormattedString>
+                              <Span text="₱" />
+                              <Span :text="del.total_cost" />
+                            </FormattedString>
+                          </Label> -->
+
                           <StackLayout row="1" class="content">
-                            <Label class="text-content" :text="'Role ID: '+role.role_id" textWrap="true" ></Label>
-                            <Label class="text-content" :text="'Role Name: '+role.role_name" textWrap="true" ></Label>
+                            <Label class="text-content" :text="user.employee_code + ' ' +user.username" textWrap="true" ></Label>
+                            <Label :text="user.role_name"></Label>
                           </StackLayout>
                         </GridLayout>
 
@@ -44,6 +58,9 @@
                 </ListView>
 
             </StackLayout>
+
+        <!-- <ActivitiIndicator busy="{{ isLoading }}" /> -->
+
       </GridLayout>
     </Page>
 </template>
@@ -55,39 +72,49 @@
   export default {
     data(){
       return {
-        roles: [
-          {
-            roles_code: 11,
+        users: [
+            {
+            users_code: 1,
+            employee_code: 153,
+            username: "Maximus",
+            password: "emp",
             role_id: 1,
             role_name: "admin",
             created_at: "May 02, 2020",
             created_by: 153,
             updated_by: null,
-            updated_at: null
-          },
-          {
-            roles_code: 12,
+            updated_at: null,
+            
+            },
+            {
+            users_code: 2,
+            employee_code: 154,
+            username: "MsCashier",
+            password: "emp",
             role_id: 2,
             role_name: "cashier",
             created_at: "May 02, 2020",
             created_by: 153,
             updated_by: null,
             updated_at: null
-          },
-          {
-            roles_code: 13,
+            },
+            {
+            users_code: 3,
+            employee_code: 155,
+            username: "Custody",
+            password: "emp",
             role_id: 3,
             role_name: "custodian",
             created_at: "May 02, 2020",
             created_by: 153,
             updated_by: null,
             updated_at: null
-          }
+            }
         ],
       }
     },
     mounted() {
-      SelectedPageService.getInstance().updateSelectedPage("Roles");
+      SelectedPageService.getInstance().updateSelectedPage("Users");
     },
     computed: {
       message() {
@@ -98,15 +125,14 @@
       onDrawerButtonTap() {
         utils.showDrawer();
       },
-      methods: {
-        creatingView: function(args) {
-            const nativeView = new android.widget.TextView(args.context);
-            nativeView.setSingleLine(true);
-            nativeView.setEllipsize(android.text.TextUtils.TruncateAt.END);
-            nativeView.setText("Native View - Android");
-            args.view = nativeView;
-        }
-      }
+      creatingView: function(args) {
+        const nativeView = new android.widget.TextView(args.context);
+        nativeView.setSingleLine(true);
+        nativeView.setEllipsize(android.text.TextUtils.TruncateAt.END);
+        nativeView.setText("Native View - Android");
+        args.view = nativeView;
+      },
+      
     }
   };
 </script>

@@ -16,24 +16,31 @@
                 </GridLayout>
 
                 <GridLayout columns="auto, *"
-                            :class="'nt-drawer__list-item' + (selectedPage === 'Browse' ? ' -selected': '')"
-                            @tap="onNavigationItemTap(Browse)">
-                    <Label col="0" text.decode="&#xf1ea;" class="nt-icon far"/>
-                    <Label col="1" text="Browse" class="p-r-10"/>
+                            :class="'nt-drawer__list-item' + (selectedPage === 'Inventory' ? ' -selected': '')"
+                            @tap="onNavigationItemTap(Inventory)">
+                    <Label col="0" text.decode="&#xf015;" class="nt-icon fas"/>
+                    <Label col="1" text="Inventory" class="p-r-10"/>
                 </GridLayout>
 
                 <GridLayout columns="auto, *"
-                            :class="'nt-drawer__list-item' + (selectedPage === 'Search' ? ' -selected': '')"
-                            @tap="onNavigationItemTap(Search)">
-                    <Label col="0" text.decode="&#xf002;" class="nt-icon fas"/>
-                    <Label col="1" text="Search" class="p-r-10"/>
+                            :class="'nt-drawer__list-item' + (selectedPage === 'Suppliers' ? ' -selected': '')"
+                            @tap="onNavigationItemTap(Suppliers)">
+                    <Label col="0" text.decode="&#xf015;" class="nt-icon fas"/>
+                    <Label col="1" text="Suppliers" class="p-r-10"/>
                 </GridLayout>
 
                 <GridLayout columns="auto, *"
-                            :class="'nt-drawer__list-item' + (selectedPage === 'Featured' ? ' -selected': '')"
-                            @tap="onNavigationItemTap(Featured)">
-                    <Label col="0" text.decode="&#xf005;" class="nt-icon fas"/>
-                    <Label col="1" text="Featured" class="p-r-10"/>
+                            :class="'nt-drawer__list-item' + (selectedPage === 'Roles' ? ' -selected': '')"
+                            @tap="onNavigationItemTap(Roles)">
+                    <Label col="0" text.decode="&#xf015;" class="nt-icon fas"/>
+                    <Label col="1" text="Roles" class="p-r-10"/>
+                </GridLayout>
+
+                <GridLayout columns="auto, *"
+                            :class="'nt-drawer__list-item' + (selectedPage === 'Users' ? ' -selected': '')"
+                            @tap="onNavigationItemTap(Users)">
+                    <Label col="0" text.decode="&#xf015;" class="nt-icon fas"/>
+                    <Label col="1" text="Users" class="p-r-10"/>
                 </GridLayout>
 
                 <StackLayout class="hr"/>
@@ -55,11 +62,12 @@
                 <StackLayout class="hr"/>
 
                 <GridLayout columns="auto, *"
-                            :class="'nt-drawer__list-item' + (selectedPage === 'Settings' ? ' -selected': '')"
-                            @tap="onNavigationItemTap(Settings)">
+                            :class="'nt-drawer__list-item' + (selectedPage === 'Logout' ? ' -selected': '')"
+                            @tap="onNavigationItemTap(Logout)">
                     <Label col="0" text.decode="&#xf013;" class="nt-icon fas"/>
-                    <Label col="1" text="Settings" class="p-r-10"/>
+                    <Label col="1" text="Logout" class="p-r-10"/>
                 </GridLayout>
+
             </StackLayout>
         </ScrollView>
     </GridLayout>
@@ -67,12 +75,16 @@
 
 <script>
   import Home from "./Home";
-  import Browse from "./Browse";
+  import Inventory from "./Inventory";
+  import Suppliers from "./Suppliers";
+  import Roles from "./Roles";
+  import Users from "./Users";
   import Featured from "./Featured";
   import Search from "./Search";
   import Settings from "./Settings";
   import Delivery from "./Delivery";
   import Sales from "./Sales";
+  import Logout from "./Logout";
   import * as utils from "~/shared/utils";
   import SelectedPageService from "~/shared/selected-page-service";
 
@@ -84,7 +96,10 @@
     data() {
       return {
         Home: Home,
-        Browse: Browse,
+        Inventory: Inventory,
+        Suppliers: Suppliers,
+        Roles: Roles,
+        Users: Users,
         Featured: Featured,
         Search: Search,
         Settings: Settings,
@@ -95,7 +110,10 @@
     },
     components: {
       Home,
-      Browse,
+      Inventory,
+      Suppliers,
+      Roles,
+      Users,
       Featured,
       Search,
       Settings,

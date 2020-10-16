@@ -1,6 +1,6 @@
 <template>
     <Page class="page">
-      <ActionBar class="action-bar banner">
+      <ActionBar class="action-bar">
           <!--
           Use the NavigationButton as a side-drawer button in Android
           because ActionItems are shown on the right side of the ActionBar
