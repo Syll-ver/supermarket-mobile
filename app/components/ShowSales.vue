@@ -15,34 +15,49 @@
                       android:visibility="collapsed"
                       @tap="onDrawerButtonTap"
                       ios.position="left"/>
-          <Label class="action-bar-title titles" :text="$props.dr_no"/>
+          <Label class="action-bar-title titles" :text="$props.receipt_no"/>
       </ActionBar>
 
       <GridLayout class="page__content">
           <!-- <Label class="page__content-icon fas" text.decode="&#xf015;"/> -->
           <!-- <Label class="page__content-placeholder" :text="message"/> -->
-          <StackLayout>
+          <StackLayout v-if="trans === 'delivery'">
 
             <StackLayout class="text-content transactions">
               <!-- working -->
-              <Label :text="'DR Number: ' + $props.dr_no"></Label>
-              <Label :text="'Date: ' + $props.dtransaction_date"></Label>
-              <Label :text="'Supplier Name: '+ $props.company_name"  textWrap="true"></Label>
-              <Label :text="'Supplier Address: '+ $props.company_address"  textWrap="true"></Label>
+              <Label :text="'DR Number: ' + $props.receipt_no"></Label>
+              <Label :text="'Date: ' + $props.date"></Label>
+              <StackLayout v-if="(!name)">
+                  <Label text="Walk-in Customer"  textWrap="true"></Label>
+              </StackLayout>
+
+                <StackLayout v-else>
+                    <Label :text="'Customer Name: '+ $props.name"  textWrap="true"></Label>
+                    <Label :text="'Customer Contact Number: '+ $props.contact"  textWrap="true"></Label>
+                    <Label :text="'Customer Name: '+ $props.address"  textWrap="true"></Label>
+                </StackLayout>
+
+              
+              
               <Label text="Items: "></Label>
 
               <ListView row="1" for="item in $props.items">
                 
                 <v-template>
                   <GridLayout columns="*,auto">
-                    <Label row="0" col="0" horizontalAlignment="left" :text="item.qty +' ' + item.product_description + ' @' + item.unit_cost" textWrap="true"></Label>
-                    <Label row="0" col="1"  :text="'₱'+(item.unit_cost*item.qty)"></Label>
+                    <Label row="0" col="0" horizontalAlignment="left" :text="item.qty +' ' + item.product_description + ' @' + item.sales_cost" textWrap="true"></Label>
+                    <Label row="0" col="1"  :text="'₱'+(item.sales_cost*item.qty).toFixed(2)"></Label>
                   </GridLayout>
                 </v-template>
 
               </ListView>
+
               <StackLayout class="hr"/>
+
               <Label class="transactions" horizontalAlignment="right" textWrap="true" :text="'Total Amount: ₱'+$props.total_cost"></Label>
+              <Label class="transactions" horizontalAlignment="right" textWrap="true" :text="'Payment Amount: ₱'+$props.payment_amt"></Label>
+              <Label class="transactions" horizontalAlignment="right" textWrap="true" :text="'Change: ₱'+($props.payment_amt-$props.total_cost).toFixed(2)"></Label>
+
 
             </StackLayout>
 
@@ -58,12 +73,14 @@
   export default {
     props: [
         // 'details'
-        'dr_no',
-        'supplier_id',
-        'company_name',
-        'company_address',
-        'dtransaction_date',
+        'trans',
+        'receipt_no',
+        'name',
+        'contact',
+        'address',
+        'date',
         'total_cost',
+        'payment_amt',
         'items'
     ],
     data(){

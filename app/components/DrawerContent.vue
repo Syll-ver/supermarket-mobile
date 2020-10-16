@@ -39,6 +39,22 @@
                 <StackLayout class="hr"/>
 
                 <GridLayout columns="auto, *"
+                            :class="'nt-drawer__list-item' + (selectedPage === 'Delivery' ? ' -selected': '')"
+                            @tap="onNavigationItemTap(Delivery)">
+                    <Label col="0" text.decode="&#xf013;" class="nt-icon fas"/>
+                    <Label col="1" text="Delivery" class="p-r-10"/>
+                </GridLayout>
+
+                <GridLayout columns="auto, *"
+                            :class="'nt-drawer__list-item' + (selectedPage === 'Sales' ? ' -selected': '')"
+                            @tap="onNavigationItemTap(Sales)">
+                    <Label col="0" text.decode="&#xf013;" class="nt-icon fas"/>
+                    <Label col="1" text="Sales" class="p-r-10"/>
+                </GridLayout>
+
+                <StackLayout class="hr"/>
+
+                <GridLayout columns="auto, *"
                             :class="'nt-drawer__list-item' + (selectedPage === 'Settings' ? ' -selected': '')"
                             @tap="onNavigationItemTap(Settings)">
                     <Label col="0" text.decode="&#xf013;" class="nt-icon fas"/>
@@ -55,6 +71,8 @@
   import Featured from "./Featured";
   import Search from "./Search";
   import Settings from "./Settings";
+  import Delivery from "./Delivery";
+  import Sales from "./Sales";
   import * as utils from "~/shared/utils";
   import SelectedPageService from "~/shared/selected-page-service";
 
@@ -70,6 +88,8 @@
         Featured: Featured,
         Search: Search,
         Settings: Settings,
+        Delivery: Delivery,
+        Sales: Sales,
         selectedPage: ""
       };
     },
@@ -78,7 +98,9 @@
       Browse,
       Featured,
       Search,
-      Settings
+      Settings,
+      Delivery,
+      Sales
     },
     methods: {
       onNavigationItemTap(component) {
