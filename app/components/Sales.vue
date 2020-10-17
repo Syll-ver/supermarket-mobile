@@ -31,6 +31,7 @@
             </StackLayout> -->
                 
                 <ListView row="1" class="list-group"
+                separatorColor="transparent"
                   for="del in sales" >
                     <v-template>
                       <GridLayout @tap="show(del)">
@@ -53,23 +54,7 @@
                           </StackLayout>
                         </GridLayout>
 
-                          <!-- <ListView for="item in del.items">
-                             <v-template>
-                               <Label :text="item.barcode"></Label>
-                               <Label :text="item.product_description"></Label>
-                             </v-template>
-                          </ListView> -->
-
                       </GridLayout>
-
-
-                      <!-- <GridLayout rows="auto,*,*" columns="*,*,auto"
-                        class="list-group">
-                          <Label row="1" col="1" class="text-main" :text="del.company_name" textWrap="true" />
-                          <Label row="2" col="1" class="text-sub" :text="del.dtransaction_date" textWrap="true" />
-                          
-                          
-                      </GridLayout> -->
                     </v-template>
 
                 </ListView>

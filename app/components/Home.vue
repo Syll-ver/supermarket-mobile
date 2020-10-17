@@ -1,50 +1,54 @@
 <template>
-    <Page class="page">
-      <ActionBar class="action-bar">
-          <!--
-          Use the NavigationButton as a side-drawer button in Android
-          because ActionItems are shown on the right side of the ActionBar
-          -->
-          <NavigationButton ios:visibility="collapsed" icon="res://menu" @tap="onDrawerButtonTap"/>
-          <!--
-          Use the ActionItem for IOS with position set to left. Using the
-          NavigationButton as a side-drawer button in iOS is not possible,
-          because its function is to always navigate back in the application.
-          -->
-          <ActionItem icon="res://menu"
-                      android:visibility="collapsed"
-                      @tap="onDrawerButtonTap"
-                      ios.position="left"/>
-          <Label class="action-bar-title titles" text="LouGeh Supermarket"/>
-      </ActionBar>
+    <Page class="page" actionBarHidden="true">
+      <FlexboxLayout class="page">
+        <StackLayout class="form">
+            <!-- <Label text="LouGeh Supermarket" class="titles logo" /> -->
 
-      <GridLayout class="page__content">
-          <!-- <Label class="page__content-icon fas" text.decode="&#xf015;"/> -->
-          <!-- <Label class="page__content-placeholder" :text="message"/> -->
-          <StackLayout>
+            
 
+            <StackLayout class="login">
 
+              <StackLayout>
+                <Label class="app-title" text="Lou Geh" />
+                <Label class="app-subtitle" text="Supermarket" />
+              </StackLayout>
+
+              <TextField class="login-input" hint="Username" maxLength="10" keyboardType="email" v-model="user.username" />
+              <TextField class="login-input" secure="true" hint="Password" v-model="user.password" />
+              
+              <Button text="Login" class="login-button btn" @tap="onNavigationItemTap(Dashboard)"  />
             </StackLayout>
 
-        <!-- <ActivitiIndicator busy="{{ isLoading }}" /> -->
+        </StackLayout>
 
-      </GridLayout>
+            
+
+      </FlexboxLayout>
     </Page>
 </template>
 
 <script>
   import * as utils from "~/shared/utils";
   import SelectedPageService from "../shared/selected-page-service";
+  import Dashboard from "./Inventory";
   // import ShowDetails from "./ShowDetails.vue";
 
   export default {
     data(){
       return {
-        
+        isLoggingIn: true,
+        user: {
+          username: "Maximus",
+          password: "emp",
+        },
+        Dashboard: Dashboard
       }
     },
+    components: {
+      Dashboard
+    },
     mounted() {
-      SelectedPageService.getInstance().updateSelectedPage("Home");
+      // SelectedPageService.getInstance().updateSelectedPage("Home");
     },
     computed: {
       message() {
@@ -52,18 +56,12 @@
       }
     },
     methods: {
-      onDrawerButtonTap() {
-        utils.showDrawer();
-      },
-      creatingView: function(args) {
-        const nativeView = new android.widget.TextView(args.context);
-        nativeView.setSingleLine(true);
-        nativeView.setEllipsize(android.text.TextUtils.TruncateAt.END);
-        nativeView.setText("Native View - Android");
-        args.view = nativeView;
-      },
-      
+      onNavigationItemTap(component) {
+        this.$navigateTo(component)
+      }
     }
+      
+    
   };
 </script>
 
@@ -73,5 +71,66 @@
     // End custom common variables
 
     // Custom styles
+	.page {
+		align-items: center;
+		// flex-direction: column;
+	}
+
+	.form {
+		
+		flex-grow: 2;
+		vertical-align: middle;
+	}
+
+	.logo {
+
+		align-items: center;
+		font-weight: bold;
+  }
+
+  .title-form {
+    align-items: center;
+  }
+
+  .app-title {
+    align-items: center;
+    // border-width: 1 1 1 1;
+    text-align: center;
+    text-transform: uppercase;
+    font: 20;
+    // padding-left: 150;
+  }
+
+  .app-subtitle {
+    align-items: center;
+    text-align: center;
+    text-transform: uppercase;
+    margin-bottom: 10;
+    // padding-left: 150;
+  }
+  
+  .login {
+    align-content: center;
+    align-items: center;
+    padding-left: 40;
+    padding-right: 40;
+  }
+
+  .login-input {
+    background-color: #e4e4e4;
+    border-radius: 15;
+    padding-left: 15;
+    text-decoration: none;
+    font-size: 13;
+  }
+
+  .login-button {
+    margin: 10;
+    text-transform: uppercase;
+    height: 30;
+    width: 280;
+    // background-color: #e4e4e4;
+    border-radius: 20;
+  }
     
 </style>

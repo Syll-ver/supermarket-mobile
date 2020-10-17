@@ -24,6 +24,7 @@
           <StackLayout>
                 
                 <ListView row="1" class="list-group"
+                separatorColor="transparent"
                   for="del in delivery" >
                     <v-template>
                       <GridLayout @tap="show(del)">

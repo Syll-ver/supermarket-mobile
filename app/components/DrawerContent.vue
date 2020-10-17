@@ -63,7 +63,7 @@
 
                 <GridLayout columns="auto, *"
                             :class="'nt-drawer__list-item' + (selectedPage === 'Logout' ? ' -selected': '')"
-                            @tap="onNavigationItemTap(Logout)">
+                            @tap="onNavigationItemTap(Home)">
                     <Label col="0" text.decode="&#xf013;" class="nt-icon fas"/>
                     <Label col="1" text="Logout" class="p-r-10"/>
                 </GridLayout>

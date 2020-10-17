@@ -31,6 +31,7 @@
             </StackLayout> -->
                 
                 <ListView row="1" class="list-group"
+                separatorColor="transparent"
                   for="item in inventory" >
                     <v-template>
                       <GridLayout >
@@ -43,10 +44,12 @@
                           </Label> -->
 
                           <StackLayout row="1" class="content">
-                            <Label class="text-content" :text="item.barcode +' - '+ item.product_description" textWrap="true" ></Label>
-                            <Label :text="'Quantity: '+item.qty"></Label>
-                            <Label :text="'Unit Cost: '+item.unit_cost"></Label>
-                            <Label :text="'Sales Cost: '+item.sales_cost"></Label>
+                            <GridLayout rows="*,*" columns="*,auto">
+                              <Label row="0" col="0" :text="item.barcode +' - '+ item.product_description" textWrap="true" ></Label>
+                              <Label row="0" col="1" :text="'Quantity: '+item.qty"></Label>
+                              <Label row="1" col="0" :text="'Unit Cost: '+item.unit_cost"></Label>
+                              <Label row="1" col="1" :text="'Sales Cost: '+item.sales_cost"></Label>
+                            </GridLayout>
 
                           </StackLayout>
                         </GridLayout>

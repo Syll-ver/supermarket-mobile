@@ -1,5 +1,5 @@
 @import "~@nativescript/theme/core";
-@import "~@nativescript/theme/sky";
+// @import "~@nativescript/theme/sky";
 
 // Place any CSS rules you want to apply on both iOS and Android here.
 // This is where the vast majority of your CSS code goes.
@@ -37,6 +37,22 @@
     }
 }
 
+
+
+// colors =================
+$earth1: #252323;
+$earth2: #70798C;
+$earth3: #F5F1ED;
+$earth4: #DAD2BC;
+$earth5: #A99985;
+
+$mobile1: #05C5AA;
+$mobile2: #B8FDDF;
+$mobile3: #AAC697;
+$mobile4: #1B2010;
+$mobile5: #929191;
+
+
 // Drawer navigation custom styles
 .nt-drawer__header-image {
     color: const(grey);
@@ -50,7 +66,7 @@
 // headers ===============
 
 .banner {
-    background-color: #257500;
+    background-color: $mobile1;
     color: aliceblue;
 }
 
@@ -78,4 +94,12 @@
     padding-top: 10;
     padding-left: 10;
     padding-right: 10;
+}
+
+
+
+// components ===========
+// button
+.btn {
+    background-color: $mobile1;
 }
