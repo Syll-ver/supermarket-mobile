@@ -1,5 +1,5 @@
 <template>
-    <Page class="page" actionBarHidden="true">
+    <Page class="" actionBarHidden="true">
       <FlexboxLayout class="page">
         <StackLayout class="form">
             <!-- <Label text="LouGeh Supermarket" class="titles logo" /> -->
@@ -21,9 +21,16 @@
 
         </StackLayout>
 
-            
+        
+        <!-- <GridLayout class="fab-btn">
+          <Button class="fab" text="+" @tap="onButtonTap" />
+        </GridLayout> -->
+
+        
 
       </FlexboxLayout>
+      
+
     </Page>
 </template>
 
@@ -71,6 +78,9 @@
     // End custom common variables
 
     // Custom styles
+
+  
+
 	.page {
 		align-items: center;
 		// flex-direction: column;
