@@ -21,7 +21,7 @@
       <GridLayout class="page__content">
           <!-- <Label class="page__content-icon fas" text.decode="&#xf015;"/> -->
           <!-- <Label class="page__content-placeholder" :text="message"/> -->
-          <StackLayout>
+          <StackLayout ref="inventoryList">
 
             <!-- <StackLayout for="del in delivery">
                 <v-template>
@@ -65,21 +65,16 @@
 
             </StackLayout>
 
-        <!-- <ActivitiIndicator busy="{{ isLoading }}" /> -->
-
-        <!-- <GridLayout id="btnFab" tap="onButtonTap">
-          <GridLayout rows="2,auto" class="fab-icon">
-              <Button text="+"></Button>
-          </GridLayout>
-        </GridLayout> -->
 
         <GridLayout class="fabbtn">
             <Button class="floatingbutton" text="button" @tap="onButtonTap" ></Button>
         </GridLayout>
-        <GridLayout class="childbtn">
-            <Button ref="fchildbtn" class="floatingbutton" id="fbutton" visibility="collapsed" text="button1" ></Button>
-            <!-- <Button class="floatingbutton" text="hidden" ></Button> -->
+        <GridLayout rows="auto,auto" column="auto,auto" class="childbtn" v-show="floatbutton">
+            <Button row="0" col="1" class="floatingbutton1" id="fbutton1" text="1" />
+            <Button row="1" col="0" class="floatingbutton2" id="fbutton2" text="2" />
         </GridLayout>
+
+        
 
       </GridLayout>
 
@@ -229,12 +224,13 @@
             updated_at: null
             }
         ],
-        display: true
+        floatbutton: false,        
       }
     },
     mounted() {
       SelectedPageService.getInstance().updateSelectedPage("Inventory");
-      const thisBtn = this.$refs.fchildbtn.nativeView
+      // const thisBtn = this.$refs.fchildbtn.nativeView
+      // let body = this.$refs.body
     },
     computed: {
       message() {
@@ -253,8 +249,13 @@
         args.view = nativeView;
       },
       onButtonTap() {
-        console.log("fab button clicked");
-        console.log("here: ", this.$refs.fchildbtn.nativeView);
+        // console.log("fab button clicked");
+        if(this.floatbutton){
+          this.floatbutton = false;
+        } else {
+          this.floatbutton = true;
+        }
+        
       },
 
       
@@ -269,51 +270,5 @@
 
     // Custom styles
 
-    .fabbtn {
-      margin-left: 300;
-      margin-top: 600;
-    }
-    .childbtn {
-      margin-left: 300;
-      margin-top: 450;
-    }
-
-    .floatingbutton {
-      width: 56;
-      height: 56;
-      border-radius: 28;
-      background: #05C5AA;
-    }
-
-
-
-
-  // #btnFab {
-  //   width: 56;
-  //   height: 56;
-  //   background-color: orangered;
-  //   border-radius: 28;
-  //   position: fixed;
-  //   bottom: 0;
-  //   // margin-left: 300;
-  //   // margin-top: 600;
-  // }
-
-  // .fab-dash--1,
-  // .fab-dash--2 {
-  //   background-color: #fff;
-  //   transform: translate(0, -2);
-  //   height: 16;
-  //   width: 3;
-  // }
-
-  // .fab-dash--1 {
-  //   transform: rotate(90deg) translate(0, -2);
-  // }
-
-  // .fab-icon {
-  //   height: 16;
-  //   width: 16;
-  // }
     
 </style>
