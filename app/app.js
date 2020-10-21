@@ -4,9 +4,7 @@ import Home from "./components/Home";
 import DrawerContent from "./components/DrawerContent";
 import RadSideDrawer from "nativescript-ui-sidedrawer/vue";
 
-import RadDataForm from 'nativescript-ui-dataform/vue';
 
-Vue.use(RadDataForm);
 
 // import VueDevtools from 'nativescript-vue-devtools'
 Vue.use(RadSideDrawer);
@@ -24,3 +22,4 @@ new Vue({
         )
       }
   }).$start();
+

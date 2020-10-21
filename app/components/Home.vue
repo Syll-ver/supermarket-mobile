@@ -37,7 +37,7 @@
 <script>
   import * as utils from "~/shared/utils";
   import SelectedPageService from "../shared/selected-page-service";
-  import Dashboard from "./Inventory";
+  import Dashboard from "./Delivery";
   // import ShowDetails from "./ShowDetails.vue";
 
   export default {

@@ -14,8 +14,8 @@
             <StackLayout >
                 <StackLayout class="modal-banner">
                     <GridLayout columns="*,auto">
-                        <Label class="modal-label" col="0" >Add Inventory Item</Label>
-                        <Button class="modal-btn" col="1" text="x" @tap="close()" />
+                        <Label class="modal-label" col="0" >Add Item</Label>
+                        <Button class="modal-btn" col="1" text="x" @tap="$modal.close" />
                     </GridLayout>
                 </StackLayout>
                 <!-- <StackLayout class="hr" /> -->
@@ -188,9 +188,6 @@
                 // console.log("this.validate() returned not true");
             // }
 
-        },
-        close(){
-            $closeModal();
         }
     }
   };

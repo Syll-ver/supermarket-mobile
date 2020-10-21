@@ -20,6 +20,12 @@
     font-weight: 400;
 }
 
+.fa {
+    font-family: FontAwesome, fontawesome-webfont;
+}
+
+
+
 // Common page class
 .page__content {
     &-icon,
@@ -140,4 +146,15 @@ $mobile5: #929191;
   .modal-page {
     border-radius: 12;
       
+  }
+
+
+
+  // forms =============
+  .inputEmpty {
+      border-width: 1 1 1 1;
+      border-color: red;
+      border-radius: 8;
+      margin-bottom: 15;
+
   }

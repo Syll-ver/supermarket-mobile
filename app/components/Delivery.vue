@@ -15,17 +15,23 @@
                       android:visibility="collapsed"
                       @tap="onDrawerButtonTap"
                       ios.position="left"/>
-          <Label class="action-bar-title titles" text="Delivery Transactions"/>
+          <Label class="action-bar-title titles" text="HGASAS Transactions"/>
       </ActionBar>
 
       <GridLayout class="page__content">
           <!-- <Label class="page__content-icon fas" text.decode="&#xf015;"/> -->
           <!-- <Label class="page__content-placeholder" :text="message"/> -->
-          <StackLayout>
+          <ListView>
+            <!-- <GridLayout rows="auto" columns="auto,*"> -->
+              <Label  text="+" />
+              <Button  text="Receive Delivery" />
+            <!-- </GridLayout> -->
+          </ListView>
                 
-                <ListView row="1" class="list-group"
+                <!-- <ListView class="list-group"
                 separatorColor="transparent"
                   for="del in delivery" >
+                    
                     <v-template>
                       <GridLayout @tap="show(del)">
                         <GridLayout rows="*,*,*" columns="*,auto">
@@ -47,9 +53,22 @@
 
                     </v-template>
 
-                </ListView>
+                </ListView> -->
 
-            </StackLayout>
+                
+
+                
+        
+
+   
+
+          <!-- <GridLayout class="fabbtn">
+            <Button class="floatingbutton" text="button" @tap="onButtonTap" ></Button>
+          </GridLayout>
+          <GridLayout rows="auto,auto" column="auto,auto" class="childbtn" v-show="floatbutton">
+              <Button row="0" col="1" @tap="$showModal(add)" class="floatingbutton1" id="fbutton1" text="1" />
+              <Button row="1" col="0" class="floatingbutton2" id="fbutton2" text="2" />
+          </GridLayout> -->
 
         <!-- <ActivitiIndicator busy="{{ isLoading }}" /> -->
 
@@ -61,6 +80,7 @@
   import * as utils from "~/shared/utils";
   import SelectedPageService from "../shared/selected-page-service";
   import ShowDetails from "./ShowDetails.vue";
+  import receive from "./Admin/Delivery/add";
 
   export default {
     data(){
@@ -211,6 +231,9 @@
           }
         })
         console.log("clicked!", del);
+      },
+      confirm(){
+        console.log("button clicked");
       }
       
     }
