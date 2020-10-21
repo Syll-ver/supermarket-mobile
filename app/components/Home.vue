@@ -45,8 +45,8 @@
       return {
         isLoggingIn: true,
         user: {
-          username: "Maximus",
-          password: "emp",
+          username: "",
+          password: "",
         },
         Dashboard: Dashboard
       }
@@ -64,6 +64,7 @@
     },
     methods: {
       onNavigationItemTap(component) {
+        console.log("user: ", this.user);
         this.$navigateTo(component)
       }
     }
@@ -132,6 +133,7 @@
     padding-left: 15;
     text-decoration: none;
     font-size: 13;
+    border-bottom-color: transparent;
   }
 
   .login-button {
@@ -139,6 +141,8 @@
     text-transform: uppercase;
     height: 30;
     width: 280;
+    color: aliceblue;
+    font-weight: bold;
     // background-color: #e4e4e4;
     border-radius: 20;
   }

@@ -44,7 +44,7 @@
                           </Label> -->
 
                           <StackLayout row="1" class="content">
-                            <GridLayout rows="*,*" columns="*,auto">
+                            <GridLayout class="inv-item" rows="*,*" columns="*,auto">
                               <Label row="0" col="0" :text="item.barcode +' - '+ item.product_description" textWrap="true" ></Label>
                               <Label row="0" col="1" :text="'Quantity: '+item.qty"></Label>
                               <Label row="1" col="0" :text="'Unit Cost: '+item.unit_cost"></Label>
@@ -70,11 +70,12 @@
             <Button class="floatingbutton" text="button" @tap="onButtonTap" ></Button>
         </GridLayout>
         <GridLayout rows="auto,auto" column="auto,auto" class="childbtn" v-show="floatbutton">
-            <Button row="0" col="1" class="floatingbutton1" id="fbutton1" text="1" />
+            <Button row="0" col="1" @tap="$showModal(add)" class="floatingbutton1" id="fbutton1" text="1" />
             <Button row="1" col="0" class="floatingbutton2" id="fbutton2" text="2" />
         </GridLayout>
 
-        
+      <!-- <ActivityIndicator :busy="showLoading" color="white" class="indLog" /> -->
+
 
       </GridLayout>
 
@@ -85,7 +86,8 @@
 <script>
   import * as utils from "~/shared/utils";
   import SelectedPageService from "../shared/selected-page-service";
-  import { View, ViewBase } from "@nativescript/core/ui/frame";
+  // import { View, ViewBase } from "@nativescript/core/ui/frame";
+  import add from "./Admin/Inventory/add";
 
   export default {
     data(){
@@ -224,8 +226,14 @@
             updated_at: null
             }
         ],
-        floatbutton: false,        
+        floatbutton: false, 
+        add: add,
+        // showLoading: false
+
       }
+    },
+    components: {
+      add
     },
     mounted() {
       SelectedPageService.getInstance().updateSelectedPage("Inventory");
@@ -249,6 +257,7 @@
         args.view = nativeView;
       },
       onButtonTap() {
+      // this.showLoading = true;
         // console.log("fab button clicked");
         if(this.floatbutton){
           this.floatbutton = false;
@@ -269,6 +278,10 @@
     // End custom common variables
 
     // Custom styles
+    // .inv-item {
+    //   background-color: #B8FDDF;
+    //   margin-bottom: 10px;
+    // }
 
     
 </style>

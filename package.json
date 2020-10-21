@@ -31,6 +31,7 @@
   "dependencies": {
     "@nativescript/core": "~7.0.0",
     "@nativescript/theme": "~2.3.0",
+    "nativescript-ui-dataform": "^7.0.2",
     "nativescript-ui-sidedrawer": "~9.0.0",
     "nativescript-vue": "~2.8.0",
     "rxjs": "^6.6.0"
