@@ -18,42 +18,74 @@
           <Label class="action-bar-title titles" text="HGASAS Transactions"/>
       </ActionBar>
 
-      <GridLayout class="page__content">
+      <GridLayout class="page__content transbody">
           <!-- <Label class="page__content-icon fas" text.decode="&#xf015;"/> -->
           <!-- <Label class="page__content-placeholder" :text="message"/> -->
-          <ListView>
-            <!-- <GridLayout rows="auto" columns="auto,*"> -->
-              <Label  text="+" />
-              <Button  text="Receive Delivery" />
-            <!-- </GridLayout> -->
-          </ListView>
+          
+          <GridLayout rows="auto,*">
+
+              
+              <GridLayout row="0" class="list-group">
+                <StackLayout class="receive-button" @tap="confirm()">
+                  <GridLayout rows="auto,*" columns="auto,*">
+                      <Label row="0" col="0"
+                        text="+" class="receive-icon" 
+                        horizontalAlignment="center"
+                        />
+                      <Label row="0" col="1"
+                        text="RECEIVE DELIVERY"
+                        class="receive-text"
+                        horizontalAlignment="center"
+                        />
+                  </GridLayout>
+              </StackLayout>
+              </GridLayout>
+
                 
-                <!-- <ListView class="list-group"
+                <GridLayout row="1">
+                  <ListView class="list-group yyy"
                 separatorColor="transparent"
                   for="del in delivery" >
                     
                     <v-template>
-                      <GridLayout @tap="show(del)">
-                        <GridLayout rows="*,*,*" columns="*,auto">
-                          <Label class="text-sub sub-header" :text="del.dr_no" textWrap="true" />
-                          <Label horizontalAlignment="right" class="text-sub sub-header">
-                            <FormattedString>
-                              <Span text="₱" />
-                              <Span :text="del.total_cost" />
-                            </FormattedString>
-                          </Label>
+                      <GridLayout>
+                        <!-- <Image src="">
+                        </Image> -->
+                        <GridLayout  class="rtrans" @tap="show(del)">
+                          <GridLayout rows="*,*,*" columns="*,auto" class="trans-pills">
+                            <Label row="0" col="0" class="text-content" :text="'DR No: '+del.dr_no" textWrap="true" />
+                            <Label row="1" col="0" class="text-content" :text="del.company_name" textWrap="true" />
+                            <Label row="1" col="1" class="text-content" textWrap="true" >
+                              <FormattedString>
+                                <Span text="₱" />
+                                <Span :text="del.total_cost" />
+                              </FormattedString>
+                            </Label>
 
-                          <StackLayout row="1" class="content">
-                            <Label class="text-content" :text="del.company_name" textWrap="true" ></Label>
-                            <Label :text="del.company_address"></Label>
-                          </StackLayout>
+                            <!-- <Label class="text-sub sub-header" :text="del.dr_no" textWrap="true" />
+                            <Label horizontalAlignment="right" class="text-sub sub-header">
+                              <FormattedString>
+                                <Span text="₱" />
+                                <Span :text="del.total_cost" />
+                              </FormattedString>
+                            </Label>
+
+                            <StackLayout row="1" class="content">
+                              <Label class="text-content" :text="'Delivery Receipt Number: '+del.dr_no" textWrap="true" ></Label>
+                              <Label class="text-content" :text="del.company_name"></Label>
+                            </StackLayout> -->
+                          </GridLayout>
+
                         </GridLayout>
-
+                        
                       </GridLayout>
 
                     </v-template>
 
-                </ListView> -->
+                </ListView>
+                </GridLayout>
+              
+          </GridLayout>
 
                 
 
@@ -246,5 +278,40 @@
     // End custom common variables
 
     // Custom styles
+    .transbody {
+      // background-color: #e6e6e6;
+    }
+
+    .rtrans {
+      background-color: aliceblue;
+      border-radius: 20;
+    // android-elevation:10px;
+    }
+
+    .trans-pills {
+      margin: 5;
+    }
+
+    .receive-icon {
+      font-size: 16;
+      padding: 20 20 20 20;
+      // border-width: 1 1 1 1;
+      margin-left: 20;
+    }
+
+    .receive-text {
+      font-size: 16;
+      padding: 20 20 20 20;
+      // align-items: center;
+    }
+
+    .receive-button {
+      // height: 50;
+      //width is whole grid
+      margin: 10 10 10 10;
+      background-color: #B8FDDF;
+      border-radius: 30;
+    }
+
     
 </style>
