@@ -1,53 +1,82 @@
 <template>
-    <Page class="page">
-      <ActionBar title="Delivery Transactions Details" class="action-bar banner">
-          <!--
-          Use the NavigationButton as a side-drawer button in Android
-          because ActionItems are shown on the right side of the ActionBar
-          -->
+    <Page class="page" actionBarHidden="true">
+      <!-- <ActionBar title="Delivery Transactions Details" class="action-bar banner">
+         
           <NavigationButton ios:visibility="collapsed" icon="res://menu" @tap="onDrawerButtonTap"/>
-          <!--
-          Use the ActionItem for IOS with position set to left. Using the
-          NavigationButton as a side-drawer button in iOS is not possible,
-          because its function is to always navigate back in the application.
-          -->
+          
           <ActionItem icon="res://menu"
                       android:visibility="collapsed"
                       @tap="onDrawerButtonTap"
                       ios.position="left"/>
           <Label class="action-bar-title titles" :text="$props.dr_no"/>
-      </ActionBar>
+      </ActionBar> -->
 
       <GridLayout class="page__content">
           <!-- <Label class="page__content-icon fas" text.decode="&#xf015;"/> -->
           <!-- <Label class="page__content-placeholder" :text="message"/> -->
           <StackLayout>
+            <GridLayout class="m-t-25" rows="auto,auto,auto,*">
+              <GridLayout row="0">
+                  <Button text="button"></Button>
+              </GridLayout> 
 
-            <StackLayout class="text-content transactions">
-              <!-- working -->
-              <Label :text="'DR Number: ' + $props.dr_no"></Label>
-              <Label :text="'Date: ' + $props.dtransaction_date"></Label>
-              <Label :text="'Supplier Name: '+ $props.company_name"  textWrap="true"></Label>
-              <Label :text="'Supplier Address: '+ $props.company_address"  textWrap="true"></Label>
-              <Label text="Items: "></Label>
+              <GridLayout row="1">
+                <StackLayout class="transactions trans-details">
+                  <!-- working -->
+                  <Label :text="'Delivery Receipt Number: ' + $props.dr_no"></Label>
+                  <Label :text="'Date: ' + $props.dtransaction_date"></Label>
+                  <Label :text="'Supplier: '+ $props.company_name"  textWrap="true"></Label>
+                  <Label :text="$props.company_address" fontWeight="normal" textWrap="true"></Label>
+                  <!-- <Label text="Items: "></Label> -->
+                </StackLayout>
+              </GridLayout>
 
-              <ListView row="1" for="item in $props.items">
-                
+              <GridLayout class="thead" row="2">
+                <StackLayout>
+                  <GridLayout columns="*,*,auto">
+                    <Label col="0" text="Product" />
+                    <Label col="1" text="Qty" />
+                    <Label col="2" text="Total" />
+                  </GridLayout>
+                </StackLayout>
+              </GridLayout>
+
+              <ListView row="3" class="trans-items" for="item in $props.items" separatorColor="transparent">
                 <v-template>
-                  <GridLayout columns="*,auto">
-                    <Label row="0" col="0" horizontalAlignment="left" :text="item.qty +' ' + item.product_description + ' @' + item.unit_cost" textWrap="true"></Label>
-                    <Label row="0" col="1"  :text="'₱'+(item.unit_cost*item.qty)"></Label>
+                  <GridLayout >
+                    <GridLayout  class="rtrans">
+                      <GridLayout columns="*,*,auto" class="trans-pills">
+                        <Label col="0" class="m-b-5" :text="item.product_description" textWrap="true" />
+                        <Label col="1" class="text-sub" :text="item.qty" textWrap="true" />
+                        <Label col="2" class="text-sub" :text="item.unit_cost" textWrap="true" />
+                      </GridLayout>
+                    </GridLayout>
                   </GridLayout>
                 </v-template>
-
               </ListView>
-              <StackLayout class="hr"/>
-              <Label class="transactions" horizontalAlignment="right" textWrap="true" :text="'Total Amount: ₱'+$props.total_cost"></Label>
 
+              </GridLayout>
             </StackLayout>
 
-          </StackLayout>
+          
+
+
       </GridLayout>
+                      
+                            <!-- <GridLayout columns="*,auto,auto">
+                                <GridLayout col="0">
+                                    <Label text="Product" />
+                                </GridLayout>
+                                <GridLayout col="1">
+                                    <Label text="Qty" />
+                                </GridLayout>
+                                <GridLayout col="2">
+                                    <Label text="Total" />
+                                </GridLayout>
+                            </GridLayout> -->
+
+                         
+
     </Page>
 </template>
 
@@ -104,5 +133,36 @@
     // End custom common variables
 
     // Custom styles
+    .trans-details{
+      margin: 20;
+      border-radius: 20;
+      padding: 10;
+    }
+
+    .thead {
+      background-color: #B8FDDF;
+      padding-top: 10;
+      padding-bottom: 10;
+      padding-left: 20;
+      padding-right: 20;
+      margin-left: 20;
+      margin-right: 20;
+      border-top-left-radius: 20;
+      border-top-right-radius: 20;
+    }
+
+    .trans-items{
+      background-color: #05C5AA;
+      color: aliceblue;
+      margin-left: 20;
+      margin-right: 20;
+      margin-bottom: 20;
+      padding-left: 10;
+      padding-right: 10;
+      border-bottom-left-radius: 20;
+      border-bottom-right-radius: 20;
+      font-weight: normal;
+      font-size: 13;
+    }
     
 </style>

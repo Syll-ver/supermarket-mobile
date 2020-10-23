@@ -84,10 +84,19 @@ $mobile5: #929191;
 
 .text-sub {
     font-size: 13;
+    // font-weight: bold;
+    padding-top: 0;
+    padding-bottom: 0;
+    // color: #929191;
 }
 
 .text-content {
-    font-size: 16;
+    font-size: 13;
+    font-weight: bold;
+    padding-top: 0;
+    padding-bottom: 0;
+    // padding: 0;
+    color: $mobile1;
 }
 
 
@@ -96,6 +105,10 @@ $mobile5: #929191;
     padding-top: 10;
     padding-left: 10;
     padding-right: 10;
+}
+
+.sidetext {
+    // padding-right: 10;
 }
 
 

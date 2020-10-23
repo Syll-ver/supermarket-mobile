@@ -49,31 +49,17 @@
                     
                     <v-template>
                       <GridLayout>
-                        <!-- <Image src="">
-                        </Image> -->
                         <GridLayout  class="rtrans" @tap="show(del)">
-                          <GridLayout rows="*,*,*" columns="*,auto" class="trans-pills">
-                            <Label row="0" col="0" class="text-content" :text="'DR No: '+del.dr_no" textWrap="true" />
-                            <Label row="1" col="0" class="text-content" :text="del.company_name" textWrap="true" />
-                            <Label row="1" col="1" class="text-content" textWrap="true" >
+                          <GridLayout rows="*,*,*,*" columns="*,auto" class="trans-pills">
+                            <Label row="0" col="0" class="text-content m-b-5" :text="'DR No: '+del.dr_no" textWrap="true" />
+                            <Label row="1" col="0" class="text-sub" color="#70798C" :text="del.dtransaction_date" textWrap="true" />
+                            <Label row="2" col="0" class="text-sub" color="#70798C" :text="del.company_name" textWrap="true" />
+                            <Label row="2" col="1" color="#05C5AA" class="text-sub" textWrap="true" >
                               <FormattedString>
                                 <Span text="₱" />
                                 <Span :text="del.total_cost" />
                               </FormattedString>
                             </Label>
-
-                            <!-- <Label class="text-sub sub-header" :text="del.dr_no" textWrap="true" />
-                            <Label horizontalAlignment="right" class="text-sub sub-header">
-                              <FormattedString>
-                                <Span text="₱" />
-                                <Span :text="del.total_cost" />
-                              </FormattedString>
-                            </Label>
-
-                            <StackLayout row="1" class="content">
-                              <Label class="text-content" :text="'Delivery Receipt Number: '+del.dr_no" textWrap="true" ></Label>
-                              <Label class="text-content" :text="del.company_name"></Label>
-                            </StackLayout> -->
                           </GridLayout>
 
                         </GridLayout>
@@ -282,6 +268,10 @@
       // background-color: #e6e6e6;
     }
 
+    .page {
+      
+    }
+
     .rtrans {
       background-color: aliceblue;
       border-radius: 20;
@@ -290,17 +280,18 @@
 
     .trans-pills {
       margin: 5;
+      padding: 5;
     }
 
     .receive-icon {
-      font-size: 16;
+      font-size: 14;
       padding: 20 20 20 20;
       // border-width: 1 1 1 1;
       margin-left: 20;
     }
 
     .receive-text {
-      font-size: 16;
+      font-size: 14;
       padding: 20 20 20 20;
       // align-items: center;
     }
