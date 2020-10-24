@@ -1,16 +1,11 @@
 <template>
     <Page class="page">
-      <ActionBar class="action-bar banner">
-          <!--
-          Use the NavigationButton as a side-drawer button in Android
-          because ActionItems are shown on the right side of the ActionBar
-          -->
-          <NavigationButton ios:visibility="collapsed" icon="res://menu" @tap="onDrawerButtonTap"/>
-          <!--
-          Use the ActionItem for IOS with position set to left. Using the
-          NavigationButton as a side-drawer button in iOS is not possible,
-          because its function is to always navigate back in the application.
-          -->
+      <ActionBar class="action-bar banner" flat="true">
+      
+          <NavigationButton ios:visibility="collapsed"
+            icon="res://menu"
+            @tap="onDrawerButtonTap"/>
+          
           <ActionItem icon="res://menu"
                       android:visibility="collapsed"
                       @tap="onDrawerButtonTap"
@@ -27,18 +22,19 @@
               
               <GridLayout row="0" class="list-group">
                 <StackLayout class="receive-button" @tap="confirm()">
-                  <GridLayout rows="auto,*" columns="auto,*">
-                      <Label row="0" col="0"
-                        text="+" class="receive-icon" 
-                        horizontalAlignment="center"
-                        />
-                      <Label row="0" col="1"
+                  <GridLayout columns="auto,*">
+                      <Label col="0" :text="'fa-plus' | fonticon"
+                      class="fas receive-icon"
+                      color="grey"
+                      fontSize="25px"
+                      horizontalAlignment="left" />
+                      <Label col="1"
                         text="RECEIVE DELIVERY"
                         class="receive-text"
                         horizontalAlignment="center"
                         />
                   </GridLayout>
-              </StackLayout>
+                </StackLayout>
               </GridLayout>
 
                 
@@ -245,8 +241,8 @@
             dtransaction_date: del.dtransaction_date,
             total_cost: del.total_cost,
             items: del.items
-
-          }
+          },
+          transition: "slideLeft"
         })
         console.log("clicked!", del);
       },
@@ -265,7 +261,7 @@
 
     // Custom styles
     .transbody {
-      // background-color: #e6e6e6;
+      // background-color: #05C5AA;
     }
 
     .page {
@@ -284,15 +280,19 @@
     }
 
     .receive-icon {
-      font-size: 14;
-      padding: 20 20 20 20;
+      // font-size: 14;
+      // padding: 20 20 20 20;
       // border-width: 1 1 1 1;
       margin-left: 20;
     }
 
     .receive-text {
       font-size: 14;
-      padding: 20 20 20 20;
+      padding-top: 5;
+      // padding: 25 20 20 20;
+      // padding: up-right-down-left
+      // border-width: 1 1 1 1;
+
       // align-items: center;
     }
 
@@ -300,6 +300,7 @@
       // height: 50;
       //width is whole grid
       margin: 10 10 10 10;
+      padding: 10 10 10 10;
       background-color: #B8FDDF;
       border-radius: 30;
     }

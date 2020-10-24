@@ -14,7 +14,7 @@
     font-family: "Font Awesome 5 Free", "fa-solid-900";
     font-weight: 900;
 }
-
+.fa,
 .far {
     font-family: "Font Awesome 5 Free", "fa-regular-400";
     font-weight: 400;
@@ -68,6 +68,7 @@ $mobile5: #929191;
 // headers ===============
 
 .banner {
+    // background-color: $mobile1;
     background-color: $mobile1;
     color: aliceblue;
 }

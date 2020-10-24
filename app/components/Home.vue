@@ -27,6 +27,7 @@
         </GridLayout> -->
 
         
+      <ActivityIndicator :busy="showLoading" color="white" class="indLog" />
 
       </FlexboxLayout>
       
@@ -37,7 +38,8 @@
 <script>
   import * as utils from "~/shared/utils";
   import SelectedPageService from "../shared/selected-page-service";
-  import Dashboard from "./Delivery";
+  import Dashboard from "./Roles";
+  import axios from 'axios'
   // import ShowDetails from "./ShowDetails.vue";
 
   export default {
@@ -48,6 +50,7 @@
           username: "",
           password: "",
         },
+        showLoading: false,
         Dashboard: Dashboard
       }
     },
@@ -64,8 +67,41 @@
     },
     methods: {
       onNavigationItemTap(component) {
+      //   this.showLoading = true
+      //   await axios({
+      //   method: "POST",
+      //   url: `http://172.16.4.182:9000/new/login`,
+      //   headers: {"Content-Type": "application/json"},
+      //   data: {
+      //     username: this.user.username,
+      //     password: this.user.password
+      //   }
+      // })
+      //   .then(result => {
+      //     this.$navigateTo(Dashboard, {
+      //       clearHistory: true,
+      //       transition: {
+      //         name: "fade",
+      //         duration: 200
+      //       }
+      //     });
+      //     this.showLoading = false;
+      //     this.user = {};
+      //   })
+      //   .catch(err => {
+      //     this.showLoading = false;
+
+      //     if (err.response && err.response.data.errorMsg) {
+      //       // TNSFancyAlert.showError(err.response.data.errorMsg);
+      //       console.log(err.response.data.errorMsg);
+      //     } else {
+      //       // TNSFancyAlert.showError(err.message);
+      //       console.log(err.message);
+      //     }
+      //   });
+
         console.log("user: ", this.user);
-        this.$navigateTo(component)
+        // this.$navigateTo(component)
       }
     }
       
