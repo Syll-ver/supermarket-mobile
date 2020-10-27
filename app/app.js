@@ -1,9 +1,20 @@
 import Vue from "nativescript-vue";
+import Vuex from "vuex"
+import axios from "axios"
+import VueAxios from "vue-axios"
+
+Vue.use(VueAxios, axios);
+Vue.use(Vuex);
+
+Vue.prototype.$axios = axios;
+Vue.prototype.$axios.defaults.baseURL = 'http://172.16.4.182:9000'
+
+import state from './store/state';
 import App from "./components/App";
 import Home from "./components/Home";
 import DrawerContent from "./components/DrawerContent";
 import RadSideDrawer from "nativescript-ui-sidedrawer/vue";
-// import axios from "axios/dist/axios";
+
 
 import { TNSFontIcon, fonticon } from 'nativescript-fonticon'
 
@@ -33,6 +44,11 @@ new Vue({
             h(Home, { slot: 'mainContent' })
           ]
         )
+      },
+      data: {
+        server: "http://172.16.4.182:9000"
       }
   }).$start();
 
+
+inventory: []

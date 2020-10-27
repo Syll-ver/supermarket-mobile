@@ -76,8 +76,8 @@
 <script>
   import Home from "./Home";
   import Inventory from "./Inventory";
-  import Suppliers from "./Suppliers";
-  import Roles from "./Roles";
+  import Suppliers from "./Admin/Suppliers/Suppliers";
+  import Roles from "./Admin/Roles/Roles"; //"./Roles";
   import Users from "./Users";
   import Featured from "./Featured";
   import Search from "./Search";

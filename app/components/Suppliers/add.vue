@@ -13,8 +13,8 @@
                 <StackLayout class="modal-banner">
                     <GridLayout columns="*,auto">
                         <Label 
-                            class="modal-label m-t-5" col="0" 
-                            text="Update Inventory Item"
+                            class="modal-label" col="0" 
+                            text="Add suppliers Item"
                             fontWeight="bold"
                             color="white"
                             horizontalAlignment="center"
@@ -25,58 +25,46 @@
 
                 <GridLayout class="form">
                     <GridLayout rows="auto,auto,auto,auto">
-                        <GridLayout ref="inputBarcode" 
+                        <GridLayout ref="inputName" 
                             class="box-input" 
                             row="0" >
                             <GridLayout rows="auto,auto">
-                                <Label row="0" ref="inputBCLabel"
-                                class="box-input-label">Barcode</Label>
+                                <Label row="0" ref="inputCNLabel"
+                                class="box-input-label" 
+                                text="Company Name"
+                                />
                                 <TextField row="1" class="text-input"
-                                    v-model="inventory.barcode"
+                                    v-model="supplier.company_name"
                                     keyboardType="number"
                                     @blur="checkA()"
                                     />
                             </GridLayout>
                         </GridLayout>
 
-                        <GridLayout ref="product_description" class="box-input" row="1" >
+                        <GridLayout ref="contact_no" class="box-input" row="1" >
                             <GridLayout rows="auto,auto">
-                                <Label row="0" ref="inputPDLabel" 
-                                class="box-input-label">Product Description</Label>
+                                <Label row="0" ref="inputContactLabel" 
+                                class="box-input-label" 
+                                text="Contact Number"/>
                                 <TextField row="1" class="text-input"
-                                    v-model="inventory.product_description"
+                                    v-model="supplier.contact_no"
                                     @blur="checkB()"
                                     />
                             </GridLayout>
                         </GridLayout>
 
-                        
-
-                        <GridLayout row="2" columns="*,*">
-                            <GridLayout col="0" ref="unit_cost" class="box-input m-r-5">
-                                <GridLayout rows="auto,auto">
-                                    <Label row="0" ref="inputUCLabel" 
-                                    class="box-input-label">Unit Cost</Label>
-                                    <TextField row="1" class="text-input"  
-                                        v-model="inventory.unit_cost"
-                                        keyboardType="number"
-                                        @blur="checkC()"
+                        <GridLayout ref="address" class="box-input" row="2" >
+                            <GridLayout rows="auto,auto">
+                                <Label row="0" ref="inputAddressLabel" 
+                                class="box-input-label" 
+                                text="Company Address"/>
+                                <TextField row="1" class="text-input"
+                                    v-model="supplier.company_address"
+                                    @blur="checkC()"
                                     />
-                                </GridLayout>
                             </GridLayout>
-                      
-                            <GridLayout col="1" ref="sales_cost" class="box-input m-l-5">
-                                <GridLayout rows="auto,auto">
-                                    <Label row="0" ref="inputSCLabel"
-                                    class="box-input-label">Sales Cost</Label>
-                                    <TextField row="1" v-model="inventory.sales_cost"
-                                        class="text-input" 
-                                        keyboardType="number"
-                                        @blur="checkD()"
-                                        />
-                                </GridLayout>
-                            </GridLayout>                           
                         </GridLayout>
+
 
                         <GridLayout row="3" columns="*,*">
                             <GridLayout col="0" >
@@ -113,112 +101,93 @@
   import alertmodal from "../../Modal/alertmodal";
   import axios from "axios";
 
-
   export default {
-      props: [
-        //   'items'
-        'inventory_id',
-        'barcode',
-        'product_description',
-        'quantity',
-        'unit_cost',
-        'sales_cost',
-        'created_by',
-        'created_at',
-        'updated_by',
-        'updated_at'
-      ],
     data(){
       return {
-        inventory: {
-            inventory_id: this.inventory_id,
-            barcode: this.barcode,
-            product_description: this.product_description,
-            quantity: this.quantity,
-            unit_cost: this.unit_cost,
-            sales_cost: this.sales_cost,
-            created_by: this.created_by,
-            created_at: this.created_at,
-            updated_by: this.updated_by,
-            updated_at: this.updated_at
+        suppliers: {
         },
         showLoading: false
       }
     },
+    mounted() {
+
+    },
+    computed: {
+      message() {
+        return "<!-- Page content goes here -->";
+      }
+    },
     methods: {
         sample() {
-            console.log("br: " + this.inventory.barcode);
+            console.log("br: " + this.suppliers.barcode);
             console.log("$refs: ", this.$refs.inputBar.getViewById);  
         },
         checkA(){
-            // fieldcolor = 
-            if(this.inventory.barcode == ''){
-                this.$refs.inputBCLabel.nativeView.color = "#DD0000";
-                this.$refs.inputBarcode.nativeView.borderColor = "#DD0000";
+            if(this.suppliers.company_name == ''){
+                this.$refs.inputCNLabel.nativeView.color = "#DD0000";
+                this.$refs.inputName.nativeView.borderColor = "#DD0000";
             } else {
-                this.$refs.inputBCLabel.nativeView.color = "#0a8171";
-                this.$refs.inputBarcode.nativeView.borderColor = "#e6e6e6";
-                // this.validate()
+                this.$refs.inputCNLabel.nativeView.color = "#0a8171";
+                this.$refs.inputName.nativeView.borderColor = "#e6e6e6";
             }
+           
         },
         checkB(){
-            if(this.inventory.product_description == ''){
-                this.$refs.inputPDLabel.nativeView.color = "#DD0000";
-                this.$refs.product_description.nativeView.borderColor = "#DD0000";
+            if(this.suppliers.contact_no == ''){
+                this.$refs.inputContactLabel.nativeView.color = "#DD0000";
+                this.$refs.contact_no.nativeView.borderColor = "#DD0000";
             } else {
-                this.$refs.inputPDLabel.nativeView.color = "#0a8171";
-                this.$refs.product_description.nativeView.borderColor = "#e6e6e6";
+                this.$refs.inputContactLabel.nativeView.color = "#0a8171";
+                this.$refs.contact_no.nativeView.borderColor = "#e6e6e6";
                 // this.validate()
             }
             
         },
         checkC(){
-            if(this.inventory.unit_cost == ''){
-                this.$refs.inputUCLabel.nativeView.color = "#DD0000";
-                this.$refs.unit_cost.nativeView.borderColor = "#DD0000";
+            if(this.suppliers.company_address == ''){
+                this.$refs.inputAddressLabel.nativeView.color = "#DD0000";
+                this.$refs.address.nativeView.borderColor = "#DD0000";
             } else {
-                this.$refs.inputUCLabel.nativeView.color = "#0a8171";
-                this.$refs.unit_cost.nativeView.borderColor = "#e6e6e6";
+                this.$refs.inputAddressLabel.nativeView.color = "#0a8171";
+                this.$refs.address.nativeView.borderColor = "#e6e6e6";
                 // this.validate()
             }
 
         },
-        checkD(){
-            if(this.inventory.sales_cost == ''){
-                this.$refs.inputSCLabel.nativeView.color = "#DD0000";
-                this.$refs.sales_cost.nativeView.borderColor = "#DD0000";
-            } else {
-                this.$refs.inputSCLabel.nativeView.color = "#0a8171";
-                this.$refs.sales_cost.nativeView.borderColor = "#e6e6e6";
-                // this.validate()
-            }
+        // checkD(){
+        //     if(this.suppliers.sales_cost == ''){
+        //         this.$refs.inputSCLabel.nativeView.color = "#DD0000";
+        //         this.$refs.sales_cost.nativeView.borderColor = "#DD0000";
+        //     } else {
+        //         this.$refs.inputSCLabel.nativeView.color = "#0a8171";
+        //         this.$refs.sales_cost.nativeView.borderColor = "#e6e6e6";
+        //         // this.validate()
+        //     }
 
-        },
+        // },
         onCancel(){
-            for(var i = 0; i < this.inventory.length; i++){
-                this.inventory[0] = ""
+            for(var i = 0; i < this.suppliers.length; i++){
+                this.suppliers[0] = ""
             }
             this.$modal.close()
         },
         async onSubmit(){
-            console.log("inventory", this.inventory);
-            if(this.inventory.barcode != "" &&
-                this.inventory.product_description != "" &&
-                this.inventory.unit_cost != "" &&
-                this.inventory.sales_cost != "" ){
+            if(this.suppliers.company_name != "" &&
+                this.suppliers.contact_no != "" &&
+                this.suppliers.company_address != "" ){
 
-                    // this.inventory.quantity = 0;
-                    this.inventory.updated_by = '38';
-                    this.inventory.updated_at = 'today';
+                    this.suppliers.status = 1;
+                    this.suppliers.created_by = '38';
+                    this.suppliers.created_at = 'today';
 
                     this.showLoading = true
                     await axios({
-                        method: "PUT",
-                        url: this.$root.server+`/inventory`+this.inventory_id, 
+                        method: "POST",
+                        url: this.$root.server+`/add_supplier`, 
                         header: {
                             "Content-Type": "application/json"
                         },
-                        data: { ...this.inventory },
+                        data: { ...this.suppliers },
                         })
                         .then(result => {
                             console.log("result", result.data.msg);
@@ -235,7 +204,6 @@
                             }
                         })
                         .catch(err => {
-                            console.log("error", err);
                             this.showLoading = false;
                             alert({
                                 title: "Fail",
@@ -243,10 +211,10 @@
                                 okButtonText: "OK"
                                 }).then(() => {
                                 console.log("Alert dialog closed");
-                                this.inventory.barcode = ""
-                                this.inventory.product_description = ""
-                                this.inventory.unit_cost = ""
-                                this.inventory.sales_cost = ""
+                                this.suppliers.barcode = ""
+                                this.suppliers.product_description = ""
+                                this.suppliers.unit_cost = ""
+                                this.suppliers.sales_cost = ""
                             });
                         })
             } else {

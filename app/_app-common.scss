@@ -49,6 +49,7 @@ $earth4: #DAD2BC;
 $earth5: #A99985;
 
 $mobile1: #05C5AA;
+$mobile-text: #009688;
 $mobile2: #B8FDDF;
 $mobile3: #AAC697;
 $mobile4: #1B2010;
@@ -76,6 +77,21 @@ $mobile5: #929191;
 .sub-header {
     // background-color: #95c28296;
 }
+
+.brand-name {
+    font-size: 16;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: white;
+    padding: 15;
+}
+
+// icons ================
+// .sideicon {
+//     background-color: #B8FDDF;
+//     // border-width: 1;
+//     padding: 20;
+//   }
 
 
 // texts ================

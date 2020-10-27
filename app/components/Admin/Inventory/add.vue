@@ -9,81 +9,99 @@
 
 
         <FlexboxLayout class="page">
-
-
             <StackLayout >
                 <StackLayout class="modal-banner">
                     <GridLayout columns="*,auto">
-                        <Label class="modal-label" col="0" >Add Inventory Item</Label>
-                        <Button class="modal-btn" col="1" text="x" @tap="close()" />
+                        <Label 
+                            class="modal-label" col="0" 
+                            text="Add Inventory Item"
+                            fontWeight="bold"
+                            color="white"
+                            horizontalAlignment="center"
+                            />
+                        <!-- <Button class="modal-btn" col="1" text="x" @tap="$modal.close" /> -->
                     </GridLayout>
                 </StackLayout>
-                <!-- <StackLayout class="hr" /> -->
-                <StackLayout class="form">
-                    <StackLayout>
-                        <!-- <StackLayout ref="inputBarcode" 
-                            v-bind:class="[inventory.barcode == '' ? 'inputEmpty' : 'box-input']" 
-                            row="0" >
-                            <Label class="box-input-label"
-                            >Barcode</Label>
-                            <TextField class="text-input"
-                                v-model="inventory.barcode"
-                                keyboardType="number"
-                                />
-                        </StackLayout> -->
 
-                        <StackLayout ref="inputBarcode" 
+                <GridLayout class="form">
+                    <GridLayout rows="auto,auto,auto,auto">
+                        <GridLayout ref="inputBarcode" 
                             class="box-input" 
                             row="0" >
-                            <Label ref="inputBCLabel"
+                            <GridLayout rows="auto,auto">
+                                <Label row="0" ref="inputBCLabel"
                                 class="box-input-label">Barcode</Label>
-                            <TextField class="text-input"
-                                v-model="inventory.barcode"
-                                keyboardType="number"
-                                @blur="checkA()"
-                                />
-                        </StackLayout>
+                                <TextField row="1" class="text-input"
+                                    v-model="inventory.barcode"
+                                    keyboardType="number"
+                                    @blur="checkA()"
+                                    />
+                            </GridLayout>
+                        </GridLayout>
 
-                        <StackLayout ref="product_description" class="box-input" row="1" >
-                            <Label ref="inputPDLabel" 
+                        <GridLayout ref="product_description" class="box-input" row="1" >
+                            <GridLayout rows="auto,auto">
+                                <Label row="0" ref="inputPDLabel" 
                                 class="box-input-label">Product Description</Label>
-                            <TextField class="text-input"
-                                v-model="inventory.product_description"
-                                @blur="checkB()"
-                                />
-                        </StackLayout>
+                                <TextField row="1" class="text-input"
+                                    v-model="inventory.product_description"
+                                    @blur="checkB()"
+                                    />
+                            </GridLayout>
+                        </GridLayout>
 
-                        <StackLayout ref="unit_cost" class="box-input" row="2" >
-                            <Label ref="inputUCLabel" 
-                                class="box-input-label">Unit Cost</Label>
-                            <TextField class="text-input"  
-                                v-model="inventory.unit_cost"
-                                keyboardType="number"
-                                @blur="checkC()"
-                               />
-                        </StackLayout>
+                        
 
-                        <StackLayout ref="sales_cost" class="box-input" row="3" >
-                            <Label ref="inputSCLabel"
-                                class="box-input-label">Sales Cost</Label>
-                            <TextField v-model="inventory.sales_cost"
-                                class="text-input" 
-                                keyboardType="number"
-                                @blur="checkD()"
-                                />
-                        </StackLayout>
+                        <GridLayout row="2" columns="*,*">
+                            <GridLayout col="0" ref="unit_cost" class="box-input m-r-5">
+                                <GridLayout rows="auto,auto">
+                                    <Label row="0" ref="inputUCLabel" 
+                                    class="box-input-label">Unit Cost</Label>
+                                    <TextField row="1" class="text-input"  
+                                        v-model="inventory.unit_cost"
+                                        keyboardType="number"
+                                        @blur="checkC()"
+                                    />
+                                </GridLayout>
+                            </GridLayout>
+                      
+                            <GridLayout col="1" ref="sales_cost" class="box-input m-l-5">
+                                <GridLayout rows="auto,auto">
+                                    <Label row="0" ref="inputSCLabel"
+                                    class="box-input-label">Sales Cost</Label>
+                                    <TextField row="1" v-model="inventory.sales_cost"
+                                        class="text-input" 
+                                        keyboardType="number"
+                                        @blur="checkD()"
+                                        />
+                                </GridLayout>
+                            </GridLayout>                           
+                        </GridLayout>
 
-                        <StackLayout row="4" >
-                            <Button ref="invsubmit"
-                                class="modal-submit"
-                                text="OK" 
-                                @tap="submitMe()" />
-                        </StackLayout>
-                    </StackLayout>
+                        <GridLayout row="3" columns="*,*">
+                            <GridLayout col="0" >
+                                <Button ref="invsubmit"
+                                    class="btn-cancel"
+                                    text="CANCEL" 
+                                    @tap="onCancel()" />
+                            </GridLayout>
+                            <GridLayout col="1" >
+                                <Button ref="invsubmit"
+                                    class="btn-submit"
+                                    text="OK" 
+                                    @tap="onSubmit()" />
+                            </GridLayout>
+                        </GridLayout>
 
-                </StackLayout>
+                    </GridLayout>
+
+                </GridLayout>
             </StackLayout>
+
+            <ActivityIndicator :busy="showLoading" color="white" class="indLog" />
+
         </FlexboxLayout>
+        
 
     </Page>
 </template>
@@ -92,20 +110,17 @@
   import * as utils from "~/shared/utils";
   import SelectedPageService from "../../../shared/selected-page-service";
   import Vue from "nativescript-vue";
+  import alertmodal from "../../Modal/alertmodal";
+  import axios from "axios";
 
   
 
   export default {
     data(){
       return {
-            inventory: {
-                barcode: "",
-                product_description: "",
-                unit_cost: "",
-                sales_cost: "",
-                quantity: 0
-            }
-            
+        inventory: {
+        },
+        showLoading: false
       }
     },
     mounted() {
@@ -119,21 +134,8 @@
     methods: {
         sample() {
             console.log("br: " + this.inventory.barcode);
-            console.log("$refs: ", this.$refs.inputBar.getViewById);
-            
+            console.log("$refs: ", this.$refs.inputBar.getViewById);  
         },
-        validate(){
-            if(this.inventory.barcode != "" &&
-                this.inventory.product_description != "" &&
-                this.inventory.unit_cost != "" &&
-                this.inventory.sales_cost != "" ){
-                    // this.$refs.invsubmit.nativeView.isEnabled = 'true';
-                    return true;
-            } else {
-                return false;
-            }
-        },
-    
         checkA(){
             // fieldcolor = 
             if(this.inventory.barcode == ''){
@@ -180,19 +182,68 @@
             }
 
         },
-        submitMe(){
-            // if(this.validate()){
-                // this.$modal.close();
-                // console.log("inventory: ", this.inventory);
-            // } else {
-                // console.log("this.validate() returned not true");
-            // }
-
+        onCancel(){
+            for(var i = 0; i < this.inventory.length; i++){
+                this.inventory[0] = ""
+            }
+            this.$modal.close()
         },
-        close(){
-            $closeModal();
-        }
-    }
+        async onSubmit(){
+            if(this.inventory.barcode != "" &&
+                this.inventory.product_description != "" &&
+                this.inventory.unit_cost != "" &&
+                this.inventory.sales_cost != "" ){
+
+                    this.inventory.quantity = 0;
+                    this.inventory.created_by = '38';
+                    this.inventory.created_at = 'today';
+
+                    this.showLoading = true
+                    await axios({
+                        method: "POST",
+                        url: this.$root.server+`/add_inventory`, 
+                        header: {
+                            "Content-Type": "application/json"
+                        },
+                        data: { ...this.inventory },
+                        })
+                        .then(result => {
+                            console.log("result", result.data.msg);
+                            if(result) {
+                                this.showLoading = false;
+                                alert({
+                                    // title: "Success",
+                                    message: result.message,
+                                    okButtonText: "OK"
+                                    }).then(() => {
+                                    console.log("Alert dialog closed");
+                                });
+                                this.$modal.close();
+                            }
+                        })
+                        .catch(err => {
+                            this.showLoading = false;
+                            alert({
+                                title: "Fail",
+                                message: err.response.data.msg,
+                                okButtonText: "OK"
+                                }).then(() => {
+                                console.log("Alert dialog closed");
+                                this.inventory.barcode = ""
+                                this.inventory.product_description = ""
+                                this.inventory.unit_cost = ""
+                                this.inventory.sales_cost = ""
+                            });
+                        })
+            } else {
+                return false;
+            }
+            
+        },
+
+    
+    },
+    
   };
 </script>
 
@@ -206,6 +257,10 @@
     // .inputEmpty {
     //   border-color: red;
     // }
+
+    .page {
+        background-color: #05C5AA;
+    }
 
     .form {
 		margin: 20;
@@ -221,7 +276,7 @@
         padding-right: 5;
         font-size: 15;
         font-weight: bold;
-        background-color: white;
+        background-color: transparent;
         margin: 0;
         padding-top: 0;
         padding-bottom: 5; 
@@ -234,6 +289,7 @@
         border-color: #e6e6e6;
         border-radius: 8;
         margin-bottom: 15;
+        background-color: white;
     }
 
     .box-input-label {
@@ -242,6 +298,7 @@
         margin-left: 8;
         font-size: 10;
         color: #0a8171;
+        background-color: transparent;
         text-transform: uppercase;
     }
 
@@ -260,23 +317,20 @@
         margin-top: 0;
     }
 
-    .modal-label {
-        margin-top: 12;
-        margin-left: 15;
-        text-align: left;
-        text-transform: uppercase;
+    .btn-cancel {
+        background-color: #9e9e9e;
+        border-radius: 20;
+        height: 40;
+        color: white;
         font-weight: bold;
     }
 
-    .modal-submit {
-        width: 250;
-        color: aliceblue;
-        background-color: #0a8171;
-        border-radius: 12;
+    .btn-submit {
+        background-color: white;
+        border-radius: 20;
         height: 40;
-        text-transform: uppercase;
+        color: #009688;
         font-weight: bold;
-        margin-top: 30;
     }
     
 </style>

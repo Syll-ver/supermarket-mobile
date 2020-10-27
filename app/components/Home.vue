@@ -16,7 +16,7 @@
               <TextField class="login-input" hint="Username" maxLength="10" keyboardType="email" v-model="user.username" />
               <TextField class="login-input" secure="true" hint="Password" v-model="user.password" />
               
-              <Button text="Login" class="login-button btn" @tap="onNavigationItemTap(Dashboard)"  />
+              <Button text="Login" class="login-button btn" @tap="logme()"  />
             </StackLayout>
 
         </StackLayout>
@@ -38,8 +38,11 @@
 <script>
   import * as utils from "~/shared/utils";
   import SelectedPageService from "../shared/selected-page-service";
-  import Dashboard from "./Roles";
-  import axios from 'axios'
+  import Dashboard from "./Inventory";
+  import axios from 'axios';
+  import { mapActions } from 'vuex';
+  import state from '../store/state';
+  import actions from '../store/actions'
   // import ShowDetails from "./ShowDetails.vue";
 
   export default {
@@ -50,6 +53,7 @@
           username: "",
           password: "",
         },
+        inventory: [],
         showLoading: false,
         Dashboard: Dashboard
       }
@@ -66,43 +70,55 @@
       }
     },
     methods: {
-      onNavigationItemTap(component) {
-      //   this.showLoading = true
-      //   await axios({
-      //   method: "POST",
-      //   url: `http://172.16.4.182:9000/new/login`,
-      //   headers: {"Content-Type": "application/json"},
-      //   data: {
-      //     username: this.user.username,
-      //     password: this.user.password
-      //   }
-      // })
-      //   .then(result => {
-      //     this.$navigateTo(Dashboard, {
-      //       clearHistory: true,
-      //       transition: {
-      //         name: "fade",
-      //         duration: 200
+      // getInventory: function() {
+      //   this.$axios
+      //     .get("inventory")
+      //     .then(response => {
+      //       this.inventory = response.data.results;
+      //     })
+      //     .catch(err => console.log("Error:",err));
+      // }
+      // ...mapActions(['login']),
+      // async logme() {
+      //   this.showLoading = true; 
+
+      //   console.log("called");
+      //   if(this.user.username != '' && this.user.password != '') {
+      //     console.log("bypass empty");
+      //     console.log("user: ", this.user);
+          
+      //     await axios({
+      //       method: "POST",
+      //       url: `http://172.16.4.182:9000/new/login`,
+      //       headers: {"Content-Type": "application/json"},
+      //       data: this.user,
+      //     })
+      //     .then((result) => {
+      //       console.log("passed to actions");
+      //       console.log("result", result.data);
+      //       if(result){
+      //         console.log("success", result);
+      //       } else {
+      //         console.log("fail");
       //       }
-      //     });
-      //     this.showLoading = false;
-      //     this.user = {};
-      //   })
-      //   .catch(err => {
-      //     this.showLoading = false;
+      //     })
+      //     .catch((err) => {
+      //       console.log("error: ", err);
+      //       console.log("error: ", err.response.data.msg);
+      //     })
+      //   } else {
+      //     console.log("empty user");
+      //   }
+      // }
+        async logme(){
+          this.$navigateTo(Dashboard);
+        }
 
-      //     if (err.response && err.response.data.errorMsg) {
-      //       // TNSFancyAlert.showError(err.response.data.errorMsg);
-      //       console.log(err.response.data.errorMsg);
-      //     } else {
-      //       // TNSFancyAlert.showError(err.message);
-      //       console.log(err.message);
-      //     }
-      //   });
-
-        console.log("user: ", this.user);
-        // this.$navigateTo(component)
-      }
+        // async logme(){
+        //   axios.get('http://172.16.4.182:9000/inventory')
+        //   .then(data => console.log(data))
+        //   .catch(err => console.log(error)); // add this to see if the console is spitting an error.
+        // }
     }
       
     

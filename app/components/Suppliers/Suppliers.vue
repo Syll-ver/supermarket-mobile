@@ -32,7 +32,7 @@
                   <Label
                       col="1"
                       class="brand-name"
-                      text="INVENTORY"
+                      text="SUPPLIERS"
                       horizontalAlignment="center"
                   />
                   <Label
@@ -169,150 +169,17 @@
 
 <script>
   import * as utils from "~/shared/utils";
-  import SelectedPageService from "../shared/selected-page-service";
+  import SelectedPageService from "../../../shared/selected-page-service";
   // import { View, ViewBase } from "@nativescript/core/ui/frame";
-  import add from "./Admin/Inventory/add";
-  import edit from "./Admin/Inventory/edit";
+  import add from "./Admin/Suppliers/add";
+  import edit from "./Admin/Suppliers/edit";
   import axios from "axios";
 
   export default {
     data(){
       return {
-        inventory: {},
-        // inventory: [
-        //     {
-        //     inventory_id: 1,
-        //     barcode: 15304218,
-        //     product_description: "Churned Milk 1kg",
-        //     qty: 20,
-        //     unit_cost: 112.5,
-        //     sales_cost: 120,
-        //     created_by: 153,
-        //     created_at: "May 02, 2020",
-        //     updated_by: null,
-        //     updated_at: null
-        //     },
-        //     {
-        //     inventory_id: 2,
-        //     barcode: 51404209,
-        //     product_description: "Cadbury 65g",
-        //     qty: 50,
-        //     unit_cost: 76.75,
-        //     sales_cost: 85,
-        //     created_by: 153,
-        //     created_at: "May 02, 2020",
-        //     updated_by: null,
-        //     updated_at: null
-        //     },
-        //     {
-        //     inventory_id: 3,
-        //     barcode: 11443366,
-        //     product_description: "Dairy Meelk 250mL",
-        //     qty: 35,
-        //     unit_cost: 89.6,
-        //     sales_cost: 95.50,
-        //     created_by: 153,
-        //     created_at: "May 02, 2020",
-        //     updated_by: null,
-        //     updated_at: null
-        //     },
-        //     {
-        //     inventory_id: 1,
-        //     barcode: 15304218,
-        //     product_description: "Churned Milk 1kg",
-        //     qty: 20,
-        //     unit_cost: 112.5,
-        //     sales_cost: 120,
-        //     created_by: 153,
-        //     created_at: "May 02, 2020",
-        //     updated_by: null,
-        //     updated_at: null
-        //     },
-        //     {
-        //     inventory_id: 2,
-        //     barcode: 51404209,
-        //     product_description: "Cadbury 65g",
-        //     qty: 50,
-        //     unit_cost: 76.75,
-        //     sales_cost: 85,
-        //     created_by: 153,
-        //     created_at: "May 02, 2020",
-        //     updated_by: null,
-        //     updated_at: null
-        //     },
-        //     {
-        //     inventory_id: 3,
-        //     barcode: 11443366,
-        //     product_description: "Dairy Meelk 250mL",
-        //     qty: 35,
-        //     unit_cost: 89.6,
-        //     sales_cost: 95.50,
-        //     created_by: 153,
-        //     created_at: "May 02, 2020",
-        //     updated_by: null,
-        //     updated_at: null
-        //     },
-        //     {
-        //     inventory_id: 4,
-        //     barcode: 12196864,
-        //     product_description: "Hershey's Chocs 65g",
-        //     qty: 55,
-        //     unit_cost: 82.25,
-        //     sales_cost: 86.50,
-        //     created_by: 153,
-        //     created_at: "May 02, 2020",
-        //     updated_by: null,
-        //     updated_at: null
-        //     },
-        //     {
-        //     inventory_id: 5,
-        //     barcode: 53170036,
-        //     product_description: "Oreo Cookies",
-        //     qty: 60,
-        //     unit_cost: 54.75,
-        //     sales_cost: 60,
-        //     created_by: 153,
-        //     created_at: "May 02, 2020",
-        //     updated_by: null,
-        //     updated_at: null
-        //     },
-        //     {
-        //     inventory_id: 4,
-        //     barcode: 12196864,
-        //     product_description: "Hershey's Chocs 65g",
-        //     qty: 55,
-        //     unit_cost: 82.25,
-        //     sales_cost: 86.50,
-        //     created_by: 153,
-        //     created_at: "May 02, 2020",
-        //     updated_by: null,
-        //     updated_at: null
-        //     },
-        //     {
-        //     inventory_id: 5,
-        //     barcode: 53170036,
-        //     product_description: "Oreo Cookies",
-        //     qty: 60,
-        //     unit_cost: 54.75,
-        //     sales_cost: 60,
-        //     created_by: 153,
-        //     created_at: "May 02, 2020",
-        //     updated_by: null,
-        //     updated_at: null
-        //     },
-        //     {
-        //     inventory_id: 6,
-        //     barcode: 18773694,
-        //     product_description: "Muck n Cheez",
-        //     qty: 40,
-        //     unit_cost: 98.15,
-        //     sales_cost: 110,
-        //     created_by: 153,
-        //     created_at: "May 02, 2020",
-        //     updated_by: null,
-        //     updated_at: null
-        //     }
-        // ],
+        supplier: {},
+ 
         floatbutton: false, 
         add: add,
         edit: edit,
