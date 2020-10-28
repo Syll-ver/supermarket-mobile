@@ -34,7 +34,7 @@
                                 <TextField row="1" class="text-input"
                                     v-model="inventory.barcode"
                                     keyboardType="number"
-                                    @blur="checkA()"
+                                    
                                     />
                             </GridLayout>
                         </GridLayout>
@@ -45,7 +45,7 @@
                                 class="box-input-label">Product Description</Label>
                                 <TextField row="1" class="text-input"
                                     v-model="inventory.product_description"
-                                    @blur="checkB()"
+                                    
                                     />
                             </GridLayout>
                         </GridLayout>
@@ -60,7 +60,7 @@
                                     <TextField row="1" class="text-input"  
                                         v-model="inventory.unit_cost"
                                         keyboardType="number"
-                                        @blur="checkC()"
+                                        
                                     />
                                 </GridLayout>
                             </GridLayout>
@@ -72,7 +72,7 @@
                                     <TextField row="1" v-model="inventory.sales_cost"
                                         class="text-input" 
                                         keyboardType="number"
-                                        @blur="checkD()"
+                                        
                                         />
                                 </GridLayout>
                             </GridLayout>                           
@@ -109,7 +109,7 @@
 <script>
   import * as utils from "~/shared/utils";
   import SelectedPageService from "../../../shared/selected-page-service";
-  import Vue from "nativescript-vue";
+
   import alertmodal from "../../Modal/alertmodal";
   import axios from "axios";
 
@@ -136,57 +136,11 @@
             console.log("br: " + this.inventory.barcode);
             console.log("$refs: ", this.$refs.inputBar.getViewById);  
         },
-        checkA(){
-            // fieldcolor = 
-            if(this.inventory.barcode == ''){
-                this.$refs.inputBCLabel.nativeView.color = "#DD0000";
-                this.$refs.inputBarcode.nativeView.borderColor = "#DD0000";
-            } else {
-                this.$refs.inputBCLabel.nativeView.color = "#0a8171";
-                this.$refs.inputBarcode.nativeView.borderColor = "#e6e6e6";
-                // this.validate()
-            }
-
-           
-        },
-        checkB(){
-            if(this.inventory.product_description == ''){
-                this.$refs.inputPDLabel.nativeView.color = "#DD0000";
-                this.$refs.product_description.nativeView.borderColor = "#DD0000";
-            } else {
-                this.$refs.inputPDLabel.nativeView.color = "#0a8171";
-                this.$refs.product_description.nativeView.borderColor = "#e6e6e6";
-                // this.validate()
-            }
-            
-        },
-        checkC(){
-            if(this.inventory.unit_cost == ''){
-                this.$refs.inputUCLabel.nativeView.color = "#DD0000";
-                this.$refs.unit_cost.nativeView.borderColor = "#DD0000";
-            } else {
-                this.$refs.inputUCLabel.nativeView.color = "#0a8171";
-                this.$refs.unit_cost.nativeView.borderColor = "#e6e6e6";
-                // this.validate()
-            }
-
-        },
-        checkD(){
-            if(this.inventory.sales_cost == ''){
-                this.$refs.inputSCLabel.nativeView.color = "#DD0000";
-                this.$refs.sales_cost.nativeView.borderColor = "#DD0000";
-            } else {
-                this.$refs.inputSCLabel.nativeView.color = "#0a8171";
-                this.$refs.sales_cost.nativeView.borderColor = "#e6e6e6";
-                // this.validate()
-            }
-
-        },
         onCancel(){
-            for(var i = 0; i < this.inventory.length; i++){
-                this.inventory[0] = ""
-            }
-            this.$modal.close()
+            // for(var i = 0; i < this.inventory.length; i++){
+            //     this.inventory[0] = ""
+            // }
+            this.$modal.close();
         },
         async onSubmit(){
             if(this.inventory.barcode != "" &&

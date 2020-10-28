@@ -38,12 +38,9 @@
 <script>
   import * as utils from "~/shared/utils";
   import SelectedPageService from "../shared/selected-page-service";
-  import Dashboard from "./Inventory";
+  import Dashboard from "./Transactions/Delivery/add";
   import axios from 'axios';
   import { mapActions } from 'vuex';
-  import state from '../store/state';
-  import actions from '../store/actions'
-  // import ShowDetails from "./ShowDetails.vue";
 
   export default {
     data(){
@@ -70,55 +67,11 @@
       }
     },
     methods: {
-      // getInventory: function() {
-      //   this.$axios
-      //     .get("inventory")
-      //     .then(response => {
-      //       this.inventory = response.data.results;
-      //     })
-      //     .catch(err => console.log("Error:",err));
-      // }
-      // ...mapActions(['login']),
-      // async logme() {
-      //   this.showLoading = true; 
 
-      //   console.log("called");
-      //   if(this.user.username != '' && this.user.password != '') {
-      //     console.log("bypass empty");
-      //     console.log("user: ", this.user);
-          
-      //     await axios({
-      //       method: "POST",
-      //       url: `http://172.16.4.182:9000/new/login`,
-      //       headers: {"Content-Type": "application/json"},
-      //       data: this.user,
-      //     })
-      //     .then((result) => {
-      //       console.log("passed to actions");
-      //       console.log("result", result.data);
-      //       if(result){
-      //         console.log("success", result);
-      //       } else {
-      //         console.log("fail");
-      //       }
-      //     })
-      //     .catch((err) => {
-      //       console.log("error: ", err);
-      //       console.log("error: ", err.response.data.msg);
-      //     })
-      //   } else {
-      //     console.log("empty user");
-      //   }
-      // }
         async logme(){
           this.$navigateTo(Dashboard);
         }
 
-        // async logme(){
-        //   axios.get('http://172.16.4.182:9000/inventory')
-        //   .then(data => console.log(data))
-        //   .catch(err => console.log(error)); // add this to see if the console is spitting an error.
-        // }
     }
       
     

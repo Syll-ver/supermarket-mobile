@@ -171,8 +171,8 @@
   import * as utils from "~/shared/utils";
   import SelectedPageService from "../../../shared/selected-page-service";
   // import { View, ViewBase } from "@nativescript/core/ui/frame";
-  import add from "./Admin/Suppliers/add";
-  import edit from "./Admin/Suppliers/edit";
+  import add from "./add";
+  import edit from "./edit";
   import axios from "axios";
 
   export default {

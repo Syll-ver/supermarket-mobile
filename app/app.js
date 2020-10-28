@@ -9,17 +9,17 @@ Vue.use(Vuex);
 Vue.prototype.$axios = axios;
 Vue.prototype.$axios.defaults.baseURL = 'http://172.16.4.182:9000'
 
-import state from './store/state';
 import App from "./components/App";
 import Home from "./components/Home";
 import DrawerContent from "./components/DrawerContent";
 import RadSideDrawer from "nativescript-ui-sidedrawer/vue";
 
 
+
 import { TNSFontIcon, fonticon } from 'nativescript-fonticon'
 
 // Load TNSFonticon
- TNSFontIcon.debug = true
+//  TNSFontIcon.debug = true
  TNSFontIcon.paths = {
    fa: './assets/css/fontawesome.min.css',
    far: './assets/css/regular.min.css',
@@ -46,9 +46,14 @@ new Vue({
         )
       },
       data: {
-        server: "http://172.16.4.182:9000"
+        server: "http://172.16.4.182:9000",
+        inventory: [],
+        roles: [],
+        delivery: [],
+        sales: [],
+        suppliers: [],
       }
   }).$start();
 
 
-inventory: []
+

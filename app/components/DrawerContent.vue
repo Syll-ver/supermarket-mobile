@@ -77,12 +77,12 @@
   import Home from "./Home";
   import Inventory from "./Inventory";
   import Suppliers from "./Admin/Suppliers/Suppliers";
-  import Roles from "./Admin/Roles/Roles"; //"./Roles";
+  import Roles from "./Admin/Roles/Roles";
   import Users from "./Users";
   import Featured from "./Featured";
   import Search from "./Search";
   import Settings from "./Settings";
-  import Delivery from "./Delivery";
+  import Delivery from "./Transactions/Delivery/Delivery";
   import Sales from "./Sales";
   import Logout from "./Logout";
   import * as utils from "~/shared/utils";

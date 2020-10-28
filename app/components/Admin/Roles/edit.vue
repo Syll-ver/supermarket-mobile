@@ -1,5 +1,12 @@
 <template>
-    <Page class="modal-page" actionBarHidden="true">
+    <Page class="modal-page">
+      <ActionBar class="action-bar banner" title="Add Item">
+          <!--
+          Use the NavigationButton as a side-drawer button in Android
+          because ActionItems are shown on the right side of the ActionBar
+          -->
+      </ActionBar>
+
 
         <FlexboxLayout class="page">
             <StackLayout >
@@ -7,7 +14,7 @@
                     <GridLayout columns="*,auto">
                         <Label 
                             class="modal-label" col="0" 
-                            text="Add Role"
+                            text="Update Role"
                             color="white"
                             fontWeight="bold"
                             horizontalAlignment="center"
@@ -59,6 +66,7 @@
             <ActivityIndicator :busy="showLoading" color="white" class="indLog" />
 
         </FlexboxLayout>
+        
 
     </Page>
 </template>
@@ -67,128 +75,94 @@
   import * as utils from "~/shared/utils";
   import SelectedPageService from "../../../shared/selected-page-service";
   import Vue from "nativescript-vue";
+  import alertmodal from "../../Modal/alertmodal";
   import axios from "axios";
-  
+  import actions from "../../../store/actions";
+
 
   export default {
+      props: [
+        'role_id',
+        'roles_code',
+        'role_name',
+        'created_by',
+        'created_at',
+        'updated_by',
+        'updated_at'
+      ],
     data(){
       return {
-            roles: {
-                roles_code: "",
-                role_id: "",
-                role_name: "",
-                created_at: "",
-                created_by: "",
-                updated_by: "",
-                updated_at: ""
-            },
-            showLoading: false
-            // Roles: Roles
+        roles: {
+            role_id: this.role_id,
+            roles_code: this.roles_code,
+            role_name: this.role_name,
+            created_by: this.created_by,
+            created_at: this.created_at,
+            updated_by: this.updated_by,
+            updated_at: this.updated_at
+        },
+        showLoading: false
       }
-    },
-    mounted() {
-    },
-    created(){
-    },
-    computed: {
-      message() {
-        return "<!-- Page content goes here -->";
-      }
-    },
-    components: {
-        // Roles
     },
     methods: {
-        sample() {
-            // console.log("br: " + this.inventory.barcode);
-            // console.log("$refs: ", this.$refs.inputBar.getViewById);
-            
+        onCancel(){
+            this.$modal.close();
         },
-        validate(){
+        async onSubmit(){
+            console.log("roles", this.roles);
+            // edit on newly added kay mag fail kay auto generated man ang ids 
+            // therefore on push kay wala siya :((
             if(this.roles.role_name != "" ){
-                    // this.$refs.invsubmit.nativeView.isEnabled = 'true';
-                    return true;
+                    
+                    this.roles.updated_by = '38';
+                    this.roles.updated_at = 'today';
+                    console.log("role: ", this.roles);
+
+                    this.showLoading = true
+                    await axios({
+                        method: "PUT",
+                        url: this.$root.server+`/role/`+this.roles.role_id, 
+                        header: {
+                            "Content-Type": "application/json"
+                        },
+                        data: { ...this.roles },
+                        })
+                        .then(result => {
+                            console.log("result", result.data.msg);
+                            if(result) {
+                                
+                                // mutate 
+                                const roleList = this.$root.roles.findIndex(x => x.role_id === this.roles.role_id)
+                                this.$root.roles.splice(roleList, 1);
+                                this.$root.roles.push(this.roles)
+
+                                console.log("new: ", this.$root.roles);
+
+                                alert({
+                                    // title: "Success",
+                                    message: result.data.msg,
+                                    okButtonText: "OK"
+                                    }).then(() => {
+                                    console.log("Alert dialog closed");
+                                });
+                                this.$modal.close();
+                            }
+                        })
+                        .catch(err => {
+                            console.log("error", err);
+                            this.showLoading = false;
+                            alert({
+                                title: "Fail",
+                                message: err.response.data.msg,
+                                okButtonText: "OK"
+                                }).then(() => {
+                                console.log("Alert dialog closed");
+                            });
+                        })
             } else {
                 return false;
             }
-        },
-        onCancel(){
-            this.roles.roles_code = ""
-            this.roles.role_id = ""
-            this.roles.role_name = ""
-            this.roles.created_at = ""
-            this.roles.created_by = ""
-            this.roles.updated_by = ""
-            this.roles.updated_at = ""
-            this.$modal.close()
-        },
-        async onSubmit(){
-
-            if(this.roles.role_name != ""){
-                this.roles.created_at = "today";
-                this.roles.created_by = '38';
-                console.log("ROLES: ", this.roles);
-
-                this.showLoading = true
-                await axios({
-                    method: "POST",
-                    url: `${this.$axios.defaults.baseURL}/role/add`,
-                    header: {
-                        "Content-Type": "application/json"
-                    },
-                    data: { ...this.roles },
-                })
-                .then(result => {
-                    if(result){
-                        console.log("result: ",result);
-
-                        // mutate
-                        this.$root.roles.push(this.roles)
-
-                        // get stuff from api, re-save to global variable
-                        // so ma-edit ang newly added since makuha na man 
-                        // ang generated ids.
-                        axios.get(this.$root.server+`/roles`)
-                        .then(role => {
-                            this.$root.roles = role.data
-                            console.log("root roles: ", this.$root.roles);
-                            this.showLoading = false;
-                        })
-                        // add this to see if the console is spitting an error.
-                        .catch(err => console.log(err)); 
-                        
-                        // Success
-                        this.showLoading = false;
-                        alert({
-                        message: result.data.msg,
-                        okButtonText: "OK"
-                        }).then(() => {
-                            console.log("Alert dialog closed");
-                        });
-                        this.$modal.close();
-                    }
-                })
-                .catch(err => {
-                    this.showLoading = false;
-                    alert({
-                        title: "Fail",
-                        message: err.response.data.msg,
-                        okButtonText: "OK"
-                        }).then(() => {
-                        console.log("Alert dialog closed");
-                        this.inventory.barcode = ""
-                        this.inventory.product_description = ""
-                        this.inventory.unit_cost = ""
-                        this.inventory.sales_cost = ""
-                    });
-                })
-            } else {
-                alert({
-                    message: 'missing field',
-                    okButtonText: 'OK'
-                })
-            }
-
+            
         },
 
     
@@ -217,6 +191,8 @@
 		flex-grow: 2;
 		vertical-align: middle;
     }
+
+    
     
     .text-input {
         width: 250;
@@ -238,7 +214,6 @@
         border-radius: 8;
         margin-bottom: 15;
         background-color: white;
-        // height: 60;
     }
 
     .box-input-label {
@@ -264,32 +239,6 @@
         background: white;
         margin-right: 10;
         margin-top: 0;
-    }
-
-    .modal-label {
-        margin-top: 12;
-        margin-left: 15;
-        text-align: left;
-        text-transform: uppercase;
-        font-weight: bold;
-    }
-
-    .modal-submit {
-        // color: #009688;
-        // background-color: #0a8171;
-        border-radius: 12;
-        text-transform: uppercase;
-        font-weight: bold;
-        margin-top: 30;
-    }
-
-    .modal-cancel-btn {
-        color: white;
-        background-color: grey;
-        border-radius: 12;
-        text-transform: uppercase;
-        font-weight: bold;
-        margin-top: 30;
     }
 
     .btn-cancel {

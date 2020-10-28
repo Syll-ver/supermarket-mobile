@@ -206,7 +206,8 @@
                 this.inventory.product_description != "" &&
                 this.inventory.unit_cost != "" &&
                 this.inventory.sales_cost != "" ){
-                    
+
+                    // this.inventory.quantity = 0;
                     this.inventory.updated_by = '38';
                     this.inventory.updated_at = 'today';
 
@@ -242,6 +243,10 @@
                                 okButtonText: "OK"
                                 }).then(() => {
                                 console.log("Alert dialog closed");
+                                this.inventory.barcode = ""
+                                this.inventory.product_description = ""
+                                this.inventory.unit_cost = ""
+                                this.inventory.sales_cost = ""
                             });
                         })
             } else {
