@@ -1,15 +1,5 @@
 <template>
     <Page class="page" actionBarHidden="true">
-      <!-- <ActionBar class="action-bar banner" flat="true">
-
-          <NavigationButton ios:visibility="collapsed" icon="res://menu" @tap="onDrawerButtonTap"/>
-
-          <ActionItem icon="res://menu"
-                      android:visibility="collapsed"
-                      @tap="onDrawerButtonTap"
-                      ios.position="left"/>
-          <Label class="action-bar-title titles" text="Inventory"/>
-      </ActionBar> -->
 
       <GridLayout class="page__content">
         <GridLayout>
@@ -35,14 +25,14 @@
                       text="SUPPLIERS"
                       horizontalAlignment="center"
                   />
-                  <Label
+                  <!-- <Label
                       col="2"
                       class="fas p-20"
                       fontSize="16"
                       color="white"
                       :text=" 'fa-ellipsis-v' | fonticon "
                       horizontalAlignment="right" 
-                  />
+                  /> -->
               </GridLayout>
             </StackLayout>
           </GridLayout>
@@ -65,74 +55,48 @@
             />
           </GridLayout>
           <GridLayout row="2">
-            <StackLayout ref="inventoryList">
+            <StackLayout ref="supplierList">
 
                 <ListView row="1" class="list-group" height="670"
-                separatorColor="transparent" :items="inventory"
-                  for="item in inventory" >
+                separatorColor="transparent"
+                  for="item in $root.suppliers" >
                     <v-template>
                       <StackLayout >
-                        <GridLayout class="list-box" rows="auto,*,*" col="*,*">
-                            <Label row="0" col="0" :text="item.barcode" />
+                        <GridLayout class="list-box" rows="*,*,*" col="*,*,*">
                             <Label 
-                              row="1" col="0"
+                              row="0" col="0"
                               fontSize="15"
                               fontWeight="bold" 
-                              :text="item.product_description" />
-                            <Label row="0" col="0" rowSpan="2" 
+                              textWrap="true"
+                              :text="item.company_name" />
+                              <!-- <Label 
+                              v-bind:class="[item.status == true ? 'activeStatus' : 'inactiveStatus']"
+                              row="0" col="1"
+                              fontSize="13"
+                              margin="0"
+                              padding="0"
+                              fontWeight="bold" 
+                              textWrap="true"
+                              :text="item.status" /> -->
+                            <Label row="0" col="2" rowSpan="2" 
                               class="far m-r-10"
                               fontSize="19"
                               horizontalAlignment="right"
                               :text=" 'fa-edit' | fonticon "
                               @tap="update(item)" />
-                            <GridLayout row="2">
-                              <GridLayout rows="auto,*" columns="*,*,*">
-                                <Label row="0" col="0"
-                                  horizontalAlignment="center"
-                                  padding="0"
-                                  margin="0"
-                                  text="UNIT COST" />
-                                <Label row="1" col="0" 
-                                  horizontalAlignment="center"
-                                  fontWeight="bold"
-                                  fontSize="14"
-                                  padding="0"
-                                  margin="0"
-                                  :text=" '₱'+item.unit_cost" />
-                                <Label row="0" col="1" 
-                                  horizontalAlignment="center"
-                                  text="SALES COST" />
-                                <Label row="1" col="1" 
-                                  horizontalAlignment="center"
-                                  fontWeight="bold"
-                                  fontSize="14"
-                                  :text=" '₱'+item.sales_cost" />
-                                <Label row="0" col="2" 
-                                  horizontalAlignment="center"
-                                  text="QTY" />
-                                <Label row="1" col="2" 
-                                  horizontalAlignment="center"
-                                  fontSize="14"
-                                  fontWeight="bold"
-                                  :text="item.quantity" />
-                              </GridLayout>
-                            </GridLayout>
+                              <Label 
+                              row="1" col="0"
+                              fontSize="13"
+                              fontWeight="bold" 
+                              textWrap="true"
+                              :text="item.contact_no" />
+                              <Label 
+                              row="2" col="0"
+                              fontSize="14"
+                              fontWeight="bold" 
+                              textWrap="true"
+                              :text="item.company_address" />
                         </GridLayout>
-
-
-
-
-                        <!-- <GridLayout rows="*,*,*" columns="*,auto">
-                          <StackLayout row="1" class="content">
-                            <GridLayout class="inv-item" rows="*,*" columns="*,auto">
-                              <Label row="0" col="0" :text="item.barcode +' - '+ item.product_description" textWrap="true" ></Label>
-                              <Label row="0" col="1" :text="'Quantity: '+item.qty"></Label>
-                              <Label row="1" col="0" :text="'Unit Cost: '+item.unit_cost"></Label>
-                              <Label row="1" col="1" :text="'Sales Cost: '+item.sales_cost"></Label>
-                            </GridLayout>
-
-                          </StackLayout>
-                        </GridLayout> -->
 
                       </StackLayout>
                     </v-template>
@@ -151,12 +115,15 @@
               :text=" 'fa-plus' | fonticon " 
               fontSize="19"
               color="white"
-              @tap="onButtonTap" />
+              @tap="$showModal(add)" />
         </GridLayout>
-        <GridLayout rows="auto,auto" column="auto,auto" class="childbtn" v-show="floatbutton">
+        <!-- <GridLayout rows="auto,auto" column="auto,auto" class="childbtn" v-show="floatbutton">
             <Button row="0" col="1" @tap="$showModal(add)" class="floatingbutton1" id="fbutton1" text="1" />
             <Button row="1" col="0" class="floatingbutton2" id="fbutton2" text="2" />
-        </GridLayout>
+        </GridLayout> -->
+
+      <GridLayout v-show="blur" class="modalBlur">
+      </GridLayout>
 
       <ActivityIndicator :busy="showLoading" color="green" class="indLog" />
 
@@ -178,12 +145,11 @@
   export default {
     data(){
       return {
-        supplier: {},
- 
         floatbutton: false, 
         add: add,
         edit: edit,
-        showLoading: false
+        showLoading: false,
+        blur: false
 
       }
     },
@@ -193,9 +159,8 @@
     },
 
     mounted() {
-      SelectedPageService.getInstance().updateSelectedPage("Inventory");
-      // const thisBtn = this.$refs.fchildbtn.nativeView
-      // let body = this.$refs.body
+      SelectedPageService.getInstance().updateSelectedPage("supplier");
+
     },
     computed: {
       message() {
@@ -213,24 +178,17 @@
         nativeView.setText("Native View - Android");
         args.view = nativeView;
       },
-      onButtonTap() {
-        if(this.floatbutton){
-          this.floatbutton = false;
-        } else {
-          this.floatbutton = true;
-        }
-        
-      },
+      // onButtonTap() {
+      //   this.$showModal(add)
+      // },
       update(item) {
         this.$showModal(edit, {
           props: {
-            // items: items
-              inventory_id: item.inventory_id,
-              barcode: item.barcode,
-              product_description: item.product_description,
-              quantity: item.quantity,
-              unit_cost: item.unit_cost,
-              sales_cost: item.sales_cost,
+              supplier_id: item.supplier_id,
+              company_name: item.company_name,
+              contact_no: item.contact_no,
+              company_address: item.company_address,
+              status: item.status,
               created_by: item.created_by,
               created_at: item.created_at,
               updated_by: item.updated_by,
@@ -242,15 +200,18 @@
     },
     async created() {
       this.showLoading = true;
+      this.blur = true;
 
-      await axios.get(this.$root.server+`/inventory`)
-        .then(inventory => {
-          this.inventory = inventory.data
+      await axios.get(this.$root.server+`/supplier`)
+        .then(supplier => {
+          this.$root.suppliers = supplier.data
           
-          console.log("result data", inventory.data)
-          console.log("inventory: ", this.inventory);
+          console.log("result data", supplier.data)
+          console.log("supplier: ", this.supplier);
 
           this.showLoading = false;
+          this.blur = false;
+          
         })
         .catch(err => console.log(error)); // add this to see if the console is spitting an error.
     }
@@ -265,6 +226,14 @@
     // Custom styles
     .page {
       background: #f5f5f5;
+    }
+
+    .activeStatus {
+      background-color: #0ee920;
+    }
+
+    .inactiveStatus {
+      background-color: grey;
     }
 
     .bg-back {

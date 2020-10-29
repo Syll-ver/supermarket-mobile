@@ -34,7 +34,6 @@
                                 <TextField row="1" class="text-input"
                                     v-model="inventory.barcode"
                                     keyboardType="number"
-                                    @blur="checkA()"
                                     />
                             </GridLayout>
                         </GridLayout>
@@ -45,7 +44,6 @@
                                 class="box-input-label">Product Description</Label>
                                 <TextField row="1" class="text-input"
                                     v-model="inventory.product_description"
-                                    @blur="checkB()"
                                     />
                             </GridLayout>
                         </GridLayout>
@@ -60,7 +58,6 @@
                                     <TextField row="1" class="text-input"  
                                         v-model="inventory.unit_cost"
                                         keyboardType="number"
-                                        @blur="checkC()"
                                     />
                                 </GridLayout>
                             </GridLayout>
@@ -72,7 +69,6 @@
                                     <TextField row="1" v-model="inventory.sales_cost"
                                         class="text-input" 
                                         keyboardType="number"
-                                        @blur="checkD()"
                                         />
                                 </GridLayout>
                             </GridLayout>                           
@@ -97,6 +93,9 @@
 
                 </GridLayout>
             </StackLayout>
+
+             <GridLayout v-show="blur" class="modalBlur">
+            </GridLayout>
 
             <ActivityIndicator :busy="showLoading" color="white" class="indLog" />
 
@@ -142,58 +141,11 @@
             updated_by: this.updated_by,
             updated_at: this.updated_at
         },
-        showLoading: false
+        showLoading: false,
+        blur: false
       }
     },
     methods: {
-        sample() {
-            console.log("br: " + this.inventory.barcode);
-            console.log("$refs: ", this.$refs.inputBar.getViewById);  
-        },
-        checkA(){
-            // fieldcolor = 
-            if(this.inventory.barcode == ''){
-                this.$refs.inputBCLabel.nativeView.color = "#DD0000";
-                this.$refs.inputBarcode.nativeView.borderColor = "#DD0000";
-            } else {
-                this.$refs.inputBCLabel.nativeView.color = "#0a8171";
-                this.$refs.inputBarcode.nativeView.borderColor = "#e6e6e6";
-                // this.validate()
-            }
-        },
-        checkB(){
-            if(this.inventory.product_description == ''){
-                this.$refs.inputPDLabel.nativeView.color = "#DD0000";
-                this.$refs.product_description.nativeView.borderColor = "#DD0000";
-            } else {
-                this.$refs.inputPDLabel.nativeView.color = "#0a8171";
-                this.$refs.product_description.nativeView.borderColor = "#e6e6e6";
-                // this.validate()
-            }
-            
-        },
-        checkC(){
-            if(this.inventory.unit_cost == ''){
-                this.$refs.inputUCLabel.nativeView.color = "#DD0000";
-                this.$refs.unit_cost.nativeView.borderColor = "#DD0000";
-            } else {
-                this.$refs.inputUCLabel.nativeView.color = "#0a8171";
-                this.$refs.unit_cost.nativeView.borderColor = "#e6e6e6";
-                // this.validate()
-            }
-
-        },
-        checkD(){
-            if(this.inventory.sales_cost == ''){
-                this.$refs.inputSCLabel.nativeView.color = "#DD0000";
-                this.$refs.sales_cost.nativeView.borderColor = "#DD0000";
-            } else {
-                this.$refs.inputSCLabel.nativeView.color = "#0a8171";
-                this.$refs.sales_cost.nativeView.borderColor = "#e6e6e6";
-                // this.validate()
-            }
-
-        },
         onCancel(){
             for(var i = 0; i < this.inventory.length; i++){
                 this.inventory[0] = ""
@@ -202,18 +154,21 @@
         },
         async onSubmit(){
             console.log("inventory", this.inventory);
-            if(this.inventory.barcode != "" &&
-                this.inventory.product_description != "" &&
-                this.inventory.unit_cost != "" &&
-                this.inventory.sales_cost != "" ){
+            if(this.inventory.barcode != null &&
+                this.inventory.product_description != null &&
+                this.inventory.unit_cost != null &&
+                this.inventory.sales_cost != null ){
                     
                     this.inventory.updated_by = '38';
                     this.inventory.updated_at = 'today';
 
-                    this.showLoading = true
+                    console.log("inventory", this.inventory);
+
+                    this.showLoading = true;
+                    this.blur = true;
                     await axios({
                         method: "PUT",
-                        url: this.$root.server+`/inventory`+this.inventory_id, 
+                        url: this.$root.server+`/inventory/`+this.inventory_id, 
                         header: {
                             "Content-Type": "application/json"
                         },
@@ -222,10 +177,20 @@
                         .then(result => {
                             console.log("result", result.data.msg);
                             if(result) {
+
+                                axios.get(this.$root.server+`/inventory`)
+                                .then(inventory => {
+                                    this.$root.inventory = inventory.data
+
+                                    this.showLoading = false;
+                                    this.blur = false;
+                                })
+                                .catch(err => console.log(error));
+
+
                                 this.showLoading = false;
                                 alert({
-                                    // title: "Success",
-                                    message: result.message,
+                                    message: "Success",
                                     okButtonText: "OK"
                                     }).then(() => {
                                     console.log("Alert dialog closed");
@@ -236,6 +201,8 @@
                         .catch(err => {
                             console.log("error", err);
                             this.showLoading = false;
+                            this.blur = false;
+
                             alert({
                                 title: "Fail",
                                 message: err.response.data.msg,

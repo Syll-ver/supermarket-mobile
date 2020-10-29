@@ -52,6 +52,7 @@ new Vue({
         delivery: [],
         sales: [],
         suppliers: [],
+        users: []
       }
   }).$start();
 

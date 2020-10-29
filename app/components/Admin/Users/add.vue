@@ -17,7 +17,7 @@
                 </StackLayout>
 
                 <GridLayout class="form">
-                    <GridLayout rows="auto,auto">
+                    <GridLayout rows="auto,auto,auto,auto">
                       <GridLayout ref="inputRolename" row="0"
                         class="box-input" >
                          <GridLayout rows="auto,auto">
@@ -25,13 +25,51 @@
                                 row="0"
                                 ref="inputRNLabel"
                                 class="box-input-label" 
-                                text="Role Name"
+                                text="Employee Code"
                                 />
                             <TextField 
                                 ref="rolename_input"
                                 row="1"
                                 class="text-input"
-                                v-model="roles.role_name"
+                                v-model="user.employee_code"
+                                autoCapitalizationType="false"
+                                />
+                         </GridLayout>
+                      </GridLayout>
+
+                      <GridLayout ref="inputRolename" row="0"
+                        class="box-input" >
+                         <GridLayout rows="auto,auto">
+                              <Label 
+                                row="0"
+                                ref="inputRNLabel"
+                                class="box-input-label" 
+                                text="Username"
+                                />
+                            <TextField 
+                                ref="rolename_input"
+                                row="1"
+                                class="text-input"
+                                v-model="user.username"
+                                autoCapitalizationType="false"
+                                />
+                         </GridLayout>
+                      </GridLayout>
+
+                      <GridLayout ref="inputRolename" row="0"
+                        class="box-input" >
+                         <GridLayout rows="auto,auto">
+                              <Label 
+                                row="0"
+                                ref="inputRNLabel"
+                                class="box-input-label" 
+                                text="Role"
+                                />
+                            <TextField 
+                                ref="rolename_input"
+                                row="1"
+                                class="text-input"
+                                v-model="user.role_name"
                                 autoCapitalizationType="false"
                                 />
                          </GridLayout>

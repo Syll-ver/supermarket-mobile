@@ -13,7 +13,7 @@
                 <StackLayout class="modal-banner">
                     <GridLayout columns="*,auto">
                         <Label 
-                            class="modal-label" col="0" 
+                            class="modal-label p-t-5" col="0" 
                             text="Add Inventory Item"
                             fontWeight="bold"
                             color="white"
@@ -98,6 +98,9 @@
                 </GridLayout>
             </StackLayout>
 
+            <GridLayout v-show="blur" class="modalBlur">
+            </GridLayout>
+
             <ActivityIndicator :busy="showLoading" color="white" class="indLog" />
 
         </FlexboxLayout>
@@ -120,7 +123,8 @@
       return {
         inventory: {
         },
-        showLoading: false
+        showLoading: false,
+        blur: false
       }
     },
     mounted() {
@@ -137,9 +141,6 @@
             console.log("$refs: ", this.$refs.inputBar.getViewById);  
         },
         onCancel(){
-            // for(var i = 0; i < this.inventory.length; i++){
-            //     this.inventory[0] = ""
-            // }
             this.$modal.close();
         },
         async onSubmit(){
@@ -153,6 +154,8 @@
                     this.inventory.created_at = 'today';
 
                     this.showLoading = true
+                    this.blur = true;
+
                     await axios({
                         method: "POST",
                         url: this.$root.server+`/add_inventory`, 
@@ -162,9 +165,18 @@
                         data: { ...this.inventory },
                         })
                         .then(result => {
+
+                            axios.get(this.$root.server+`/inventory`)
+                            .then(inventory => {
+                            this.$root.inventory = inventory.data
+                            this.showLoading = false;
+                            this.blur = false;
+
+                            })
+                            .catch(err => console.log(error));
+
                             console.log("result", result.data.msg);
                             if(result) {
-                                this.showLoading = false;
                                 alert({
                                     // title: "Success",
                                     message: result.message,
@@ -177,6 +189,8 @@
                         })
                         .catch(err => {
                             this.showLoading = false;
+                            this.blur = false;
+
                             alert({
                                 title: "Fail",
                                 message: err.response.data.msg,

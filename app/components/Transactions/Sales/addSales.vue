@@ -32,7 +32,7 @@
                         fontSize="16"
                         fontWeight="bold"
                         color="white"
-                        text=" RECEIVE DELIVERY "
+                        text=" ADD SALES "
                         horizontalAlignment="left"
                     />
                     <Label
@@ -41,7 +41,7 @@
                         fontSize="16"
                         fontWeight="bold"
                         color="white"
-                        text=" Delivery Details " 
+                        text=" Customer Details " 
                         horizontalAlignment="left"
                     />
                   </GridLayout>
@@ -59,11 +59,9 @@
                         <GridLayout rows="auto,auto">
                             <Label row="0" ref="inputBCLabel"
                             v-bind:class=" [inputDate == true ? 'greenLabel' : 'redLabel']"
-                            text="Date" />
+                            text="Customer Name" />
                             <TextField row="1" class="text-input"
-                                v-model="delivery.transaction_date"
-                                keyboardType="date"
-                                
+                                v-model="sales.customer_name"
                                 />
                         </GridLayout>
                     </GridLayout>
@@ -73,11 +71,9 @@
                         <GridLayout rows="auto,auto">
                             <Label row="0" ref="inputBCLabel"
                             v-bind:class=" [inputDR == true ? 'greenLabel' : 'redLabel']"
-                            text="Delivery Receipt Number" />
+                            text="Contact Number" />
                             <TextField row="1" class="text-input"
-                                v-model="delivery.dr_no"
-                                keyboardType="number"
-                                
+                                v-model="sales.customer_contact_no"
                                 />
                         </GridLayout>
                     </GridLayout>
@@ -87,19 +83,12 @@
                         <GridLayout rows="auto,auto">
                             <Label row="0" ref="inputBCLabel"
                             v-bind:class=" [inputSup == true ? 'greenLabel' : 'redLabel']"
-                            text="Supplier" />
-                            <Label row="1" class="text-input "
-                                v-model="delivery.company_name"
-                                hint="Tap to choose..."
-                                @tap="supplierList()"
-                                keyboardType="number"
-                                
+                            text="Address" />
+                            <TextField row="1" class="text-input "
+                                v-model="sales.customer_address"
                                 />
                         </GridLayout>
                     </GridLayout>
-
-                    <!-- <ListPicker row="2" :items="listOfItems" selectedIndex="0"
-                    @selectedIndexChange="selectedIndexChanged" /> -->
               </GridLayout>
           </GridLayout>
           <GridLayout row="2" columns="*,*">
@@ -115,7 +104,7 @@
                 fontSize="16"
                 fontWeight="bold"
                 color="white"
-                v-model="delivery.total_cost"
+                v-model="sales.total_cost"
                 horizontalAlignment="right" />
           </GridLayout>
           <GridLayout row="3">
@@ -191,7 +180,7 @@
                 <Button 
                     col="0"
                     class="addbutton"
-                    text="RECEIVE DELIVERY"
+                    text="PAYMENT"
                     color="white"
                     backgroundColor="#424242"
                     @tap="receiveDelivery()" />
@@ -210,13 +199,13 @@
         <GridLayout v-show="modalBlur" class="modalBlur">
         </GridLayout>
 
-        <GridLayout class="supplierPicker" v-show="isItemVisible" rows="*,auto">
+        <!-- <GridLayout class="supplierPicker" v-show="isItemVisible" rows="*,auto">
           <GridLayout row="0">
             <ListView for="sup in unfilteredItemsToShow">
                 <v-template>
                     <StackLayout>
                         <GridLayout>
-                            <Label :text="sup.company_name" @tap="pickSupplier(sup)" />
+                            <Label :text="sup.customer_address" @tap="pickSupplier(sup)" />
                         </GridLayout>
                     </StackLayout>
                 </v-template>
@@ -225,7 +214,7 @@
           <GridLayout row="1">
               <Button backgroundColor="#f5f5f5" row="2" horizontalAlignment="center" text="CANCEL" @tap="onCancel()" />
           </GridLayout>
-      </GridLayout>
+      </GridLayout> -->
 
         <GridLayout v-show="addItems" class="item-modal" rows="auto,*,auto">
             <GridLayout row="0">
@@ -275,7 +264,7 @@
   import * as utils from "~/shared/utils";
   import SelectedPageService from "../../../shared/selected-page-service";
   // import { View, ViewBase } from "@nativescript/core/ui/frame";
-  import parent from "./Delivery";
+  import parent from "./Sales";
   import axios from "axios";
 import { GridLayout } from '@nativescript/core';
 
@@ -283,42 +272,7 @@ import { GridLayout } from '@nativescript/core';
     data(){
       return {
         items: [],
-        delItems: [
-            {
-                dti_id: 197,
-                dt_no: 44,
-                barcode: 1001,
-                product_description: "sdffdfds",
-                unit_cost: 20,
-                quantity: 1
-            },
-            {
-                dti_id: 198,
-                dt_no: 44,
-                barcode: 1005,
-                product_description: "sdffdfds",
-                unit_cost: 20,
-                quantity: 1
-            },
-            {
-                dti_id: 230,
-                dt_no: 44,
-                barcode: 1006,
-                product_description: "sdffdfds",
-                unit_cost: 20,
-                quantity: 1
-            },
-            {
-                dti_id: 418,
-                dt_no: 44,
-                barcode: 1001,
-                product_description: "sdffdfds",
-                unit_cost: 20,
-                quantity: 1
-            }
-
-        ],
-        delivery: {
+        sales: {
           total_cost: 0
         },
         showLoading: false,
@@ -327,11 +281,6 @@ import { GridLayout } from '@nativescript/core';
         modalBlur: false,
         addItems: false,
         parent: parent,
-        listOfItems: [
-            'supplier1',
-            'supplier2',
-            'supplier3'
-        ],
         itemsToShow: [],
         unfilteredItemsToShow: [],
         filterItem: "",
@@ -348,29 +297,16 @@ import { GridLayout } from '@nativescript/core';
         this.showLoading = true;
         this.blur = true
 
-        await axios.get(this.$root.server+`/supplier`)
-            .then(supplier => {
-            this.$root.suppliers = supplier.data
-            this.unfilteredItemsToShow = this.$root.suppliers
-            
-            console.log("result data", supplier.data)
-        })
-        .catch(err => console.log(err)); // add this to see if the console is spitting an error.
-
         if(this.$root.inventory) {
-            await axios.get(this.$root.server+`/inventory`)
-                .then(items => {
-                this.$root.inventory = items.data;
-                this.inventoryList = this.$root.inventory;
-            })
-            .catch(err => console.log(err)); // add this to see if the console is spitting an error.
+          await axios.get(this.$root.server+`/inventory`)
+            .then(items => {
+            this.$root.inventory = items.data;
+            this.inventoryList = this.$root.inventory;
+          })
+          .catch(err => console.log(err)); // add this to see if the console is spitting an error.
         }
-            this.showLoading = false;
-            this.blur = false
-    },
-
-    mounted() {
-
+          this.showLoading = false;
+          this.blur = false
     },
     computed: {
       message() {
@@ -391,27 +327,13 @@ import { GridLayout } from '@nativescript/core';
       onButtonTap(){
         this.$navigateTo(parent);
       },
-      supplierList() {
-          this.blur = true
-          this.isItemVisible = true;
-          console.log("itemvisible: ", this.isItemVisible);
-      },
-      pickSupplier(item){
-        this.delivery.company_name = item.company_name
-        this.delivery.supplier_id = item.supplier_id
-        this.isItemVisible = false;
-        this.blur = false;
-      },
-      onCancel() {
-          this.isItemVisible = false;
-          this.blur = false;
-      },
       addItem() {
           this.modalBlur = true;
           this.addItems = true;
       },
       onCancelItemModal(){
-          
+          this.modalBlur = false;
+          this.addItems = false;
       },
       pickItem(i){
           console.log("item: ", i);
@@ -421,8 +343,8 @@ import { GridLayout } from '@nativescript/core';
           this.inventoryList.splice(thisItem,1);
           
           i.quantity = 1;
-          i.total_unitcost = (i.quantity*i.unit_cost).toFixed(2)
-          i.cost_per_unit = i.unit_cost
+          i.total_unitcost = (i.quantity*i.sales_cost).toFixed(2)
+          i.cost_per_unit = i.sales_cost
           this.items.push(i)
           console.log("picked item:", this.items);
 
@@ -438,7 +360,7 @@ import { GridLayout } from '@nativescript/core';
               const qty = this.items.findIndex(
               x => x.barcode === inv.barcode)
               this.items[qty].quantity = inv.quantity-1
-            this.items[qty].total_unitcost = (inv.unit_cost*(this.items[qty].quantity))
+            this.items[qty].total_unitcost = (inv.sales_cost*(this.items[qty].quantity))
           } else {
 
             // confirm removal of item from list
@@ -480,95 +402,85 @@ import { GridLayout } from '@nativescript/core';
               x => x.barcode === inv.barcode)
               this.items[qty].quantity = inv.quantity+1
 
-            this.items[qty].total_unitcost = (inv.unit_cost*(this.items[qty].quantity))
+            this.items[qty].total_unitcost = (inv.sales_cost*(this.items[qty].quantity))
 
         this.getTotalDeliveryCost();
             
       },
       async receiveDelivery() {
-        this.delivery.items = this.items
+        this.sales.items = this.items
 
-        if((this.delivery.transaction_date != null) &&
-            (this.delivery.dr_no != null) &&
-            (this.delivery.company_name != null) &&
-            (this.delivery.supplier_id != null) &&
-            (this.delivery.items != null) ){
-              this.inputDate = true;
-              this.inputSup = true;
-              this.inputDR = true;
-              this.delivery.payment_amt = 300;
-              this.delivery.created_at = "today";
-              this.delivery.created_by = '38';
+        if(this.sales.items.length >= 1) {
+              this.sales.stransaction_date = "today"
+              this.sales.created_at = "today";
+              this.sales.created_by = '38';
 
-              console.log("deliveryyyy", this.delivery);
+              console.log("deliveryyyy", this.sales);
 
-              await axios({
-                method: "POST",
-                url: this.$root.server+`/add_delivery`,
-                  header: {
-                    "Content-Type": "application/json"
-                  },
-                  data: { ...this.delivery },
+              prompt({
+                message: "Enter Payment",
+                okButtonText: 'OK',
+                cancelButtonText: 'CANCEL',
               }).then( result => {
-                console.log("@result", result);
+                console.log("result: ", result.text);
+                console.log("jksbhdfdhfdfddfdfddf", result);
+                this.sales.payment_amt = result.text
 
-                alert({
-                message: "Success",
-                okButtonText: "OK"
-                }).then(() => {
-                    console.log("Alert dialog closed");
-                    this.$navigateTo(parent);
-                });
-                
+                if(result){
+                  
+                  if(result.text >= this.sales.total_cost){
+                    console.log("bypass condition payment more than total cost");
+                    axios({
+                      method: "POST",
+                      url: this.$root.server+`/addsale`,
+                        header: {
+                          "Content-Type": "application/json"
+                        },
+                        data: { ...this.sales },
+                    }).then( result => {
+                      console.log("@result", result);
+
+                      alert({
+                      message: "Success",
+                      okButtonText: "OK"
+                      }).then(() => {
+                          console.log("Alert dialog closed");
+                          this.$navigateTo(parent);
+                      });
+                      
+                    })
+                  } else {
+                    alert('Payment is not enough')
+                    .then(() => {
+                      console.log("alert dialog is closed.");
+                    })
+                  }
+                  
+                } else {
+
+                  alert('Payment is required')
+                  .then(() => {
+                    console.log("alert dialog is closed.");
+                  })
+                }
               })
-
-/**
- * {
-   "total_cost": 110,
-   "dr_no": "10",
-   "payment_amt": 110,
-    "supplier_id": 40,
-    "created_by": "38",
-    "items": [
-      {
-        "inventory_id": 259,
-        "quantity": 11,
-        "cost_per_unit": "10"
-      }
-    ]
-    
-  }
- */
-
+              
             } else {
-
-              if(this.delivery.transaction_date == null){
-                this.inputDate = false;
-              } else {
-                this.inputDate = true;
-              }
-
-              if(this.delivery.dr_no == null){
-                this.inputDR = false;
-              } else {
-                this.inputDR = true;
-              }
-
-              if(this.delivery.company_name == null){
-                this.inputSup = false;
-              } else {
-                this.inputSup = true;
-              }
+              alert('No item in list')
+              .then(() => {
+                console.log("alert dialog is closed.");
+              })
             }
       },
+      
       getTotalDeliveryCost() {
-        this.delivery.total_cost = 0;
+        this.sales.total_cost = 0;
 
           var total2 = 0;
           for(var i = 0; i < this.items.length; i++){
               total2 = (parseInt(total2) + parseInt(this.items[i].total_unitcost))
           }
-          this.delivery.total_cost = total2
+          this.sales.total_cost = total2
           console.log("total2: ", total2);
 
       }

@@ -1,10 +1,7 @@
 <template>
     <Page class="modal-page">
       <ActionBar class="action-bar banner" title="Add Item">
-          <!--
-          Use the NavigationButton as a side-drawer button in Android
-          because ActionItems are shown on the right side of the ActionBar
-          -->
+
       </ActionBar>
 
 
@@ -13,8 +10,8 @@
                 <StackLayout class="modal-banner">
                     <GridLayout columns="*,auto">
                         <Label 
-                            class="modal-label m-t-5" col="0" 
-                            text="Update Inventory Item"
+                            class="modal-label p-t-5" col="0" 
+                            text="Update Supplier"
                             fontWeight="bold"
                             color="white"
                             horizontalAlignment="center"
@@ -24,61 +21,49 @@
                 </StackLayout>
 
                 <GridLayout class="form">
-                    <GridLayout rows="auto,auto,auto,auto">
+                    <GridLayout rows="auto,auto,auto,auto,auto">
                         <GridLayout ref="inputBarcode" 
                             class="box-input" 
                             row="0" >
                             <GridLayout rows="auto,auto">
                                 <Label row="0" ref="inputBCLabel"
-                                class="box-input-label">Barcode</Label>
+                                class="box-input-label" text="Company Name" />
                                 <TextField row="1" class="text-input"
-                                    v-model="inventory.barcode"
-                                    keyboardType="number"
-                                    @blur="checkA()"
-                                    />
+                                    v-model="supplier.company_name" />
                             </GridLayout>
                         </GridLayout>
 
                         <GridLayout ref="product_description" class="box-input" row="1" >
                             <GridLayout rows="auto,auto">
                                 <Label row="0" ref="inputPDLabel" 
-                                class="box-input-label">Product Description</Label>
+                                class="box-input-label" text="Contact Number" />
                                 <TextField row="1" class="text-input"
-                                    v-model="inventory.product_description"
-                                    @blur="checkB()"
+                                    v-model="supplier.contact_no"
                                     />
                             </GridLayout>
                         </GridLayout>
 
-                        
-
-                        <GridLayout row="2" columns="*,*">
-                            <GridLayout col="0" ref="unit_cost" class="box-input m-r-5">
-                                <GridLayout rows="auto,auto">
-                                    <Label row="0" ref="inputUCLabel" 
-                                    class="box-input-label">Unit Cost</Label>
-                                    <TextField row="1" class="text-input"  
-                                        v-model="inventory.unit_cost"
-                                        keyboardType="number"
-                                        @blur="checkC()"
-                                    />
-                                </GridLayout>
+                        <GridLayout ref="product_description" class="box-input" row="2" >
+                            <GridLayout rows="auto,auto">
+                                <Label row="0" ref="inputPDLabel" 
+                                class="box-input-label" text="Company Address" />
+                                <TextField row="1" class="text-input"
+                                    v-model="supplier.company_address"
+                                />
                             </GridLayout>
-                      
-                            <GridLayout col="1" ref="sales_cost" class="box-input m-l-5">
-                                <GridLayout rows="auto,auto">
-                                    <Label row="0" ref="inputSCLabel"
-                                    class="box-input-label">Sales Cost</Label>
-                                    <TextField row="1" v-model="inventory.sales_cost"
-                                        class="text-input" 
-                                        keyboardType="number"
-                                        @blur="checkD()"
-                                        />
-                                </GridLayout>
-                            </GridLayout>                           
                         </GridLayout>
 
-                        <GridLayout row="3" columns="*,*">
+                        <GridLayout ref="product_description" class="box-input" row="3" >
+                            <GridLayout rows="auto,auto" @tap="changeStatus()">
+                                <Label row="0" ref="inputPDLabel" 
+                                class="box-input-label" text="Status" />
+                                <Label row="1" class="text-input"
+                                v-model="supplier.status" @tap="changeStatus()"
+                                 />
+                            </GridLayout>
+                        </GridLayout>
+
+                        <GridLayout row="4" columns="*,*">
                             <GridLayout col="0" >
                                 <Button ref="invsubmit"
                                     class="btn-cancel"
@@ -98,6 +83,22 @@
                 </GridLayout>
             </StackLayout>
 
+            <GridLayout v-show="blur" class="modalBlur">
+            </GridLayout>
+
+            <GridLayout class="supplierPicker" v-show="isItemVisible" rows="*,auto">
+                <GridLayout row="0">
+                    <ListView for="stat in status">
+                        <v-template>
+                            <Label :text="stat.name" @tap="pickStatus(stat)" />
+                        </v-template>
+                    </ListView>
+                </GridLayout>
+                <GridLayout row="1">
+                    <Button backgroundColor="#f5f5f5" row="2" horizontalAlignment="center" text="CANCEL" @tap="onCancel()" />
+                </GridLayout>
+            </GridLayout>
+
             <ActivityIndicator :busy="showLoading" color="white" class="indLog" />
 
         </FlexboxLayout>
@@ -109,121 +110,91 @@
 <script>
   import * as utils from "~/shared/utils";
   import SelectedPageService from "../../../shared/selected-page-service";
-  import Vue from "nativescript-vue";
-  import alertmodal from "../../Modal/alertmodal";
   import axios from "axios";
 
-
   export default {
-      props: [
-        //   'items'
-        'inventory_id',
-        'barcode',
-        'product_description',
-        'quantity',
-        'unit_cost',
-        'sales_cost',
+    props: [
+        'supplier_id',
+        'company_name',
+        'contact_no',
+        'company_address',
+        'status',
         'created_by',
         'created_at',
         'updated_by',
         'updated_at'
-      ],
+    ],
     data(){
       return {
-        inventory: {
-            inventory_id: this.inventory_id,
-            barcode: this.barcode,
-            product_description: this.product_description,
-            quantity: this.quantity,
-            unit_cost: this.unit_cost,
-            sales_cost: this.sales_cost,
+        supplier: {
+            supplier_id: this.supplier_id,
+            company_name: this.company_name,
+            contact_no: this.contact_no,
+            company_address: this.company_address,
+            status: this.status,
             created_by: this.created_by,
             created_at: this.created_at,
             updated_by: this.updated_by,
             updated_at: this.updated_at
         },
-        showLoading: false
+        showLoading: false,
+        blur: false,
+        isItemVisible: false,
+        status: [
+            { name: "Active", value: 1},
+            { name: "Inactive", value: 0},
+        ],
+
       }
     },
+    created(){
+        
+    },
+    mounted() {
+
+    },
+    computed: {
+      message() {
+        return "<!-- Page content goes here -->";
+      },
+    },
     methods: {
-        sample() {
-            console.log("br: " + this.inventory.barcode);
-            console.log("$refs: ", this.$refs.inputBar.getViewById);  
-        },
-        checkA(){
-            // fieldcolor = 
-            if(this.inventory.barcode == ''){
-                this.$refs.inputBCLabel.nativeView.color = "#DD0000";
-                this.$refs.inputBarcode.nativeView.borderColor = "#DD0000";
-            } else {
-                this.$refs.inputBCLabel.nativeView.color = "#0a8171";
-                this.$refs.inputBarcode.nativeView.borderColor = "#e6e6e6";
-                // this.validate()
-            }
-        },
-        checkB(){
-            if(this.inventory.product_description == ''){
-                this.$refs.inputPDLabel.nativeView.color = "#DD0000";
-                this.$refs.product_description.nativeView.borderColor = "#DD0000";
-            } else {
-                this.$refs.inputPDLabel.nativeView.color = "#0a8171";
-                this.$refs.product_description.nativeView.borderColor = "#e6e6e6";
-                // this.validate()
-            }
-            
-        },
-        checkC(){
-            if(this.inventory.unit_cost == ''){
-                this.$refs.inputUCLabel.nativeView.color = "#DD0000";
-                this.$refs.unit_cost.nativeView.borderColor = "#DD0000";
-            } else {
-                this.$refs.inputUCLabel.nativeView.color = "#0a8171";
-                this.$refs.unit_cost.nativeView.borderColor = "#e6e6e6";
-                // this.validate()
-            }
-
-        },
-        checkD(){
-            if(this.inventory.sales_cost == ''){
-                this.$refs.inputSCLabel.nativeView.color = "#DD0000";
-                this.$refs.sales_cost.nativeView.borderColor = "#DD0000";
-            } else {
-                this.$refs.inputSCLabel.nativeView.color = "#0a8171";
-                this.$refs.sales_cost.nativeView.borderColor = "#e6e6e6";
-                // this.validate()
-            }
-
-        },
         onCancel(){
-            for(var i = 0; i < this.inventory.length; i++){
-                this.inventory[0] = ""
-            }
-            this.$modal.close()
+            this.$modal.close();
         },
         async onSubmit(){
-            console.log("inventory", this.inventory);
-            if(this.inventory.barcode != "" &&
-                this.inventory.product_description != "" &&
-                this.inventory.unit_cost != "" &&
-                this.inventory.sales_cost != "" ){
+            if(this.supplier.company_name != null &&
+                this.supplier.contact_no != null &&
+                this.supplier.company_address != null &&
+                this.supplier.status != null ){
 
-                    // this.inventory.quantity = 0;
-                    this.inventory.updated_by = '38';
-                    this.inventory.updated_at = 'today';
+                    this.supplier.updated_by = '38';
+                    this.supplier.updated_at = 'today';
 
                     this.showLoading = true
+                    this.blur = true;
+
                     await axios({
-                        method: "PUT",
-                        url: this.$root.server+`/inventory`+this.inventory_id, 
+                        method: "POST",
+                        url: this.$root.server+`/add_supplier`, 
                         header: {
                             "Content-Type": "application/json"
                         },
-                        data: { ...this.inventory },
+                        data: { ...this.supplier },
                         })
                         .then(result => {
+
+                            axios.get(this.$root.server+`/supplier`)
+                            .then(supplier => {
+                            this.$root.supplier = supplier.data
+                            this.showLoading = false;
+                            this.blur = false;
+
+                            })
+                            .catch(err => console.log(error));
+
                             console.log("result", result.data.msg);
                             if(result) {
-                                this.showLoading = false;
                                 alert({
                                     // title: "Success",
                                     message: result.message,
@@ -235,18 +206,18 @@
                             }
                         })
                         .catch(err => {
-                            console.log("error", err);
                             this.showLoading = false;
+                            this.blur = false;
+
                             alert({
                                 title: "Fail",
                                 message: err.response.data.msg,
                                 okButtonText: "OK"
                                 }).then(() => {
                                 console.log("Alert dialog closed");
-                                this.inventory.barcode = ""
-                                this.inventory.product_description = ""
-                                this.inventory.unit_cost = ""
-                                this.inventory.sales_cost = ""
+                                this.supplier.company_name = ""
+                                this.supplier.company_address = ""
+                                this.supplier.contact_no = ""
                             });
                         })
             } else {
@@ -254,6 +225,16 @@
             }
             
         },
+        changeStatus(){
+            console.log("clicked~");
+            this.blur = true;
+            this.isItemVisible = true;
+        },
+        pickStatus(stat){
+            this.supplier.status = stat.value
+            this.blur = false;
+            this.isItemVisible = false;
+        }
 
     
     },

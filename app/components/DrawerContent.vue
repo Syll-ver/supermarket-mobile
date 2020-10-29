@@ -78,12 +78,12 @@
   import Inventory from "./Inventory";
   import Suppliers from "./Admin/Suppliers/Suppliers";
   import Roles from "./Admin/Roles/Roles";
-  import Users from "./Users";
+  import Users from "./Admin/Users/Users";
   import Featured from "./Featured";
   import Search from "./Search";
   import Settings from "./Settings";
   import Delivery from "./Transactions/Delivery/Delivery";
-  import Sales from "./Sales";
+  import Sales from "./Transactions/Sales/Sales";
   import Logout from "./Logout";
   import * as utils from "~/shared/utils";
   import SelectedPageService from "~/shared/selected-page-service";

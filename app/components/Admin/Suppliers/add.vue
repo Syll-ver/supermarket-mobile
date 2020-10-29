@@ -1,10 +1,7 @@
 <template>
     <Page class="modal-page">
       <ActionBar class="action-bar banner" title="Add Item">
-          <!--
-          Use the NavigationButton as a side-drawer button in Android
-          because ActionItems are shown on the right side of the ActionBar
-          -->
+
       </ActionBar>
 
 
@@ -13,8 +10,8 @@
                 <StackLayout class="modal-banner">
                     <GridLayout columns="*,auto">
                         <Label 
-                            class="modal-label" col="0" 
-                            text="Add suppliers Item"
+                            class="modal-label p-t-5" col="0" 
+                            text="Add Supplier"
                             fontWeight="bold"
                             color="white"
                             horizontalAlignment="center"
@@ -25,48 +22,50 @@
 
                 <GridLayout class="form">
                     <GridLayout rows="auto,auto,auto,auto">
-                        <GridLayout ref="inputName" 
+                        <GridLayout ref="inputBarcode" 
                             class="box-input" 
                             row="0" >
                             <GridLayout rows="auto,auto">
-                                <Label row="0" ref="inputCNLabel"
-                                class="box-input-label" 
-                                text="Company Name"
-                                />
+                                <Label row="0" ref="inputBCLabel"
+                                class="box-input-label" text="Company Name" />
                                 <TextField row="1" class="text-input"
                                     v-model="supplier.company_name"
-                                    keyboardType="number"
-                                    @blur="checkA()"
+                                    
                                     />
                             </GridLayout>
                         </GridLayout>
 
-                        <GridLayout ref="contact_no" class="box-input" row="1" >
+                        <GridLayout ref="product_description" class="box-input" row="1" >
                             <GridLayout rows="auto,auto">
-                                <Label row="0" ref="inputContactLabel" 
-                                class="box-input-label" 
-                                text="Contact Number"/>
+                                <Label row="0" ref="inputPDLabel" 
+                                class="box-input-label" text="Contact Number" />
                                 <TextField row="1" class="text-input"
                                     v-model="supplier.contact_no"
-                                    @blur="checkB()"
                                     />
                             </GridLayout>
                         </GridLayout>
 
-                        <GridLayout ref="address" class="box-input" row="2" >
+                        <GridLayout ref="product_description" class="box-input" row="2" >
                             <GridLayout rows="auto,auto">
-                                <Label row="0" ref="inputAddressLabel" 
-                                class="box-input-label" 
-                                text="Company Address"/>
+                                <Label row="0" ref="inputPDLabel" 
+                                class="box-input-label" text="Company Address" />
                                 <TextField row="1" class="text-input"
                                     v-model="supplier.company_address"
-                                    @blur="checkC()"
-                                    />
+                                />
                             </GridLayout>
                         </GridLayout>
 
+                        <!-- <GridLayout ref="product_description" class="box-input" row="3" >
+                            <GridLayout rows="auto,auto">
+                                <Label row="0" ref="inputPDLabel" 
+                                class="box-input-label" text="Status" />
+                                <TextField row="1" class="text-input"
+                                    v-model="supplier.status"
+                                />
+                            </GridLayout>
+                        </GridLayout> -->
 
-                        <GridLayout row="3" columns="*,*">
+                        <GridLayout row="4" columns="*,*">
                             <GridLayout col="0" >
                                 <Button ref="invsubmit"
                                     class="btn-cancel"
@@ -86,6 +85,9 @@
                 </GridLayout>
             </StackLayout>
 
+            <GridLayout v-show="blur" class="modalBlur">
+            </GridLayout>
+
             <ActivityIndicator :busy="showLoading" color="white" class="indLog" />
 
         </FlexboxLayout>
@@ -97,16 +99,15 @@
 <script>
   import * as utils from "~/shared/utils";
   import SelectedPageService from "../../../shared/selected-page-service";
-  import Vue from "nativescript-vue";
-  import alertmodal from "../../Modal/alertmodal";
   import axios from "axios";
 
   export default {
     data(){
       return {
-        suppliers: {
+        supplier: {
         },
-        showLoading: false
+        showLoading: false,
+        blur: false
       }
     },
     mounted() {
@@ -118,84 +119,46 @@
       }
     },
     methods: {
-        sample() {
-            console.log("br: " + this.suppliers.barcode);
-            console.log("$refs: ", this.$refs.inputBar.getViewById);  
-        },
-        checkA(){
-            if(this.suppliers.company_name == ''){
-                this.$refs.inputCNLabel.nativeView.color = "#DD0000";
-                this.$refs.inputName.nativeView.borderColor = "#DD0000";
-            } else {
-                this.$refs.inputCNLabel.nativeView.color = "#0a8171";
-                this.$refs.inputName.nativeView.borderColor = "#e6e6e6";
-            }
-           
-        },
-        checkB(){
-            if(this.suppliers.contact_no == ''){
-                this.$refs.inputContactLabel.nativeView.color = "#DD0000";
-                this.$refs.contact_no.nativeView.borderColor = "#DD0000";
-            } else {
-                this.$refs.inputContactLabel.nativeView.color = "#0a8171";
-                this.$refs.contact_no.nativeView.borderColor = "#e6e6e6";
-                // this.validate()
-            }
-            
-        },
-        checkC(){
-            if(this.suppliers.company_address == ''){
-                this.$refs.inputAddressLabel.nativeView.color = "#DD0000";
-                this.$refs.address.nativeView.borderColor = "#DD0000";
-            } else {
-                this.$refs.inputAddressLabel.nativeView.color = "#0a8171";
-                this.$refs.address.nativeView.borderColor = "#e6e6e6";
-                // this.validate()
-            }
-
-        },
-        // checkD(){
-        //     if(this.suppliers.sales_cost == ''){
-        //         this.$refs.inputSCLabel.nativeView.color = "#DD0000";
-        //         this.$refs.sales_cost.nativeView.borderColor = "#DD0000";
-        //     } else {
-        //         this.$refs.inputSCLabel.nativeView.color = "#0a8171";
-        //         this.$refs.sales_cost.nativeView.borderColor = "#e6e6e6";
-        //         // this.validate()
-        //     }
-
-        // },
         onCancel(){
-            for(var i = 0; i < this.suppliers.length; i++){
-                this.suppliers[0] = ""
-            }
-            this.$modal.close()
+            this.$modal.close();
         },
         async onSubmit(){
-            if(this.suppliers.company_name != "" &&
-                this.suppliers.contact_no != "" &&
-                this.suppliers.company_address != "" ){
+            if(this.supplier.company_name != null &&
+                this.supplier.contact_no != null &&
+                this.supplier.company_address != null ){
 
-                    this.suppliers.status = 1;
-                    this.suppliers.created_by = '38';
-                    this.suppliers.created_at = 'today';
+                    this.supplier.status = true;
+                    this.supplier.created_by = '38';
+                    this.supplier.created_at = 'today';
 
                     this.showLoading = true
+                    this.blur = true;
+
                     await axios({
                         method: "POST",
                         url: this.$root.server+`/add_supplier`, 
                         header: {
                             "Content-Type": "application/json"
                         },
-                        data: { ...this.suppliers },
+                        data: { ...this.supplier },
                         })
                         .then(result => {
+
+                            axios.get(this.$root.server+`/supplier`)
+                            .then(supplier => {
+                            this.$root.suppliers = supplier.data
+                            console.log("root roles: ", this.$root.suppliers);
+                            this.showLoading = false;
+                            this.blur = false;
+
+                            })
+                            .catch(err => console.log(error));
+
                             console.log("result", result.data.msg);
                             if(result) {
-                                this.showLoading = false;
                                 alert({
                                     // title: "Success",
-                                    message: result.message,
+                                    message: "Success",
                                     okButtonText: "OK"
                                     }).then(() => {
                                     console.log("Alert dialog closed");
@@ -205,16 +168,17 @@
                         })
                         .catch(err => {
                             this.showLoading = false;
+                            this.blur = false;
+
                             alert({
                                 title: "Fail",
                                 message: err.response.data.msg,
                                 okButtonText: "OK"
                                 }).then(() => {
                                 console.log("Alert dialog closed");
-                                this.suppliers.barcode = ""
-                                this.suppliers.product_description = ""
-                                this.suppliers.unit_cost = ""
-                                this.suppliers.sales_cost = ""
+                                this.supplier.company_name = ""
+                                this.supplier.company_address = ""
+                                this.supplier.contact_no = ""
                             });
                         })
             } else {

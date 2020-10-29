@@ -24,7 +24,7 @@
                   <Label
                       col="1"
                       class="brand-name"
-                      text="DELIVERY"
+                      text="SALES"
                       horizontalAlignment="center"
                   />
                   <!-- <Label
@@ -62,7 +62,7 @@
 
                 <ListView row="1" class="list-group" height="670"
                 separatorColor="transparent"
-                  for="d in $root.delivery" >
+                  for="d in $root.sales" >
                     <v-template>
                       <StackLayout >
                         <GridLayout 
@@ -70,14 +70,19 @@
                           rows="auto,*,*"
                           columns="*,auto">
                             <Label row="0" col="0"  
-                              :text="d.dr_no" />
+                              :text="d.or_no" />
                             <Label row="0" col="1" 
                               horizontalAlignment="right"
-                              :text="new Date(d.transaction_date).toDateString().split(' ').slice(1).join(' ')" />
-                            <Label row="1" col="0" 
+                              :text="new Date(d.stransaction_date).toDateString().split(' ').slice(1).join(' ')" />
+                            <Label v-if="d.customer_name" row="1" col="0" 
                               fontSize="15"
                               fontWeight="bold"
-                              :text="d.supplier_name"
+                              :text="d.customer_name"
+                              textWrap="true" />
+                              <Label v-else row="1" col="0" 
+                              fontSize="15"
+                              fontWeight="bold"
+                              text="Walk-in Customer"
                               textWrap="true" />
                             <Label row="2" col="0" 
                               fontSize="15"
@@ -88,7 +93,8 @@
                               fontSize="16"
                               color="#05C5AA"
                               horizontalAlignment="right"
-                              :text=" 'fa-chevron-right' | fonticon " />
+                              :text=" 'fa-chevron-right' | fonticon "
+                              @tap="show(d)" />
                         </GridLayout>
                       </StackLayout>
                     </v-template>
@@ -114,11 +120,6 @@
 
         <ActivityIndicator :busy="showLoading" color="#05C5AA" class="indLog" />
 
-        
-
-      
-
-
       </GridLayout>
 
     </Page>
@@ -127,8 +128,8 @@
 <script>
   import * as utils from "~/shared/utils";
   import SelectedPageService from "../../../shared/selected-page-service";
-  import ShowDetails from "./ShowDetails.vue";
-  import receive from "./add";
+  import ShowDetails from "./ShowSales.vue";
+  import receive from "./addSales";
   import axios from "axios";
 
   export default {
@@ -142,10 +143,10 @@
        this.showLoading = true;
        this.blur = true;
 
-      await axios.get(this.$root.server+`/delivery_item/all`)
-        .then(delivery => {
-          this.$root.delivery = delivery.data
-          console.log("root delivery: ", this.$root.delivery);
+      await axios.get(this.$root.server+`/viewsales`)
+        .then(sale => {
+          this.$root.sales = sale.data
+          console.log("root sales: ", this.$root.sales);
           this.showLoading = false;
           this.blur = false;
 
@@ -153,7 +154,7 @@
         .catch(err => console.log(err)); // add this to see if the console is spitting an error.
     },
     mounted() {
-      SelectedPageService.getInstance().updateSelectedPage("Delivery");
+      SelectedPageService.getInstance().updateSelectedPage("Sales");
     },
     computed: {
       message() {
@@ -177,13 +178,13 @@
       show(del){
         this.$navigateTo(ShowDetails, {
           props: {
-            // details: del
-            dr_no: del.dr_no,
-            supplier_id: del.supplier_id,
-            company_name: del.company_name,
-            company_address: del.company_address,
-            dtransaction_date: del.dtransaction_date,
+            or_no: del.or_no,
+            customer_name: del.customer_name,
+            customer_contact_no: del.customer_contact_no,
+            customer_address: del.customer_address,
+            stransaction_date: del.stransaction_date,
             total_cost: del.total_cost,
+            payment_amt: del.payment_amt,
             items: del.items
           },
           transition: "slideLeft"

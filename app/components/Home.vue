@@ -38,7 +38,7 @@
 <script>
   import * as utils from "~/shared/utils";
   import SelectedPageService from "../shared/selected-page-service";
-  import Dashboard from "./Transactions/Delivery/add";
+  import Dashboard from "./Transactions/Sales/Sales";
   import axios from 'axios';
   import { mapActions } from 'vuex';
 
