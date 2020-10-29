@@ -1,7 +1,7 @@
 <template>
     <Page class="" actionBarHidden="true">
-      <FlexboxLayout class="page">
-        <StackLayout class="form">
+      <GridLayout class="page">
+        <GridLayout class="form">
             <!-- <Label text="LouGeh Supermarket" class="titles logo" /> -->
 
             
@@ -19,7 +19,7 @@
               <Button text="Login" class="login-button btn" @tap="logme()"  />
             </StackLayout>
 
-        </StackLayout>
+        </GridLayout>
 
         
         <!-- <GridLayout class="fab-btn">
@@ -27,9 +27,9 @@
         </GridLayout> -->
 
         
-      <ActivityIndicator :busy="showLoading" color="white" class="indLog" />
+      <ActivityIndicator :busy="showLoading" color="#05C5AA" class="indLog" />
 
-      </FlexboxLayout>
+      </GridLayout>
       
 
     </Page>
@@ -38,7 +38,9 @@
 <script>
   import * as utils from "~/shared/utils";
   import SelectedPageService from "../shared/selected-page-service";
-  import Dashboard from "./Transactions/Sales/Sales";
+  import Dashboard from "./Admin/Inventory/Inventory";
+  import Delivery from "./Transactions/Delivery/Delivery";
+  import Sales from "./Transactions/Sales/Sales";
   import axios from 'axios';
   import { mapActions } from 'vuex';
 
@@ -69,7 +71,114 @@
     methods: {
 
         async logme(){
-          this.$navigateTo(Dashboard);
+          if(this.user.username != null && this.user.password != null){
+            this.showLoading = true;
+          await axios({
+            method: "POST",
+            url: this.$root.server+`/new/login`, 
+            header: {
+                "Content-Type": "application/json"
+            },
+            data: { ...this.user },
+            }).then(result => {
+
+              if(result.data == this.user.username){
+                this.showLoading = false;
+
+                axios.get(this.$root.server+`/users`)
+                .then(role => {
+                  this.$root.users = role.data
+
+                  for(var i = 0; i < this.$root.users.length; i++){
+                  if(result.data == this.$root.users[i].username){
+                    this.$root.localStorage = this.$root.users[i];
+                  }
+                }
+
+                console.log("local storage",this.$root.localStorage);
+                  console.log("users: ", this.$root.users);
+                  console.log("==============================");
+
+
+        
+
+              // get inventory items
+              axios.get(this.$root.server+`/inventory`)
+              .then(inventory => {
+              this.$root.inventory = inventory.data
+              console.log("inventory: ", this.$root.inventory);
+              console.log("==============================");
+              })
+              .catch(err => console.log(error));
+
+              // get roles
+              axios.get(this.$root.server+`/roles`)
+              .then(role => {
+                this.$root.roles = role.data
+                console.log("roles: ", this.$root.roles);
+                console.log("==============================");
+              })
+              .catch(err => console.log(err));
+
+              // get suppliers
+              axios.get(this.$root.server+`/supplier`)
+              .then(supplier => {
+                this.$root.suppliers = supplier.data
+                console.log("suppliers: ", this.$root.roles);
+                console.log("==============================");
+              })
+              .catch(err => console.log(error));
+
+              // get users
+              // await axios.get(this.$root.server+`/users`)
+              // .then(role => {
+              //   this.$root.users = role.data
+              //   console.log("users: ", this.$root.users);
+              //   console.log("==============================");
+              // })
+              // .catch(err => console.log(err));
+
+
+              // get delivery
+              axios.get(this.$root.server+`/delivery_item/all`)
+              .then(delivery => {
+                this.$root.delivery = delivery.data
+                console.log("delivery: ", this.$root.delivery);
+                console.log("==============================");
+              })
+              .catch(err => console.log(err)); 
+
+
+              // get sales
+              axios.get(this.$root.server+`/viewsales`)
+              .then(sale => {
+                this.$root.sales = sale.data
+                console.log("sales: ", this.$root.sales);
+                console.log("==============================");
+              })
+              .catch(err => console.log(err));
+
+              this.showLoading = false;
+
+                if(this.$root.localStorage.role_name == 'admin' ){
+                  this.$navigateTo(Dashboard);
+                } else if(this.$root.localStorage.role_name == 'custodian' ){
+                  this.$navigateTo(Delivery);
+                } else if(this.$root.localStorage.role_name == 'cashier' ){
+                  this.$navigateTo(Sales);
+                }
+
+                })
+                .catch(err => console.log(err));
+
+                
+              }
+
+            })
+          } else {
+            console.log("no credentials");
+          }
+
         }
 
     }

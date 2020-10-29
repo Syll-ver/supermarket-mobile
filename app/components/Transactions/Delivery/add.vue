@@ -56,14 +56,13 @@
                    <GridLayout ref="inputBarcode" 
                         v-bind:class=" [inputDate == true ? 'box-input' : 'red-box-input']"
                         row="0" >
-                        <GridLayout rows="auto,auto">
+                        <GridLayout rows="auto,auto" @tap="openDatePicker()">
                             <Label row="0" ref="inputBCLabel"
                             v-bind:class=" [inputDate == true ? 'greenLabel' : 'redLabel']"
                             text="Date" />
                             <TextField row="1" class="text-input"
-                                v-model="delivery.transaction_date"
-                                keyboardType="date"
-                                
+                                :text="new Date(delivery.transaction_date).toDateString().split(' ').slice(1).join(' ')"
+                                hint="Tap to choose date"
                                 />
                         </GridLayout>
                     </GridLayout>
@@ -98,8 +97,6 @@
                         </GridLayout>
                     </GridLayout>
 
-                    <!-- <ListPicker row="2" :items="listOfItems" selectedIndex="0"
-                    @selectedIndexChange="selectedIndexChanged" /> -->
               </GridLayout>
           </GridLayout>
           <GridLayout row="2" columns="*,*">
@@ -212,7 +209,7 @@
 
         <GridLayout class="supplierPicker" v-show="isItemVisible" rows="*,auto">
           <GridLayout row="0">
-            <ListView for="sup in unfilteredItemsToShow">
+            <ListView for="sup in $root.suppliers">
                 <v-template>
                     <StackLayout>
                         <GridLayout>
@@ -262,6 +259,29 @@
             </GridLayout>
         </GridLayout>
 
+        <GridLayout v-show="datepicker" class="supplierPicker" rows="auto,*,auto">
+            <GridLayout row="0">
+                <Label 
+                    margin="10"
+                    fontSize="16"
+                    fontWeight="bold"
+                    color="white"
+                    text="CHOOSE ITEM" 
+                    horizontalAlignment="center" />
+            </GridLayout>
+            <GridLayout row="1">
+                <DatePicker class="text-input" v-model="delivery.transaction_date"/>
+            </GridLayout>
+            <GridLayout row="2">
+                <Button 
+                    backgroundColor="#f5f5f5" col="0" 
+                    borderRadius="20" 
+                    class="p-l-25 p-r-25 p-t-0 p-b-0"
+                    horizontalAlignment="center" 
+                    text="OK" @tap="onCancelDate()" />
+            </GridLayout>
+        </GridLayout>
+
       <ActivityIndicator :busy="showLoading" color="green" class="indLog" />
 
     
@@ -274,10 +294,9 @@
 <script>
   import * as utils from "~/shared/utils";
   import SelectedPageService from "../../../shared/selected-page-service";
-  // import { View, ViewBase } from "@nativescript/core/ui/frame";
   import parent from "./Delivery";
   import axios from "axios";
-import { GridLayout } from '@nativescript/core';
+  import { GridLayout } from '@nativescript/core';
 
   export default {
     data(){
@@ -338,35 +357,15 @@ import { GridLayout } from '@nativescript/core';
         inventoryList: [],
         inputDate: true,
         inputDR: true,
-        inputSup: true
+        inputSup: true,
+        datepicker: false,
       }
     },
     components: {
       parent
     },
     async created() {
-        this.showLoading = true;
-        this.blur = true
-
-        await axios.get(this.$root.server+`/supplier`)
-            .then(supplier => {
-            this.$root.suppliers = supplier.data
-            this.unfilteredItemsToShow = this.$root.suppliers
-            
-            console.log("result data", supplier.data)
-        })
-        .catch(err => console.log(err)); // add this to see if the console is spitting an error.
-
-        if(this.$root.inventory) {
-            await axios.get(this.$root.server+`/inventory`)
-                .then(items => {
-                this.$root.inventory = items.data;
-                this.inventoryList = this.$root.inventory;
-            })
-            .catch(err => console.log(err)); // add this to see if the console is spitting an error.
-        }
-            this.showLoading = false;
-            this.blur = false
+      this.inventoryList = this.$root.inventory;
     },
 
     mounted() {
@@ -388,6 +387,15 @@ import { GridLayout } from '@nativescript/core';
         nativeView.setText("Native View - Android");
         args.view = nativeView;
       },
+      openDatePicker(){
+        this.blur = true
+        this.datepicker = true;
+      },
+      onCancelDate(){
+        this.blur = false;
+        this.datepicker = false;
+        console.log(this.delivery.transaction_date);
+      },
       onButtonTap(){
         this.$navigateTo(parent);
       },
@@ -405,13 +413,16 @@ import { GridLayout } from '@nativescript/core';
       onCancel() {
           this.isItemVisible = false;
           this.blur = false;
+          // this.modalBlur = true;
+          // this.addItems = true;
       },
       addItem() {
           this.modalBlur = true;
           this.addItems = true;
       },
       onCancelItemModal(){
-          
+          this.modalBlur = false;
+          this.addItems = false;
       },
       pickItem(i){
           console.log("item: ", i);
@@ -487,6 +498,7 @@ import { GridLayout } from '@nativescript/core';
       },
       async receiveDelivery() {
         this.delivery.items = this.items
+          console.log("deliveryyyy", this.delivery);
 
         if((this.delivery.transaction_date != null) &&
             (this.delivery.dr_no != null) &&
@@ -502,6 +514,9 @@ import { GridLayout } from '@nativescript/core';
 
               console.log("deliveryyyy", this.delivery);
 
+                this.showLoading = true
+                this.modalBlur = true;
+
               await axios({
                 method: "POST",
                 url: this.$root.server+`/add_delivery`,
@@ -512,13 +527,40 @@ import { GridLayout } from '@nativescript/core';
               }).then( result => {
                 console.log("@result", result);
 
-                alert({
-                message: "Success",
-                okButtonText: "OK"
-                }).then(() => {
-                    console.log("Alert dialog closed");
-                    this.$navigateTo(parent);
-                });
+                if(result){
+
+                  // get update delivery
+                  axios.get(this.$root.server+`/delivery_item/all`)
+                  .then(delivery => {
+                    this.$root.delivery = delivery.data
+                    console.log("delivery: ", this.$root.delivery);
+                    console.log("==============================");
+                  })
+                  .catch(err => console.log(err)); 
+
+                  // get updated inventory
+                  axios.get(this.$root.server+`/inventory`)
+                  .then(inventory => {
+                  this.$root.inventory = inventory.data
+                  console.log("inventory: ", this.$root.inventory);
+                  console.log("==============================");
+                  })
+                  .catch(err => console.log(error));
+
+                  this.showLoading = false
+                  this.modalBlur = false;
+
+                  
+                  alert({
+                    message: "Success",
+                    okButtonText: "OK"
+                  }).then(() => {
+                      console.log("Alert dialog closed");
+                      this.$navigateTo(parent);
+                  });
+                }
+
+                
                 
               })
 

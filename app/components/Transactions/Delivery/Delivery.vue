@@ -68,6 +68,8 @@
                         <GridLayout 
                           class="list-box" 
                           rows="auto,*,*"
+                          @tap="show(d)"
+                          androidElevation="5"
                           columns="*,auto">
                             <Label row="0" col="0"  
                               :text="d.dr_no" />
@@ -138,20 +140,7 @@
         blur: false
       }
     },
-    async created(){
-       this.showLoading = true;
-       this.blur = true;
 
-      await axios.get(this.$root.server+`/delivery_item/all`)
-        .then(delivery => {
-          this.$root.delivery = delivery.data
-          console.log("root delivery: ", this.$root.delivery);
-          this.showLoading = false;
-          this.blur = false;
-
-        })
-        .catch(err => console.log(err)); // add this to see if the console is spitting an error.
-    },
     mounted() {
       SelectedPageService.getInstance().updateSelectedPage("Delivery");
     },
@@ -179,9 +168,9 @@
           props: {
             // details: del
             dr_no: del.dr_no,
-            supplier_id: del.supplier_id,
-            company_name: del.company_name,
-            company_address: del.company_address,
+            supplier_name: del.supplier_name,
+            // company_name: del.company_name,
+            // company_address: del.company_address,
             dtransaction_date: del.dtransaction_date,
             total_cost: del.total_cost,
             items: del.items

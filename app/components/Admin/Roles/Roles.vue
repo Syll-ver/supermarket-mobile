@@ -122,17 +122,17 @@
       add,
       edit
     },
-    async created(){
-       this.showLoading = true;
+    // async created(){
+    //    this.showLoading = true;
 
-      await axios.get(this.$root.server+`/roles`)
-        .then(role => {
-          this.$root.roles = role.data
-          console.log("root roles: ", this.$root.roles);
-          this.showLoading = false;
-        })
-        .catch(err => console.log(err)); // add this to see if the console is spitting an error.
-    },
+    //   await axios.get(this.$root.server+`/roles`)
+    //     .then(role => {
+    //       this.$root.roles = role.data
+    //       console.log("root roles: ", this.$root.roles);
+    //       this.showLoading = false;
+    //     })
+    //     .catch(err => console.log(err)); // add this to see if the console is spitting an error.
+    // },
     mounted() {
       SelectedPageService.getInstance().updateSelectedPage("Roles");
     },

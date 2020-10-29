@@ -58,7 +58,7 @@
                                 <Label row="0" ref="inputPDLabel" 
                                 class="box-input-label" text="Status" />
                                 <Label row="1" class="text-input"
-                                v-model="supplier.status" @tap="changeStatus()"
+                                v-model="supplier.status"
                                  />
                             </GridLayout>
                         </GridLayout>
@@ -86,18 +86,7 @@
             <GridLayout v-show="blur" class="modalBlur">
             </GridLayout>
 
-            <GridLayout class="supplierPicker" v-show="isItemVisible" rows="*,auto">
-                <GridLayout row="0">
-                    <ListView for="stat in status">
-                        <v-template>
-                            <Label :text="stat.name" @tap="pickStatus(stat)" />
-                        </v-template>
-                    </ListView>
-                </GridLayout>
-                <GridLayout row="1">
-                    <Button backgroundColor="#f5f5f5" row="2" horizontalAlignment="center" text="CANCEL" @tap="onCancel()" />
-                </GridLayout>
-            </GridLayout>
+           
 
             <ActivityIndicator :busy="showLoading" color="white" class="indLog" />
 
@@ -148,7 +137,11 @@
       }
     },
     created(){
-        
+        if(this.supplier.status){
+            this.supplier.status = "Active";
+        } else {
+            this.supplier.status = "Inactive";
+        }
     },
     mounted() {
 
@@ -168,15 +161,22 @@
                 this.supplier.company_address != null &&
                 this.supplier.status != null ){
 
+                    if(this.supplier.status == "Active"){
+                        this.supplier.status = true;
+                    } else if(this.supplier.status == "Inactive") {
+                        this.supplier.status = false;
+                    }
+
                     this.supplier.updated_by = '38';
                     this.supplier.updated_at = 'today';
 
                     this.showLoading = true
                     this.blur = true;
-
+                    
+                    console.log("supplier", this.supplier);
                     await axios({
-                        method: "POST",
-                        url: this.$root.server+`/add_supplier`, 
+                        method: "PUT",
+                        url: this.$root.server+`/supplier/`+this.supplier.supplier_id, 
                         header: {
                             "Content-Type": "application/json"
                         },
@@ -184,9 +184,13 @@
                         })
                         .then(result => {
 
+                            const supList = this.$root.suppliers.findIndex(x => x.supplier_id === this.supplier.supplier_id)
+                                this.$root.suppliers.splice(supList, 1);
+                                this.$root.suppliers.push(this.supplier)
+
                             axios.get(this.$root.server+`/supplier`)
                             .then(supplier => {
-                            this.$root.supplier = supplier.data
+                            this.$root.suppliers = supplier.data
                             this.showLoading = false;
                             this.blur = false;
 
@@ -197,7 +201,7 @@
                             if(result) {
                                 alert({
                                     // title: "Success",
-                                    message: result.message,
+                                    message: "Success",
                                     okButtonText: "OK"
                                     }).then(() => {
                                     console.log("Alert dialog closed");
@@ -226,9 +230,18 @@
             
         },
         changeStatus(){
+            // this.$modal.close()
             console.log("clicked~");
-            this.blur = true;
-            this.isItemVisible = true;
+            
+            // this.blur = true;
+            // this.isItemVisible = true;
+            if(this.supplier.status=="Active"){
+                this.supplier.status = "Inactive";
+                console.log(this.supplier.status);
+            } else if(this.supplier.status=="Inactive"){
+                this.supplier.status = "Active";
+                console.log(this.supplier.status);
+            }
         },
         pickStatus(stat){
             this.supplier.status = stat.value

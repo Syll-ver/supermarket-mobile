@@ -12,7 +12,7 @@
                             fontWeight="bold"
                             horizontalAlignment="center"
                             />
-                        <!-- <Button class="modal-btn" col="1" text="x" @tap="$modal.close" /> -->
+
                     </GridLayout>
                 </StackLayout>
 
@@ -70,6 +70,7 @@
                                 row="1"
                                 class="text-input"
                                 v-model="user.role_name"
+                                @tap="pickRole()"
                                 autoCapitalizationType="false"
                                 />
                          </GridLayout>
@@ -94,6 +95,44 @@
 
             </StackLayout>
 
+            <GridLayout v-show="modalBlur" class="modalBlur">
+            </GridLayout>
+
+            <GridLayout v-show="addItems" class="item-modal" rows="auto,*,auto">
+                <GridLayout row="0">
+                    <Label 
+                        margin="10"
+                        fontSize="16"
+                        fontWeight="bold"
+                        color="white"
+                        text="CHOOSE ITEM" 
+                        horizontalAlignment="center" />
+                </GridLayout>
+                <GridLayout row="1">
+                    <ListView for="i in inventoryList">
+                        <v-template>
+                            <StackLayout>
+                                <GridLayout>
+                                    <Label 
+                                        color="white"
+                                        fontSize="14"
+                                        fontWeight="bold"
+                                        :text="i.product_description" @tap="pickItem(i)" />
+                                </GridLayout>
+                            </StackLayout>
+                        </v-template>
+                    </ListView>
+                </GridLayout>
+                <GridLayout row="2">
+                    <Button 
+                        backgroundColor="#f5f5f5" col="0" 
+                        borderRadius="20" 
+                        class="p-l-25 p-r-25 p-t-0 p-b-0"
+                        horizontalAlignment="center" 
+                        text="CANCEL" @tap="onCancelItemModal()" />
+                </GridLayout>
+            </GridLayout>
+
             <ActivityIndicator :busy="showLoading" color="white" class="indLog" />
 
         </FlexboxLayout>
@@ -111,8 +150,10 @@
   export default {
     data(){
       return {
-            roles: {
-                roles_code: "",
+            user: {
+                employee_code: "",
+                // role_id: "",
+                username: "",
                 role_id: "",
                 role_name: "",
                 created_at: "",
@@ -120,7 +161,9 @@
                 updated_by: "",
                 updated_at: ""
             },
-            showLoading: false
+            showLoading: false,
+            modalBlur: false,
+            addItems: false,
             // Roles: Roles
       }
     },
@@ -143,7 +186,7 @@
             
         },
         validate(){
-            if(this.roles.role_name != "" ){
+            if(this.user.role_name != "" ){
                     // this.$refs.invsubmit.nativeView.isEnabled = 'true';
                     return true;
             } else {
@@ -151,45 +194,55 @@
             }
         },
         onCancel(){
-            this.roles.roles_code = ""
-            this.roles.role_id = ""
-            this.roles.role_name = ""
-            this.roles.created_at = ""
-            this.roles.created_by = ""
-            this.roles.updated_by = ""
-            this.roles.updated_at = ""
+            this.user.roles_code = ""
+            this.user.role_id = ""
+            this.user.role_name = ""
+            this.user.created_at = ""
+            this.user.created_by = ""
+            this.user.updated_by = ""
+            this.user.updated_at = ""
             this.$modal.close()
+        },
+        pickRole(){
+          this.modalBlur = true;
+          this.addItems = true;
         },
         async onSubmit(){
 
-            if(this.roles.role_name != ""){
-                this.roles.created_at = "today";
-                this.roles.created_by = '38';
-                console.log("ROLES: ", this.roles);
+            if(this.user.username != null && 
+                this.user.employee_code != null &&
+                this.user.role_id != null ){
+                
+                this.user.password = '1234';
+                this.user.created_at = "today";
+                this.user.created_by = '38';
+                console.log("ROLES: ", this.user);
 
                 this.showLoading = true
+                this.blur = true
                 await axios({
                     method: "POST",
-                    url: `${this.$axios.defaults.baseURL}/role/add`,
+                    url: this.$root.server+`/new/register`,
                     header: {
                         "Content-Type": "application/json"
                     },
-                    data: { ...this.roles },
+                    data: { ...this.user },
                 })
                 .then(result => {
                     if(result){
                         console.log("result: ",result);
                         // mutate
-                        this.$root.roles.push(this.roles)
+                        this.$root.user.push(this.roles)
 
                         // get stuff from api, re-save to global variable
                         // so ma-edit ang newly added since makuha na man 
                         // ang generated ids.
-                        axios.get(this.$root.server+`/roles`)
-                        .then(role => {
-                            this.$root.roles = role.data
-                            console.log("root roles: ", this.$root.roles);
+                        axios.get(this.$root.server+`/users`)
+                        .then(user => {
+                            this.$root.users = user.data
+                            console.log("root users: ", this.$root.users);
                             this.showLoading = false;
+                            this.blur = false;
                         })
                         // add this to see if the console is spitting an error.
                         .catch(err => console.log(err)); 
@@ -207,16 +260,17 @@
                 })
                 .catch(err => {
                     this.showLoading = false;
+                    this.blur = false;
                     alert({
                         title: "Fail",
                         message: err.response.data.msg,
                         okButtonText: "OK"
                         }).then(() => {
                         console.log("Alert dialog closed");
-                        this.inventory.barcode = ""
-                        this.inventory.product_description = ""
-                        this.inventory.unit_cost = ""
-                        this.inventory.sales_cost = ""
+                        this.user.employee_code = ""
+                        this.user.username = ""
+                        this.user.role_id = ""
+                        this.user.role_name = ""
                     });
                 })
             } else {
@@ -343,6 +397,14 @@
         height: 40;
         color: #009688;
         font-weight: bold;
+    }
+
+    .item-modal {
+        margin: 50 25 25 25;
+        padding: 20;
+        border-radius: 20;
+        height: 300;
+        background-color: #05C5AA;
     }
     
 </style>

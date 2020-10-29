@@ -68,7 +68,9 @@
                         <GridLayout 
                           class="list-box" 
                           rows="auto,*,*"
-                          columns="*,auto">
+                          columns="*,auto"
+                          @tap="show(d)"
+                          androidElevation="5" >
                             <Label row="0" col="0"  
                               :text="d.or_no" />
                             <Label row="0" col="1" 
@@ -94,7 +96,7 @@
                               color="#05C5AA"
                               horizontalAlignment="right"
                               :text=" 'fa-chevron-right' | fonticon "
-                              @tap="show(d)" />
+                               />
                         </GridLayout>
                       </StackLayout>
                     </v-template>
@@ -139,20 +141,20 @@
         blur: false
       }
     },
-    async created(){
-       this.showLoading = true;
-       this.blur = true;
+    // async created(){
+    //    this.showLoading = true;
+    //    this.blur = true;
 
-      await axios.get(this.$root.server+`/viewsales`)
-        .then(sale => {
-          this.$root.sales = sale.data
-          console.log("root sales: ", this.$root.sales);
-          this.showLoading = false;
-          this.blur = false;
+    //   await axios.get(this.$root.server+`/viewsales`)
+    //     .then(sale => {
+    //       this.$root.sales = sale.data
+    //       console.log("root sales: ", this.$root.sales);
+    //       this.showLoading = false;
+    //       this.blur = false;
 
-        })
-        .catch(err => console.log(err)); // add this to see if the console is spitting an error.
-    },
+    //     })
+    //     .catch(err => console.log(err)); // add this to see if the console is spitting an error.
+    // },
     mounted() {
       SelectedPageService.getInstance().updateSelectedPage("Sales");
     },

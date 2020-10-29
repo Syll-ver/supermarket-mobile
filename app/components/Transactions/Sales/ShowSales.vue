@@ -25,7 +25,7 @@
                         fontSize="16"
                         fontWeight="bold"
                         color="#009688"
-                        text=" ADD SALES "
+                        text=" SALES "
                         horizontalAlignment="left"
                     />
                     <Label
@@ -34,7 +34,7 @@
                         fontSize="16"
                         fontWeight="bold"
                         color="#009688"
-                        text=" Delivery Details " 
+                        text=" Transaction Details " 
                         horizontalAlignment="left"
                     />
                   </GridLayout>
@@ -65,14 +65,17 @@
                         <Label row="0"
                           :text="sales.customer_name"
                           textWrap="true"
+                          fontWeight="bold"
                           horizontalAlignment="left" />
                         <Label row="1"
                           :text="sales.customer_contact_no"
                           textWrap="true"
+                          fontWeight="bold"
                           horizontalAlignment="left" />
                         <Label row="2"
                           :text="sales.customer_address"
                           textWrap="true"
+                          fontWeight="bold"
                           horizontalAlignment="left" />
                     </GridLayout>
                     <GridLayout v-else-if="(sales.customer_name==null)"
@@ -95,7 +98,7 @@
                 class="p-l-20"
                 fontSize="16"
                 fontWeight="bold"
-                color="black"
+                color="#009688"
                 text="Items"
                 horizontalAlignment="left" />
               <!-- <Label col="1" 
@@ -129,7 +132,7 @@
                               fontSize="14"
                               fontWeight="bold"
                               color="#05C5AA"
-                              :text="inv.sales_cost" />
+                              :text="(inv.sales_cost)" />
                             <GridLayout 
                               row="0" col="1" 
                               rowSpan="2"
@@ -159,63 +162,13 @@
                 marginTop="10"
                 marginRight="70"
                 horizontalAlignment="right"
-                :text=" 'Total Cost: P'+sales.total_cost" />
-                <!-- <Button 
-                  col="0"
-                  text="ENTER PAYMENT"
-                  fontSize="15"
-                  color="white"
-                  borderRadius="30"
-                  backgroundColor="#424242" />
-                <Label
-                  col="1"
-                  class="fas additem"
-                  :text=" 'fa-plus-circle' | fonticon "
-                  @tap="addItem()"
-                   /> -->
+                :text=" 'Total Cost: P'+(sales.total_cost)" />
+
             </GridLayout>
           </GridLayout>
         </GridLayout>
 
-        <GridLayout v-show="modalBlur" class="modalBlur">
-        </GridLayout>
-
-        <GridLayout v-show="addItems" class="item-modal" rows="auto,*,auto">
-            <GridLayout row="0">
-                <Label 
-                    margin="10"
-                    fontSize="16"
-                    fontWeight="bold"
-                    color="white"
-                    text="CHOOSE ITEM" 
-                    horizontalAlignment="center" />
-            </GridLayout>
-            <GridLayout row="1">
-                <ListView for="i in inventoryList">
-                    <v-template>
-                        <StackLayout>
-                            <GridLayout>
-                                <Label 
-                                    color="white"
-                                    fontSize="14"
-                                    fontWeight="bold"
-                                    :text="i.product_description" @tap="pickItem(i)" />
-                            </GridLayout>
-                        </StackLayout>
-                    </v-template>
-                </ListView>
-            </GridLayout>
-            <GridLayout row="2">
-                <Button 
-                    backgroundColor="#f5f5f5" col="0" 
-                    borderRadius="20" 
-                    class="p-l-25 p-r-25 p-t-0 p-b-0"
-                    horizontalAlignment="center" 
-                    text="CANCEL" @tap="onCancelItemModal()" />
-            </GridLayout>
-        </GridLayout>
-
-        <ActivityIndicator :busy="showLoading" color="green" class="indLog" />
+      
           
       </GridLayout>
     </Page>
@@ -279,13 +232,6 @@
       },
       onButtonTap(){
         this.$navigateTo(parent);
-      },
-      show(del){
-        console.log("clicked!", del);
-      },
-      addItem() {
-          this.modalBlur = true;
-          this.addItems = true;
       },
       
     }

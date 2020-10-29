@@ -1,121 +1,187 @@
 <template>
     <Page class="page" actionBarHidden="true">
-      <!-- <ActionBar title="Delivery Transactions Details" class="action-bar banner">
-         
-          <NavigationButton ios:visibility="collapsed" icon="res://menu" @tap="onDrawerButtonTap"/>
-          
-          <ActionItem icon="res://menu"
-                      android:visibility="collapsed"
-                      @tap="onDrawerButtonTap"
-                      ios.position="left"/>
-          <Label class="action-bar-title titles" :text="$props.dr_no"/>
-      </ActionBar> -->
+      
 
       <GridLayout class="page__content">
-
-          <StackLayout>
-            <GridLayout class="m-t-25" rows="auto,auto,*,auto">
-              <GridLayout row="0" columns="*,*,*">
-                <Label col="0"
-                  class="fas sideicon"
-                  :text=" 'fa-chevron-left' | fonticon " 
-                  horizontalAlignment="left"
-                  @tap="goBack()" />
-                <Label col="1" class="m-t-15"
-                  text="Delivery Details" textTransform="uppercase"
-                  horizontalAlignment="center" />
-                <Label col="2"
-                  class="fas sideicon"
-                  :text=" 'fa-ellipsis-v' | fonticon "
-                  horizontalAlignment="right" />
-              </GridLayout>
-
-              <GridLayout row="1">
-                <StackLayout>
-                  <GridLayout class="thead" columns="*,auto,auto,auto">
-                    <Label class="m-r-10" col="0" text="Product" />
-                    <Label class="m-r-10" col="1" text="Qty" />
-                    <Label class="m-r-10" col="2" text="Unit Cost" />
-                    <Label col="3" text="Total Unit Cost" 
-                      textWrap="true" />
+        <GridLayout class="sales-bg">
+        </GridLayout>
+        <GridLayout rows="auto,auto,auto,auto,auto">
+          <GridLayout>
+            <StackLayout class="m-t-25">
+              <GridLayout row="0">
+                  <GridLayout rows="auto,auto" columns="auto,*">
+                    <Label
+                        row="0" col="0"
+                        class="fas p-t-20 p-l-20 p-r-20"
+                        fontSize="16"
+                        color="#009688"
+                        :text=" 'fa-chevron-left' | fonticon "
+                        horizontalAlignment="left"
+                        @tap="onButtonTap"
+                    />
+                    <Label
+                        row="0" col="1"
+                        class="p-t-20 p-r-20"
+                        fontSize="16"
+                        fontWeight="bold"
+                        color="#009688"
+                        text=" DELIVERY "
+                        horizontalAlignment="left"
+                    />
+                    <Label
+                        row="1"
+                        class="p-l-20"
+                        fontSize="16"
+                        fontWeight="bold"
+                        color="#009688"
+                        text=" Transaction Details " 
+                        horizontalAlignment="left"
+                    />
                   </GridLayout>
-                </StackLayout>
               </GridLayout>
-
-              <ListView row="2" class="trans-items" for="item in $props.items" separatorColor="transparent">
-                <v-template>
-                  <GridLayout >
-                    <GridLayout  class="rtrans">
-                      <GridLayout columns="*,auto,auto,auto">
-                        <Label  col="0" class="m-r-10" :text="item.product_description" textWrap="true" />
-                        <Label col="1" class="m-r-10" :text="item.qty" textWrap="true" />
-                        <Label col="2" class="m-r-10" :text="item.unit_cost" textWrap="true" />
-                        <Label col="3" :text="(item.unit_cost*item.qty).toFixed(2)" textWrap="true" />
-                      </GridLayout>
+            </StackLayout>
+          </GridLayout>
+          <GridLayout  row="1">
+              <GridLayout 
+                class="bg-pill" 
+                rows="*,*,*"
+                androidElevation="5" >
+                <GridLayout rows="auto,auto" columns="*,*">
+                  <Label row="0" col="0" 
+                    color="white"
+                    :text=" ' OR No: ' +delivery.dr_no" 
+                    fontSize="13"
+                    textWrap="true"
+                    horizontalAlignment="left" />
+                  <Label row="0" col="1" 
+                    color="white"
+                    fontSize="13"
+                    :text="new Date(delivery.transaction_date).toDateString().split(' ').slice(1).join(' ')"
+                    textWrap="true"
+                    horizontalAlignment="right" />
+                    <GridLayout
+                      row="1">
+                        <Label
+                          paddingBottom="15"
+                          paddingTop="15"
+                          :text="delivery.supplier_name"
+                          fontSize="14"
+                          fontWeight="bold"
+                          textWrap="true"
+                          horizontalAlignment="left" />
                     </GridLayout>
-                  </GridLayout>
-                </v-template>
+                </GridLayout>
+
+              </GridLayout>
+          </GridLayout>
+          <GridLayout row="2" columns="*,*">
+              <Label col="0"
+                class="p-l-20"
+                fontSize="16"
+                fontWeight="bold"
+                color="#009688"
+                text="Items"
+                horizontalAlignment="left" />
+              <!-- <Label col="1" 
+                class="p-r-20"
+                fontSize="16"
+                fontWeight="bold"
+                color="black"
+                v-model="delivery.total_cost"
+                horizontalAlignment="right" /> -->
+          </GridLayout>
+          <GridLayout 
+            class="itemdetails-pill"
+            row="3"
+            padding="20">
+              <ListView row="1" class="list-group" 
+                height="380"
+                separatorColor="transparent"
+                for="inv in delivery.items" >
+                    <v-template>
+                      <GridLayout >
+                        <GridLayout 
+                          class="item-pill"
+                          rows="auto,auto"
+                          columns="2*,*"
+                          androidElevation="5" >
+                            <Label row="0" col="0" 
+                              fontSize="14"
+                              :text="inv.product_description"
+                              textWrap="true" />
+                            <Label row="1" col="0" 
+                              fontSize="14"
+                              fontWeight="bold"
+                              color="#05C5AA"
+                              :text="(inv.unit_cost)" />
+                            <GridLayout 
+                              row="0" col="1" 
+                              rowSpan="2"
+                              backgroundColor="#7ac5be" 
+                              borderRadius="20"
+                              alignItems="center" >
+                            <Label row="1" col="0" 
+                              fontSize="14"
+                              fontWeight="bold"
+                              :text="inv.quantity"
+                              horizontalAlignment="center"
+                              paddingTop="20" />
+                            </GridLayout>
+
+                          </GridLayout>
+                      </GridLayout>
+
+                    </v-template>
+
               </ListView>
 
-              </GridLayout>
+          </GridLayout>
+          <GridLayout row="4">
+            <GridLayout marginBottom="20">
+              <Label 
+                fontSize="15"
+                fontWeight="bold"
+                marginTop="10"
+                marginRight="70"
+                horizontalAlignment="right"
+                :text=" 'Total Cost: P'+(delivery.total_cost)" />
 
-            </StackLayout>
-
-
-            <GridLayout class="float-details" >
-              <StackLayout class="transactions trans-details">
-                <GridLayout rows="auto,auto,auto,auto" columns="*,auto">
-                  <Label row="0" col="0"
-                  fontSize="13"
-                    :text="'Delivery Receipt Number: ' + $props.dr_no" />
-                  <Label row="0" col="1"
-                  fontSize="13"
-                    :text="$props.dtransaction_date"
-                    horizontalAlignment="right" />
-                  <Label row="1" col="0"
-                    class="trans-details-label m-t-8"
-                    color="aliceblue"
-                    fontSize="13"
-                    text="Supplier" />
-                  <Label row="2" col="0"
-                    fontSize="17"
-                    :text="$props.company_name"
-                    textWrap="true" />
-                  <Label row="3" col="0"
-                    :text="$props.company_address"
-                    textWrap="true" />
-                </GridLayout>
-              </StackLayout>
             </GridLayout>
-
-
+          </GridLayout>
+        </GridLayout>
+          
       </GridLayout>
-                      
-                            
-
-                         
-
     </Page>
 </template>
 
 <script>
   import * as utils from "~/shared/utils";
   import SelectedPageService from "../../../shared/selected-page-service";
+  import axios from "axios";
+  import parent from './Delivery';
 
   export default {
     props: [
-        // 'details'
         'dr_no',
-        'supplier_id',
-        'company_name',
-        'company_address',
+        'supplier_name',
         'dtransaction_date',
         'total_cost',
         'items'
     ],
     data(){
       return {
-        listOfItems: this.$props.items
+        delivery: {
+          dr_no: this.dr_no,
+          supplier_name: this.supplier_name,
+          // company_name: this.company_name,
+          // company_address: this.company_address,
+          dtransaction_date: this.dtransaction_date,
+          total_cost: this.total_cost,
+          items: this.items
+          
+        },
+        inventoryList: {},
+
       }
     },
     mounted() {
@@ -137,13 +203,9 @@
         nativeView.setText("Native View - Android");
         args.view = nativeView;
       },
-      show(del){
-        console.log("clicked!", del);
+      onButtonTap(){
+        this.$navigateTo(parent);
       },
-      goBack(){
-        console.log("tap me~");
-      }
-      
     }
   };
 </script>
@@ -154,60 +216,42 @@
     // End custom common variables
 
     // Custom styles
-
-    .page {
-      background-color: #B8FDDF;
+    .sales-bg {
+      background-color: #7ac5be;
+      margin-top: 200;
+      margin-bottom: 70;
+      border-radius: 250 0 50 50;
     }
 
-    .sideicon {
-      background-color: #B8FDDF;
-      // border-width: 1;
-      padding: 20;
+    .bg-pill {
+      background-color: #05c5aa;
+      margin: 5 30 30 30;
+      border-radius: 15;
+      padding: 20 20 20 20;
     }
-    
 
-    .thead {
+    .item-pill {
       background-color: white;
-      font-weight: bold;
-      font-size: 13;
-      margin-top: 80;
-      padding-top: 95;
-      padding-bottom: 10;
-      padding-left: 20;
-      padding-right: 20;
-      border-top-left-radius: 50;
-      border-top-right-radius: 50;
-    }
-
-    .trans-items{
-      background-color: white;
-      color: grey;
-      padding-left: 10;
-      padding-right: 10;
-      font-weight: bold;
-      font-size: 13;
-    }
-
-    .trans-details{
-      // padding: up-right-down-left
-      height: 150;
-      margin: 0 20 430 20;
-      padding: 20;
-      border-radius: 8;
-      color: white;
-      font-weight: bold;
-      font-size: 14;
-      background-color: #05C5AA;
+      margin-left: 20;
+      margin-right: 20;
       
+      padding: 15;
+      border-radius: 20;
     }
-    
-    .shadow-down {
-      height: 8;
-      background: linear-gradient(to bottom, #0000001a, rgba(0,0,0, 0))
-  }
 
-    .float-details {
-      align-items: center;
+    .additem {
+      // background-color: white;
+      color: #05c5aa;
+      font-size: 40;
+      padding: 10 20 5 10;
+      margin-right: 15;
+      box-shadow: none;
     }
+
+    
     
 </style>
+
+
+
+

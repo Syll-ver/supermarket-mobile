@@ -121,8 +121,7 @@
   export default {
     data(){
       return {
-        inventory: {
-        },
+        inventory: {},
         showLoading: false,
         blur: false
       }
@@ -136,10 +135,6 @@
       }
     },
     methods: {
-        sample() {
-            console.log("br: " + this.inventory.barcode);
-            console.log("$refs: ", this.$refs.inputBar.getViewById);  
-        },
         onCancel(){
             this.$modal.close();
         },
@@ -179,7 +174,7 @@
                             if(result) {
                                 alert({
                                     // title: "Success",
-                                    message: result.message,
+                                    message: "Success",
                                     okButtonText: "OK"
                                     }).then(() => {
                                     console.log("Alert dialog closed");

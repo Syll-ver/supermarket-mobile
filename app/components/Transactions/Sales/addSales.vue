@@ -104,7 +104,7 @@
                 fontSize="16"
                 fontWeight="bold"
                 color="white"
-                v-model="sales.total_cost"
+                v-model="totalsales"
                 horizontalAlignment="right" />
           </GridLayout>
           <GridLayout row="3">
@@ -273,7 +273,7 @@ import { GridLayout } from '@nativescript/core';
       return {
         items: [],
         sales: {
-          total_cost: 0
+          // total_cost: 0
         },
         showLoading: false,
         isItemVisible: false,
@@ -287,27 +287,31 @@ import { GridLayout } from '@nativescript/core';
         inventoryList: [],
         inputDate: true,
         inputDR: true,
-        inputSup: true
+        inputSup: true,
+        totalsales: 0
       }
     },
     components: {
       parent
     },
-    async created() {
-        this.showLoading = true;
-        this.blur = true
-
-        if(this.$root.inventory) {
-          await axios.get(this.$root.server+`/inventory`)
-            .then(items => {
-            this.$root.inventory = items.data;
-            this.inventoryList = this.$root.inventory;
-          })
-          .catch(err => console.log(err)); // add this to see if the console is spitting an error.
-        }
-          this.showLoading = false;
-          this.blur = false
+    async created(){
+      this.inventoryList = this.$root.inventory;
     },
+    // async created() {
+    //     this.showLoading = true;
+    //     this.blur = true
+
+    //     if(this.$root.inventory) {
+    //       await axios.get(this.$root.server+`/inventory`)
+    //         .then(items => {
+    //         this.$root.inventory = items.data;
+    //         this.inventoryList = this.$root.inventory;
+    //       })
+    //       .catch(err => console.log(err)); // add this to see if the console is spitting an error.
+    //     }
+    //       this.showLoading = false;
+    //       this.blur = false
+    // },
     computed: {
       message() {
         return "<!-- Page content goes here -->";
@@ -325,7 +329,20 @@ import { GridLayout } from '@nativescript/core';
         args.view = nativeView;
       },
       onButtonTap(){
-        this.$navigateTo(parent);
+        if(this.sales.items != null){
+          confirm({
+              message: "Remove this item from the list?",
+              okButtonText: "OK",
+              cancelButtonText: "CANCEL"
+            }).then( result => {
+              if(result){
+                this.$navigateTo(parent);
+              }
+            })
+        } else {
+          this.$navigateTo(parent);
+        }
+        
       },
       addItem() {
           this.modalBlur = true;
@@ -360,7 +377,7 @@ import { GridLayout } from '@nativescript/core';
               const qty = this.items.findIndex(
               x => x.barcode === inv.barcode)
               this.items[qty].quantity = inv.quantity-1
-            this.items[qty].total_unitcost = (inv.sales_cost*(this.items[qty].quantity))
+            this.items[qty].total_unitcost = (inv.sales_cost*(this.items[qty].quantity)).toFixed(2)
           } else {
 
             // confirm removal of item from list
@@ -402,7 +419,7 @@ import { GridLayout } from '@nativescript/core';
               x => x.barcode === inv.barcode)
               this.items[qty].quantity = inv.quantity+1
 
-            this.items[qty].total_unitcost = (inv.sales_cost*(this.items[qty].quantity))
+            this.items[qty].total_unitcost = parseFloat(inv.sales_cost)*(parseFloat(this.items[qty].quantity))
 
         this.getTotalDeliveryCost();
             
@@ -430,6 +447,7 @@ import { GridLayout } from '@nativescript/core';
                   
                   if(result.text >= this.sales.total_cost){
                     console.log("bypass condition payment more than total cost");
+
                     axios({
                       method: "POST",
                       url: this.$root.server+`/addsale`,
@@ -439,6 +457,25 @@ import { GridLayout } from '@nativescript/core';
                         data: { ...this.sales },
                     }).then( result => {
                       console.log("@result", result);
+
+                      // get updated sales
+                      axios.get(this.$root.server+`/viewsales`)
+                      .then(sale => {
+                        this.$root.sales = sale.data
+                        console.log("sales: ", this.$root.sales);
+                        console.log("==============================");
+                      })
+                      .catch(err => console.log(err));
+
+                      // get updated inventory
+                      axios.get(this.$root.server+`/inventory`)
+                      .then(inventory => {
+                      this.$root.inventory = inventory.data
+                      console.log("inventory: ", this.$root.inventory);
+                      console.log("==============================");
+                      })
+                      .catch(err => console.log(error));
+                      
 
                       alert({
                       message: "Success",
@@ -474,13 +511,12 @@ import { GridLayout } from '@nativescript/core';
       },
       
       getTotalDeliveryCost() {
-        this.sales.total_cost = 0;
-
           var total2 = 0;
           for(var i = 0; i < this.items.length; i++){
-              total2 = (parseInt(total2) + parseInt(this.items[i].total_unitcost))
+              total2 = (parseFloat(total2,10) + parseFloat(this.items[i].total_unitcost).toFixed(2))
           }
-          this.sales.total_cost = total2
+          this.totalsales = 'P'+total2;
+          this.sales.total_cost = total2;
           console.log("total2: ", total2);
 
       }

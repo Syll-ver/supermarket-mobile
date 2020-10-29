@@ -1,15 +1,5 @@
 <template>
     <Page class="page" actionBarHidden="true">
-      <!-- <ActionBar class="action-bar banner">
-         
-          <NavigationButton ios:visibility="collapsed" icon="res://menu" @tap="onDrawerButtonTap"/>
-         
-          <ActionItem icon="res://menu"
-                      android:visibility="collapsed"
-                      @tap="onDrawerButtonTap"
-                      ios.position="left"/>
-          <Label class="action-bar-title titles" text="Suppliers"/>
-      </ActionBar> -->
 
       <GridLayout class="page__content">
           
@@ -17,7 +7,7 @@
               <GridLayout>
                   <GridLayout rows="*,auto,*">
                       <GridLayout class="dash-bg-top" row="0">
-                          <GridLayout rows="auto,*">
+                          <GridLayout rows="auto,*" opacity="1">
                               <!-- drawer button, lougeh supermarket brand name -->
                                 <StackLayout class="m-t-25">
                                 <GridLayout row="0" columns="*,auto,*">
@@ -25,6 +15,7 @@
                                         col="0"
                                         class="fas p-20"
                                         fontSize="16"
+                                        color="white"
                                         :text=" 'fa-bars' | fonticon "
                                         horizontalAlignment="left"
                                         @tap="onDrawerButtonTap"
@@ -35,12 +26,12 @@
                                         text="LOUGEH SUPERMARKET"
                                         horizontalAlignment="center"
                                     />
-                                    <Label
+                                    <!-- <Label
                                         col="2"
                                         class="fas p-20"
                                         :text=" 'fa-ellipsis-v' | fonticon "
                                         horizontalAlignment="right" 
-                                    />
+                                    /> -->
                                 </GridLayout>
                                 </StackLayout>
 
@@ -66,50 +57,19 @@
                           <Label class="stock-title header-title" text="Low on stock" />
                       </GridLayout>
                       <GridLayout class="dash-bg-bottom" row="2">
-                          <!-- <GridLayout class="bg-pill">
-                              
-                          </GridLayout> -->
+
                       </GridLayout>
                   </GridLayout>
               </GridLayout>
 
-
-              <!-- <GridLayout rows="auto,auto,auto">
-                <GridLayout row="0" columns="*,*,*">
-                    <Label
-                        col="0"
-                        class="fas sideicon"
-                        :text=" 'fa-bars' | fonticon "
-                        horizontalAlignment="left"
-                         
-                    />
-                    <Label
-                        col="1"
-                        class="LOUGEH SUPERMARKET"
-                        horizontalAlignment="center"
-                    />
-                    <Label
-                        col="2"
-                        class="fas sideicon"
-                        :text=" 'fa-ellipsis-v' | fonticon "
-                        horizontalAlignment="right" 
-                    />
-                </GridLayout>
-              </GridLayout> -->
-
-          
-
             </StackLayout>
 
-            <!-- <GridLayout rows="*,*">
-                <GridLayout row="0" columns="auto,auto">
-                    <GridLayout class="bg-pill" columns="0">
-                        
-                    </GridLayout>
-                </GridLayout>
-            </GridLayout> -->
+        <GridLayout v-show="blur" class="blur">
+        </GridLayout>
 
-        <!-- <ActivitiIndicator busy="{{ isLoading }}" /> -->
+        <ActivityIndicator :busy="showLoading" color="#05C5AA" class="indLog" />
+
+ 
 
       </GridLayout>
     </Page>
@@ -118,12 +78,81 @@
 <script>
   import * as utils from "~/shared/utils";
   import SelectedPageService from "../shared/selected-page-service";
+  import axios from "axios";
 
   export default {
     data(){
       return {
-        
+        showLoading: false,
+        blur: false,
       }
+    },
+    async created(){
+        this.showLoading = true;
+        this.blur = true;
+
+        
+
+        // get inventory items
+        await axios.get(this.$root.server+`/inventory`)
+        .then(inventory => {
+        this.$root.inventory = inventory.data
+        console.log("inventory: ", this.$root.inventory);
+        console.log("==============================");
+        })
+        .catch(err => console.log(error));
+
+        // get roles
+        await axios.get(this.$root.server+`/roles`)
+        .then(role => {
+          this.$root.roles = role.data
+          console.log("roles: ", this.$root.roles);
+          console.log("==============================");
+        })
+        .catch(err => console.log(err));
+
+        // get suppliers
+        await axios.get(this.$root.server+`/supplier`)
+        .then(supplier => {
+          this.$root.suppliers = supplier.data
+          console.log("suppliers: ", this.$root.roles);
+          console.log("==============================");
+        })
+        .catch(err => console.log(error));
+
+        // get users
+        // await axios.get(this.$root.server+`/users`)
+        // .then(role => {
+        //   this.$root.users = role.data
+        //   console.log("users: ", this.$root.users);
+        //   console.log("==============================");
+        // })
+        // .catch(err => console.log(err));
+
+
+        // get delivery
+        await axios.get(this.$root.server+`/delivery_item/all`)
+        .then(delivery => {
+          this.$root.delivery = delivery.data
+          console.log("delivery: ", this.$root.delivery);
+          console.log("==============================");
+        })
+        .catch(err => console.log(err)); 
+
+
+        // get sales
+        await axios.get(this.$root.server+`/viewsales`)
+        .then(sale => {
+          this.$root.sales = sale.data
+          console.log("sales: ", this.$root.sales);
+          console.log("==============================");
+        })
+        .catch(err => console.log(err));
+
+        this.showLoading = false;
+        this.blur = false;
+
+
     },
     mounted() {
       SelectedPageService.getInstance().updateSelectedPage("Users");
@@ -156,17 +185,21 @@
 
     // Custom styles
     .dash-bg-top {
-        background-image: linear-gradient(to right, #05c5aa,#f0f0f0);
+        background-image: linear-gradient(to top right,
+                         rgb(5, 197, 170),
+                         rgb(184, 255, 234));
       // padding: up-right-down-left
         border-radius: 0 0 0 50;
-        opacity: 0.4;
+        // opacity: 0.4;
     }
 
     .dash-bg-bottom {
-        background-image: linear-gradient(to right, #f0f0f0, #05c5aa);
+        background-image: linear-gradient(to top right, 
+                        #b6ffe9, 
+                        #05c5aa);
         border-radius: 50 0 0 0;
         // margin-top: 50;
-        opacity: 0.3;
+        // opacity: 0.3;
     }
 
     .bg-pill {

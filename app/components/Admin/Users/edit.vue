@@ -241,7 +241,7 @@
 
                                 alert({
                                     // title: "Success",
-                                    message: result.data.msg,
+                                    message: "Success",
                                     okButtonText: "OK"
                                     }).then(() => {
                                     console.log("Alert dialog closed");

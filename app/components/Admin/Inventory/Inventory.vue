@@ -143,9 +143,9 @@
 
 <script>
   import * as utils from "~/shared/utils";
-  import SelectedPageService from "../shared/selected-page-service";
-  import add from "./Admin/Inventory/add";
-  import edit from "./Admin/Inventory/edit";
+  import SelectedPageService from "../../../shared/selected-page-service";
+  import add from "./add";
+  import edit from "./edit";
   import axios from "axios";
 
   export default {
@@ -210,19 +210,19 @@
         })
       }
     },
-    async created() {
-      this.showLoading = true;
-      this.blur = true;
+    // async created() {
+    //   this.showLoading = true;
+    //   this.blur = true;
 
-      await axios.get(this.$root.server+`/inventory`)
-        .then(inventory => {
-          this.$root.inventory = inventory.data
-          this.showLoading = false;
-          this.blur = false;
+    //   await axios.get(this.$root.server+`/inventory`)
+    //     .then(inventory => {
+    //       this.$root.inventory = inventory.data
+    //       this.showLoading = false;
+    //       this.blur = false;
 
-        })
-        .catch(err => console.log(error)); // add this to see if the console is spitting an error.
-    }
+    //     })
+    //     .catch(err => console.log(error)); // add this to see if the console is spitting an error.
+    // }
   };
 </script>
 

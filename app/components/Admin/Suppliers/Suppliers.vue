@@ -198,23 +198,23 @@
         })
       }
     },
-    async created() {
-      this.showLoading = true;
-      this.blur = true;
+    // async created() {
+    //   this.showLoading = true;
+    //   this.blur = true;
 
-      await axios.get(this.$root.server+`/supplier`)
-        .then(supplier => {
-          this.$root.suppliers = supplier.data
+    //   await axios.get(this.$root.server+`/supplier`)
+    //     .then(supplier => {
+    //       this.$root.suppliers = supplier.data
           
-          console.log("result data", supplier.data)
-          console.log("supplier: ", this.supplier);
+    //       console.log("result data", supplier.data)
+    //       console.log("supplier: ", this.supplier);
 
-          this.showLoading = false;
-          this.blur = false;
+    //       this.showLoading = false;
+    //       this.blur = false;
           
-        })
-        .catch(err => console.log(error)); // add this to see if the console is spitting an error.
-    }
+    //     })
+    //     .catch(err => console.log(error)); // add this to see if the console is spitting an error.
+    // }
   };
 </script>
 
