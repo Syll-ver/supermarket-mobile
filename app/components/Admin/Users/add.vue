@@ -152,7 +152,6 @@
       return {
             user: {
                 employee_code: "",
-                // role_id: "",
                 username: "",
                 role_id: "",
                 role_name: "",
@@ -164,35 +163,15 @@
             showLoading: false,
             modalBlur: false,
             addItems: false,
-            // Roles: Roles
       }
-    },
-    mounted() {
-    },
-    created(){
     },
     computed: {
-      message() {
-        return "<!-- Page content goes here -->";
-      }
+
     },
     components: {
-        // Roles
+
     },
     methods: {
-        sample() {
-            // console.log("br: " + this.inventory.barcode);
-            // console.log("$refs: ", this.$refs.inputBar.getViewById);
-            
-        },
-        validate(){
-            if(this.user.role_name != "" ){
-                    // this.$refs.invsubmit.nativeView.isEnabled = 'true';
-                    return true;
-            } else {
-                return false;
-            }
-        },
         onCancel(){
             this.user.roles_code = ""
             this.user.role_id = ""
@@ -215,7 +194,7 @@
                 
                 this.user.password = '1234';
                 this.user.created_at = "today";
-                this.user.created_by = '38';
+                this.user.created_by = this.$root.localStorage.users_id;
                 console.log("ROLES: ", this.user);
 
                 this.showLoading = true
@@ -234,7 +213,7 @@
                         // mutate
                         this.$root.user.push(this.roles)
 
-                        // get stuff from api, re-save to global variable
+                        // get updated stuff from api, re-save to global variable
                         // so ma-edit ang newly added since makuha na man 
                         // ang generated ids.
                         axios.get(this.$root.server+`/users`)
@@ -329,7 +308,6 @@
         border-radius: 8;
         margin-bottom: 15;
         background-color: white;
-        // height: 60;
     }
 
     .box-input-label {
@@ -366,8 +344,6 @@
     }
 
     .modal-submit {
-        // color: #009688;
-        // background-color: #0a8171;
         border-radius: 12;
         text-transform: uppercase;
         font-weight: bold;

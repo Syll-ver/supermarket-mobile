@@ -215,7 +215,7 @@
             // therefore on push kay wala siya :((
             if(this.roles.role_name != "" ){
                     
-                    this.roles.updated_by = '38';
+                    this.roles.updated_by = this.$root.localStorage.users_id;
                     this.roles.updated_at = 'today';
                     console.log("role: ", this.roles);
 

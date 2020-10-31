@@ -1,5 +1,6 @@
 <template lang="html">
-    <GridLayout rows="auto, *" class="nt-drawer__content">
+    <GridLayout rows="auto, *"
+      class="nt-drawer__content" >
         <StackLayout row="0" class="nt-drawer__header banner">
             <Image class="nt-drawer__header-image fas t-36" src.decode="font://&#xf2bd;"/>
             <Label class="nt-drawer__header-brand" :text="this.$root.localStorage.username"/>
@@ -45,7 +46,9 @@
                     <Label col="1" text="Users" class="p-r-10"/>
                 </GridLayout>
 
-                <StackLayout class="hr"/>
+                <StackLayout 
+                  v-if="(this.$root.localStorage.role_name==='admin')"  class="hr" 
+                  color="#05C5AA"/>
 
                 <GridLayout v-if="(this.$root.localStorage.role_name==='admin')" columns="auto, *"
                             :class="'nt-drawer__list-item' + (selectedPage === 'Delivery' ? ' -selected': '')"
@@ -64,19 +67,20 @@
                 <GridLayout v-if="(this.$root.localStorage.role_name==='admin')" columns="auto, *"
                             :class="'nt-drawer__list-item' + (selectedPage === 'Sales' ? ' -selected': '')"
                             @tap="onNavigationItemTap(Sales)">
-                    <Label col="0" class="nt-icon fas" />
+                    <Label col="0" :text=" 'fa-cash-register' | fonticon" class="nt-icon fas" />
                     <Label col="1" text="Sales" class="p-r-10"/>
                 </GridLayout>
 
                 <GridLayout v-if="(this.$root.localStorage.role_name==='cashier')" columns="auto, *"
                             :class="'nt-drawer__list-item' + (selectedPage === 'Sales' ? ' -selected': '')"
                             @tap="onNavigationItemTap(Sales)">
-                    <Label col="0" class="nt-icon fas" 
-                    :text=" 'fa-coins' | fonticon" />
+                   <Label col="0" :text=" 'fa-cash-register' | fonticon" class="nt-icon fas" />
                     <Label col="1" text="Sales" class="p-r-10"/>
                 </GridLayout>
 
-                <StackLayout class="hr"/>
+                <StackLayout 
+                  v-if="(this.$root.localStorage.role_name==='admin')"  class="hr" 
+                  color="#05C5AA"/>
 
                 <GridLayout columns="auto, *"
                             :class="'nt-drawer__list-item' + (selectedPage === 'Logout' ? ' -selected': '')"
@@ -171,4 +175,7 @@
     // End custom common variables
 
     // Custom styles
+    .banner {
+      border-radius: 0 0 30 0;
+    }
 </style>

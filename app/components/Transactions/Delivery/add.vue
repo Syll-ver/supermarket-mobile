@@ -1,15 +1,5 @@
 <template>
     <Page class="page" actionBarHidden="true">
-      <!-- <ActionBar class="action-bar banner" flat="true">
-
-          <NavigationButton ios:visibility="collapsed" icon="res://menu" @tap="onDrawerButtonTap"/>
-
-          <ActionItem icon="res://menu"
-                      android:visibility="collapsed"
-                      @tap="onDrawerButtonTap"
-                      ios.position="left"/>
-          <Label class="action-bar-title titles" text="Inventory"/>
-      </ActionBar> -->
 
       <GridLayout class="page__content">
           <GridLayout rows="auto,auto,auto,*,auto">
@@ -171,8 +161,6 @@
                                         :text="inv.total_unitcost" />
                                 </GridLayout>
                             </GridLayout>
-                            <!-- <Label class="text-content" :text="user.barcode + ' ' +user.product_description" textWrap="true" ></Label>
-                            <Label :text="user.quantity"></Label> -->
                           </StackLayout>
                         </GridLayout>
 
@@ -302,41 +290,41 @@
     data(){
       return {
         items: [],
-        delItems: [
-            {
-                dti_id: 197,
-                dt_no: 44,
-                barcode: 1001,
-                product_description: "sdffdfds",
-                unit_cost: 20,
-                quantity: 1
-            },
-            {
-                dti_id: 198,
-                dt_no: 44,
-                barcode: 1005,
-                product_description: "sdffdfds",
-                unit_cost: 20,
-                quantity: 1
-            },
-            {
-                dti_id: 230,
-                dt_no: 44,
-                barcode: 1006,
-                product_description: "sdffdfds",
-                unit_cost: 20,
-                quantity: 1
-            },
-            {
-                dti_id: 418,
-                dt_no: 44,
-                barcode: 1001,
-                product_description: "sdffdfds",
-                unit_cost: 20,
-                quantity: 1
-            }
+        // delItems: [
+        //     {
+        //         dti_id: 197,
+        //         dt_no: 44,
+        //         barcode: 1001,
+        //         product_description: "sdffdfds",
+        //         unit_cost: 20,
+        //         quantity: 1
+        //     },
+        //     {
+        //         dti_id: 198,
+        //         dt_no: 44,
+        //         barcode: 1005,
+        //         product_description: "sdffdfds",
+        //         unit_cost: 20,
+        //         quantity: 1
+        //     },
+        //     {
+        //         dti_id: 230,
+        //         dt_no: 44,
+        //         barcode: 1006,
+        //         product_description: "sdffdfds",
+        //         unit_cost: 20,
+        //         quantity: 1
+        //     },
+        //     {
+        //         dti_id: 418,
+        //         dt_no: 44,
+        //         barcode: 1001,
+        //         product_description: "sdffdfds",
+        //         unit_cost: 20,
+        //         quantity: 1
+        //     }
 
-        ],
+        // ],
         delivery: {
           total_cost: 0
         },
@@ -346,11 +334,11 @@
         modalBlur: false,
         addItems: false,
         parent: parent,
-        listOfItems: [
-            'supplier1',
-            'supplier2',
-            'supplier3'
-        ],
+        // listOfItems: [
+        //     'supplier1',
+        //     'supplier2',
+        //     'supplier3'
+        // ],
         itemsToShow: [],
         unfilteredItemsToShow: [],
         filterItem: "",
@@ -413,8 +401,6 @@
       onCancel() {
           this.isItemVisible = false;
           this.blur = false;
-          // this.modalBlur = true;
-          // this.addItems = true;
       },
       addItem() {
           this.modalBlur = true;
@@ -428,7 +414,7 @@
           console.log("item: ", i);
           // find item index
           const thisItem = this.inventoryList.findIndex(x => x.inventory_id === i.inventory_id)
-          // remove from list to pick
+          // remove item from list to pick
           this.inventoryList.splice(thisItem,1);
           
           i.quantity = 1;
@@ -452,7 +438,7 @@
             this.items[qty].total_unitcost = (inv.unit_cost*(this.items[qty].quantity))
           } else {
 
-            // confirm removal of item from list
+            // confirm removal of item from list of deliveries
             confirm({
               message: "Remove this item from the list?",
               okButtonText: "OK",
@@ -510,7 +496,7 @@
               this.inputDR = true;
               this.delivery.payment_amt = 300;
               this.delivery.created_at = "today";
-              this.delivery.created_by = '38';
+              this.delivery.created_by = this.$root.localStorage.users_id;
 
               console.log("deliveryyyy", this.delivery);
 

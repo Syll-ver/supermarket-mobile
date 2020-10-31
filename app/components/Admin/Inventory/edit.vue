@@ -159,7 +159,7 @@
                 this.inventory.unit_cost != null &&
                 this.inventory.sales_cost != null ){
                     
-                    this.inventory.updated_by = '38';
+                    this.inventory.updated_by = this.$root.localStorage.users_id;
                     this.inventory.updated_at = 'today';
 
                     console.log("inventory", this.inventory);

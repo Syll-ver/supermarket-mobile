@@ -423,7 +423,7 @@
                 
                 this.user.password = '1234';
                 this.user.created_at = "today";
-                this.user.created_by = '38';
+                this.user.created_by = this.$root.localStorage.users_id;
                 console.log("ROLES: ", this.user);
 
                 this.showLoading = true
@@ -511,7 +511,7 @@
                 this.update.role_name != null ){
 
                 this.update.updated_at = "today";
-                this.update.updated_by = '38';
+                this.update.updated_by = this.$root.localStorage.users_id;
                 console.log("ROLES: ", this.update);
 
                 this.showLoading = true

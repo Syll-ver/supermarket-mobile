@@ -145,7 +145,7 @@
                 this.inventory.sales_cost != "" ){
 
                     this.inventory.quantity = 0;
-                    this.inventory.created_by = '38';
+                    this.inventory.created_by = this.$root.localStorage.users_id;
                     this.inventory.created_at = 'today';
 
                     this.showLoading = true

@@ -128,7 +128,7 @@
                 this.supplier.company_address != null ){
 
                     this.supplier.status = true;
-                    this.supplier.created_by = '38';
+                    this.supplier.created_by = this.$root.localStorage.users_id;
                     this.supplier.created_at = 'today';
 
                     this.showLoading = true

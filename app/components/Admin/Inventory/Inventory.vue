@@ -62,7 +62,10 @@
                   for="item in $root.inventory" >
                     <v-template>
                       <StackLayout >
-                        <GridLayout class="list-box" rows="auto,*,*" col="*,*">
+                        <GridLayout 
+                          class="list-box" 
+                          androidElevation="5"
+                          rows="auto,*,*" col="*,*">
                             <Label row="0" col="0" :text="item.barcode" />
                             <Label 
                               row="1" col="0"
@@ -132,7 +135,7 @@
       <GridLayout v-show="blur" class="modalBlur">
       </GridLayout>
 
-      <ActivityIndicator :busy="showLoading" color="green" class="indLog" />
+      <ActivityIndicator :busy="showLoading" color="#05C5AA" class="indLog" />
 
 
       </GridLayout>
@@ -210,19 +213,6 @@
         })
       }
     },
-    // async created() {
-    //   this.showLoading = true;
-    //   this.blur = true;
-
-    //   await axios.get(this.$root.server+`/inventory`)
-    //     .then(inventory => {
-    //       this.$root.inventory = inventory.data
-    //       this.showLoading = false;
-    //       this.blur = false;
-
-    //     })
-    //     .catch(err => console.log(error)); // add this to see if the console is spitting an error.
-    // }
   };
 </script>
 

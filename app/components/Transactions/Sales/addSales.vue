@@ -295,23 +295,15 @@ import { GridLayout } from '@nativescript/core';
       parent
     },
     async created(){
-      this.inventoryList = this.$root.inventory;
+      console.log("print items !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      for(var i = 0; i < this.$root.inventory.length; i++){
+        if(this.$root.inventory[i].quantity = 0 ){
+          this.inventoryList.push(this.$root.inventory[i]);
+        }
+      }
+      console.log("list of items: ", this.inventoryList);
     },
-    // async created() {
-    //     this.showLoading = true;
-    //     this.blur = true
 
-    //     if(this.$root.inventory) {
-    //       await axios.get(this.$root.server+`/inventory`)
-    //         .then(items => {
-    //         this.$root.inventory = items.data;
-    //         this.inventoryList = this.$root.inventory;
-    //       })
-    //       .catch(err => console.log(err)); // add this to see if the console is spitting an error.
-    //     }
-    //       this.showLoading = false;
-    //       this.blur = false
-    // },
     computed: {
       message() {
         return "<!-- Page content goes here -->";
@@ -430,7 +422,7 @@ import { GridLayout } from '@nativescript/core';
         if(this.sales.items.length >= 1) {
               this.sales.stransaction_date = "today"
               this.sales.created_at = "today";
-              this.sales.created_by = '38';
+              this.sales.created_by = this.$root.localStorage.users_id;
 
               console.log("deliveryyyy", this.sales);
 

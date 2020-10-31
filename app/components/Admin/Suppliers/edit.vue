@@ -167,7 +167,7 @@
                         this.supplier.status = false;
                     }
 
-                    this.supplier.updated_by = '38';
+                    this.supplier.updated_by = this.$root.localStorage.users_id;
                     this.supplier.updated_at = 'today';
 
                     this.showLoading = true
