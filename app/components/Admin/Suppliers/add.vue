@@ -23,11 +23,12 @@
                 <GridLayout class="form">
                     <GridLayout rows="auto,auto,auto,auto">
                         <GridLayout ref="inputBarcode" 
-                            class="box-input" 
+                            v-bind:class=" [inputName == true ? 'box-input' : 'red-box-input'] " 
                             row="0" >
                             <GridLayout rows="auto,auto">
                                 <Label row="0" ref="inputBCLabel"
-                                class="box-input-label" text="Company Name" />
+                                v-bind:class=" [inputName == true ? 'box-input-label' : 'redLabel'] " 
+                                text="Company Name" />
                                 <TextField row="1" class="text-input"
                                     v-model="supplier.company_name"
                                     
@@ -35,20 +36,26 @@
                             </GridLayout>
                         </GridLayout>
 
-                        <GridLayout ref="product_description" class="box-input" row="1" >
+                        <GridLayout ref="product_description" 
+                            v-bind:class=" [inputNo == true ? 'box-input' : 'red-box-input'] " 
+                            row="1" >
                             <GridLayout rows="auto,auto">
                                 <Label row="0" ref="inputPDLabel" 
-                                class="box-input-label" text="Contact Number" />
+                                v-bind:class=" [inputNo == true ? 'box-input-label' : 'redLabel'] " 
+                                text="Contact Number" />
                                 <TextField row="1" class="text-input"
                                     v-model="supplier.contact_no"
                                     />
                             </GridLayout>
                         </GridLayout>
 
-                        <GridLayout ref="product_description" class="box-input" row="2" >
+                        <GridLayout ref="product_description" 
+                            v-bind:class=" [inputAddress == true ? 'box-input' : 'red-box-input'] " 
+                            row="2" >
                             <GridLayout rows="auto,auto">
                                 <Label row="0" ref="inputPDLabel" 
-                                class="box-input-label" text="Company Address" />
+                                v-bind:class=" [inputName == true ? 'box-input-label' : 'redLabel'] " 
+                                text="Company Address" />
                                 <TextField row="1" class="text-input"
                                     v-model="supplier.company_address"
                                 />
@@ -107,7 +114,10 @@
         supplier: {
         },
         showLoading: false,
-        blur: false
+        blur: false,
+        inputName: true,
+        inputNo: true,
+        inputAddress: true
       }
     },
     mounted() {
@@ -126,6 +136,11 @@
             if(this.supplier.company_name != null &&
                 this.supplier.contact_no != null &&
                 this.supplier.company_address != null ){
+
+                    this.inputName = true;
+                    this.inputNo = true;
+                    this.inputAddress = true;
+
 
                     this.supplier.status = true;
                     this.supplier.created_by = this.$root.localStorage.users_id;
@@ -182,7 +197,25 @@
                             });
                         })
             } else {
-                return false;
+                // return false;
+
+                if(this.supplier.company_name == null ){
+                    this.inputName = false;
+                } else {
+                    this.inputName = true;
+                }
+
+                if(this.supplier.contact_no == null){
+                    this.inputNo = false;
+                } else{
+                    this.inputNo = true;
+                }
+
+                if(this.supplier.company_address == null){
+                    this.inputAddress = false;
+                } else {
+                    this.inputAddress = true;
+                }
             }
             
         },

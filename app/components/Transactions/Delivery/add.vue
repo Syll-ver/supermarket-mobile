@@ -102,7 +102,7 @@
                 fontSize="16"
                 fontWeight="bold"
                 color="white"
-                v-model="delivery.total_cost"
+                v-model="totalDelivery"
                 horizontalAlignment="right" />
           </GridLayout>
           <GridLayout row="3">
@@ -141,9 +141,10 @@
                                       col="1"
                                       class="text-input"
                                       color="black"
-                                      :text="inv.quantity"
+                                      v-model="inv.quantity"
                                       horizontalAlignment="center"
                                       keyboardType="number"
+                                      @textChange="getTotalDeliveryCost2(inv)"
                                   />
                                   <Label
                                       col="2"
@@ -347,6 +348,7 @@
         inputDR: true,
         inputSup: true,
         datepicker: false,
+        totalDelivery: 0,
       }
     },
     components: {
@@ -549,6 +551,13 @@
                 
                 
               })
+              .catch(err => {
+                console.log("error: ", err);
+                alert(err)
+                  .then(() => {
+                    console.log("alert dialog is closed.");
+                  })
+              })
 
 /**
  * {
@@ -596,8 +605,20 @@
           for(var i = 0; i < this.items.length; i++){
               total2 = (parseInt(total2) + parseInt(this.items[i].total_unitcost))
           }
-          this.delivery.total_cost = total2
+          this.totalDelivery = '₱'+total2;
+          this.delivery.total_cost = total2;
           console.log("total2: ", total2);
+
+      },
+      getTotalDeliveryCost2(inv) {
+        console.log("increase clicked");
+          const qty = this.items.findIndex(
+              x => x.barcode === inv.barcode)
+              this.items[qty].quantity = inv.quantity
+
+            this.items[qty].total_unitcost = (inv.unit_cost*(this.items[qty].quantity))
+
+        this.getTotalDeliveryCost();
 
       }
 

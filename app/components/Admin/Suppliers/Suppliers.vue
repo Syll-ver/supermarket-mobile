@@ -62,7 +62,9 @@
                   for="item in $root.suppliers" >
                     <v-template>
                       <StackLayout >
-                        <GridLayout class="list-box" rows="*,*,*" col="*,*,*">
+                        <GridLayout class="list-box" 
+                          androidElevation="5"
+                          rows="*,*,*" col="*,*,*">
                             <Label 
                               row="0" col="0"
                               fontSize="15"

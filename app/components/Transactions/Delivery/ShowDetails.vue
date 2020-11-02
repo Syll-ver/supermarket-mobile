@@ -113,7 +113,7 @@
                               fontSize="14"
                               fontWeight="bold"
                               color="#05C5AA"
-                              :text="(inv.unit_cost)" />
+                              :text="'₱'+(inv.unit_cost)" />
                             <GridLayout 
                               row="0" col="1" 
                               rowSpan="2"

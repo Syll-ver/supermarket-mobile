@@ -26,11 +26,12 @@
                 <GridLayout class="form">
                     <GridLayout rows="auto,auto,auto,auto">
                         <GridLayout ref="inputBarcode" 
-                            class="box-input" 
+                            v-bind:class=" [inputBarcode == true ? 'box-input' : 'red-box-input'] " 
                             row="0" >
                             <GridLayout rows="auto,auto">
                                 <Label row="0" ref="inputBCLabel"
-                                class="box-input-label">Barcode</Label>
+                                v-bind:class=" [inputBarcode == true ? 'box-input-label' : 'redLabel'] "
+                                >Barcode</Label>
                                 <TextField row="1" class="text-input"
                                     v-model="inventory.barcode"
                                     keyboardType="number"
@@ -39,10 +40,13 @@
                             </GridLayout>
                         </GridLayout>
 
-                        <GridLayout ref="product_description" class="box-input" row="1" >
+                        <GridLayout ref="product_description" 
+                            v-bind:class=" [inputPD == true ? 'box-input' : 'red-box-input'] "  
+                        row="1" >
                             <GridLayout rows="auto,auto">
                                 <Label row="0" ref="inputPDLabel" 
-                                class="box-input-label">Product Description</Label>
+                                v-bind:class=" [inputPD == true ? 'box-input-label' : 'redLabel'] "
+                                >Product Description</Label>
                                 <TextField row="1" class="text-input"
                                     v-model="inventory.product_description"
                                     
@@ -53,10 +57,13 @@
                         
 
                         <GridLayout row="2" columns="*,*">
-                            <GridLayout col="0" ref="unit_cost" class="box-input m-r-5">
+                            <GridLayout col="0" ref="unit_cost" 
+                            v-bind:class=" [inputUnit == true ? 'box-input m-r-5' : 'red-box-input m-r-5'] " 
+                            >
                                 <GridLayout rows="auto,auto">
                                     <Label row="0" ref="inputUCLabel" 
-                                    class="box-input-label">Unit Cost</Label>
+                                    v-bind:class=" [inputUnit == true ? 'box-input-label' : 'redLabel'] "
+                                    >Unit Cost</Label>
                                     <TextField row="1" class="text-input"  
                                         v-model="inventory.unit_cost"
                                         keyboardType="number"
@@ -65,10 +72,11 @@
                                 </GridLayout>
                             </GridLayout>
                       
-                            <GridLayout col="1" ref="sales_cost" class="box-input m-l-5">
+                            <GridLayout col="1" ref="sales_cost" 
+                            v-bind:class=" [inputSales == true ? 'box-input m-l-5' : 'red-box-input m-l-5'] " >
                                 <GridLayout rows="auto,auto">
                                     <Label row="0" ref="inputSCLabel"
-                                    class="box-input-label">Sales Cost</Label>
+                                    v-bind:class=" [inputSales == true ? 'greenLabel' : 'redLabel'] " >Sales Cost</Label>
                                     <TextField row="1" v-model="inventory.sales_cost"
                                         class="text-input" 
                                         keyboardType="number"
@@ -123,7 +131,11 @@
       return {
         inventory: {},
         showLoading: false,
-        blur: false
+        blur: false,
+        inputBarcode: true,
+        inputPD: true,
+        inputUnit: true,
+        inputSales: true,
       }
     },
     mounted() {
@@ -139,10 +151,10 @@
             this.$modal.close();
         },
         async onSubmit(){
-            if(this.inventory.barcode != "" &&
-                this.inventory.product_description != "" &&
-                this.inventory.unit_cost != "" &&
-                this.inventory.sales_cost != "" ){
+            if((this.inventory.barcode != null) &&
+                (this.inventory.product_description) != null &&
+                (this.inventory.unit_cost) != null &&
+                (this.inventory.sales_cost) != null ){
 
                     this.inventory.quantity = 0;
                     this.inventory.created_by = this.$root.localStorage.users_id;
@@ -199,7 +211,30 @@
                             });
                         })
             } else {
-                return false;
+                // return false;
+                if(this.inventory.barcode == null ){
+                    this.inputBarcode = false;
+                } else {
+                    this.inputBarcode = true;
+                }
+
+                if(this.inventory.product_description == null ){
+                    this.inputPD = false;
+                } else {
+                    this.inputPD = true;
+                }
+
+                if(this.inventory.unit_cost == null ){
+                    this.inputUnit = false;
+                } else {
+                    this.inputUnit = true;
+                }
+
+                if(this.inventory.sales_cost == null ){
+                    this.inputSales = false;
+                } else {
+                    this.inputSales = true;
+                }
             }
             
         },

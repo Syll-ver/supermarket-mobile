@@ -66,7 +66,9 @@
                   for="r in $root.roles" >
                     <v-template>
                       <StackLayout >
-                        <GridLayout class="list-box" col="*,*">
+                        <GridLayout class="list-box" 
+                          androidElevation="5"
+                          col="*,*">
                             <Label col="0" 
                               fontSize="15"
                               fontWeight="bold" 

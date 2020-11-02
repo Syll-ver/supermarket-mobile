@@ -66,7 +66,9 @@
                   for="r in $root.users" >
                     <v-template>
                       <StackLayout >
-                        <GridLayout class="list-box" rows="auto,*,*" columns="*,*">
+                        <GridLayout class="list-box"
+                          androidElevation="5"
+                          rows="auto,*,*" columns="*,*">
                             <GridLayout row="1" col="0" horizontalAlignment="left" >
                               <Label :text="'Employee Code: '+r.employee_code" />
                             </GridLayout>

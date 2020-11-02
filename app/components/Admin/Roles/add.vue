@@ -19,12 +19,12 @@
                 <GridLayout class="form">
                     <GridLayout rows="auto,auto">
                       <GridLayout ref="inputRolename" row="0"
-                        class="box-input" >
+                        v-bind:class=" [inputRolename == true ? 'box-input' : 'red-box-input' ] " >
                          <GridLayout rows="auto,auto">
                               <Label 
                                 row="0"
                                 ref="inputRNLabel"
-                                class="box-input-label" 
+                                v-bind:class=" [inputRolename == true ? 'box-input-label' : 'redLabel']" 
                                 text="Role Name"
                                 />
                             <TextField 
@@ -82,7 +82,8 @@
                 updated_by: "",
                 updated_at: ""
             },
-            showLoading: false
+            showLoading: false,
+            inputRolename: true
             // Roles: Roles
       }
     },
@@ -125,6 +126,7 @@
         async onSubmit(){
 
             if(this.roles.role_name != ""){
+                this.inputRolename = true;
                 this.roles.created_at = "today";
                 this.roles.created_by = this.$root.localStorage.users_id;
                 console.log("ROLES: ", this.roles);
@@ -182,10 +184,7 @@
                     });
                 })
             } else {
-                alert({
-                    message: 'missing field',
-                    okButtonText: 'OK'
-                })
+                this.inputRolename = false;
             }
 
         },

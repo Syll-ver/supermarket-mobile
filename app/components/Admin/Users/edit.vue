@@ -210,34 +210,35 @@
             this.$modal.close();
         },
         async onSubmit(){
-            console.log("roles", this.roles);
+            console.log("user", this.user);
             // edit on newly added kay mag fail kay auto generated man ang ids 
             // therefore on push kay wala siya :((
-            if(this.roles.role_name != "" ){
-                    
-                    this.roles.updated_by = this.$root.localStorage.users_id;
-                    this.roles.updated_at = 'today';
-                    console.log("role: ", this.roles);
+            if((this.user.username != null) &&
+                (this.user.role_name != null ) ){
+                    this.user.password = '1234';
+                    this.user.updated_by = this.$root.localStorage.users_id;
+                    this.user.updated_at = 'today';
+                    console.log("roleuser: ", this.user);
 
                     this.showLoading = true
                     await axios({
                         method: "PUT",
-                        url: this.$root.server+`/role/`+this.roles.role_id, 
+                        url: this.$root.server+`/user/`+this.user.users_id, 
                         header: {
                             "Content-Type": "application/json"
                         },
-                        data: { ...this.roles },
+                        data: { ...this.users_id },
                         })
                         .then(result => {
                             console.log("result", result.data.msg);
                             if(result) {
                                 
                                 // mutate 
-                                const roleList = this.$root.roles.findIndex(x => x.role_id === this.roles.role_id)
-                                this.$root.roles.splice(roleList, 1);
-                                this.$root.roles.push(this.roles)
+                                const userList = this.$root.user.findIndex(x => x.users_id === this.user.users_id)
+                                this.$root.user.splice(userList, 1);
+                                this.$root.user.push(this.user)
 
-                                console.log("new: ", this.$root.roles);
+                                console.log("new: ", this.$root.user);
 
                                 alert({
                                     // title: "Success",
@@ -262,6 +263,7 @@
                         })
             } else {
                 return false;
+                
             }
             
         },

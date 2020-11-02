@@ -297,7 +297,8 @@ import { GridLayout } from '@nativescript/core';
     async created(){
       console.log("print items !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
       for(var i = 0; i < this.$root.inventory.length; i++){
-        if(this.$root.inventory[i].quantity = 0 ){
+        console.log("AAAAAAAAAAAAAAAAA", this.$root.inventory[i]);
+        if(this.$root.inventory[i].quantity != '0' ){
           this.inventoryList.push(this.$root.inventory[i]);
         }
       }
@@ -416,91 +417,91 @@ import { GridLayout } from '@nativescript/core';
         this.getTotalDeliveryCost();
             
       },
-      async receiveDelivery() {
-        this.sales.items = this.items
+    async receiveDelivery() {
+      this.sales.items = this.items
 
-        if(this.sales.items.length >= 1) {
-              this.sales.stransaction_date = "today"
-              this.sales.created_at = "today";
-              this.sales.created_by = this.$root.localStorage.users_id;
+      if(this.sales.items.length >= 1) {
+            this.sales.stransaction_date = "today"
+            this.sales.created_at = "today";
+            this.sales.created_by = this.$root.localStorage.users_id;
 
-              console.log("deliveryyyy", this.sales);
+            console.log("deliveryyyy", this.sales);
 
-              prompt({
-                message: "Enter Payment",
-                okButtonText: 'OK',
-                cancelButtonText: 'CANCEL',
-              }).then( result => {
-                console.log("result: ", result.text);
-                console.log("jksbhdfdhfdfddfdfddf", result);
-                this.sales.payment_amt = result.text
+            prompt({
+              message: "Enter Payment",
+              okButtonText: 'OK',
+              cancelButtonText: 'CANCEL',
+            }).then( result => {
+              console.log("result: ", result.text);
+              console.log("jksbhdfdhfdfddfdfddf", result);
+              this.sales.payment_amt = result.text
 
-                if(result){
-                  
-                  if(result.text >= this.sales.total_cost){
-                    console.log("bypass condition payment more than total cost");
+              if(result){
+                
+                if(result.text >= this.sales.total_cost){
+                  console.log("bypass condition payment more than total cost");
 
-                    axios({
-                      method: "POST",
-                      url: this.$root.server+`/addsale`,
-                        header: {
-                          "Content-Type": "application/json"
-                        },
-                        data: { ...this.sales },
-                    }).then( result => {
-                      console.log("@result", result);
+                  axios({
+                    method: "POST",
+                    url: this.$root.server+`/addsale`,
+                      header: {
+                        "Content-Type": "application/json"
+                      },
+                      data: { ...this.sales },
+                  }).then( result => {
+                    console.log("@result", result);
 
-                      // get updated sales
-                      axios.get(this.$root.server+`/viewsales`)
-                      .then(sale => {
-                        this.$root.sales = sale.data
-                        console.log("sales: ", this.$root.sales);
-                        console.log("==============================");
-                      })
-                      .catch(err => console.log(err));
-
-                      // get updated inventory
-                      axios.get(this.$root.server+`/inventory`)
-                      .then(inventory => {
-                      this.$root.inventory = inventory.data
-                      console.log("inventory: ", this.$root.inventory);
+                    // get updated sales
+                    axios.get(this.$root.server+`/viewsales`)
+                    .then(sale => {
+                      this.$root.sales = sale.data
+                      console.log("sales: ", this.$root.sales);
                       console.log("==============================");
-                      })
-                      .catch(err => console.log(error));
-                      
+                    })
+                    .catch(err => console.log(err));
 
-                      alert({
-                      message: "Success",
-                      okButtonText: "OK"
-                      }).then(() => {
-                          console.log("Alert dialog closed");
-                          this.$navigateTo(parent);
-                      });
-                      
+                    // get updated inventory
+                    axios.get(this.$root.server+`/inventory`)
+                    .then(inventory => {
+                    this.$root.inventory = inventory.data
+                    console.log("inventory: ", this.$root.inventory);
+                    console.log("==============================");
                     })
-                  } else {
-                    alert('Payment is not enough')
-                    .then(() => {
-                      console.log("alert dialog is closed.");
-                    })
-                  }
-                  
+                    .catch(err => console.log(error));
+                    
+
+                    alert({
+                    message: "Success",
+                    okButtonText: "OK"
+                    }).then(() => {
+                        console.log("Alert dialog closed");
+                        this.$navigateTo(parent);
+                    });
+                    
+                  })
                 } else {
-
-                  alert('Payment is required')
+                  alert('Payment is not enough')
                   .then(() => {
                     console.log("alert dialog is closed.");
                   })
                 }
-              })
-              
-            } else {
-              alert('No item in list')
-              .then(() => {
-                console.log("alert dialog is closed.");
-              })
-            }
-      },
+                
+              } else {
+
+                alert('Payment is required')
+                .then(() => {
+                  console.log("alert dialog is closed.");
+                })
+              }
+            })
+            
+          } else {
+            alert('No item in list')
+            .then(() => {
+              console.log("alert dialog is closed.");
+            })
+          }
+    },
       
       getTotalDeliveryCost() {
           var total2 = 0;
