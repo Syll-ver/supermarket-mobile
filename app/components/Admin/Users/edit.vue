@@ -221,46 +221,46 @@
                     console.log("roleuser: ", this.user);
 
                     this.showLoading = true
-                    await axios({
-                        method: "PUT",
-                        url: this.$root.server+`/user/`+this.user.users_id, 
-                        header: {
-                            "Content-Type": "application/json"
-                        },
-                        data: { ...this.users_id },
-                        })
-                        .then(result => {
-                            console.log("result", result.data.msg);
-                            if(result) {
+                    // await axios({
+                    //     method: "PUT",
+                    //     url: this.$root.server+`/user/`+this.user.users_id, 
+                    //     header: {
+                    //         "Content-Type": "application/json"
+                    //     },
+                    //     data: { ...this.users },
+                    //     })
+                    //     .then(result => {
+                    //         console.log("result", result.data.msg);
+                    //         if(result) {
                                 
-                                // mutate 
-                                const userList = this.$root.user.findIndex(x => x.users_id === this.user.users_id)
-                                this.$root.user.splice(userList, 1);
-                                this.$root.user.push(this.user)
+                    //             // // mutate 
+                    //             // const userList = this.$root.user.findIndex(x => x.users_id === this.user.users_id)
+                    //             // this.$root.user.splice(userList, 1);
+                    //             // this.$root.user.push(this.user)
 
-                                console.log("new: ", this.$root.user);
+                    //             console.log("new: ", this.$root.user);
 
-                                alert({
-                                    // title: "Success",
-                                    message: "Success",
-                                    okButtonText: "OK"
-                                    }).then(() => {
-                                    console.log("Alert dialog closed");
-                                });
-                                this.$modal.close();
-                            }
-                        })
-                        .catch(err => {
-                            console.log("error", err);
-                            this.showLoading = false;
-                            alert({
-                                title: "Fail",
-                                message: err.response.data.msg,
-                                okButtonText: "OK"
-                                }).then(() => {
-                                console.log("Alert dialog closed");
-                            });
-                        })
+                    //             alert({
+                    //                 // title: "Success",
+                    //                 message: "Success",
+                    //                 okButtonText: "OK"
+                    //                 }).then(() => {
+                    //                 console.log("Alert dialog closed");
+                    //             });
+                    //             this.$modal.close();
+                    //         }
+                    //     })
+                    //     .catch(err => {
+                    //         console.log("error", err);
+                    //         this.showLoading = false;
+                    //         alert({
+                    //             title: "Fail",
+                    //             message: err.response.data.msg,
+                    //             okButtonText: "OK"
+                    //             }).then(() => {
+                    //             console.log("Alert dialog closed");
+                    //         });
+                    //     })
             } else {
                 return false;
                 

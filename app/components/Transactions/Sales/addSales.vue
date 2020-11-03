@@ -143,8 +143,9 @@
                                       col="1"
                                       class="text-input"
                                       color="black"
-                                      :text="inv.quantity"
+                                      v-model="inv.quantity"
                                       horizontalAlignment="center"
+                                      @textChange="getTotalDeliveryCost2(inv)"
                                       keyboardType="number"
                                   />
                                   <Label
@@ -412,7 +413,7 @@ import { GridLayout } from '@nativescript/core';
               x => x.barcode === inv.barcode)
               this.items[qty].quantity = inv.quantity+1
 
-            this.items[qty].total_unitcost = parseFloat(inv.sales_cost)*(parseFloat(this.items[qty].quantity))
+            this.items[qty].total_unitcost = (inv.sales_cost*(this.items[qty].quantity))
 
         this.getTotalDeliveryCost();
             
@@ -511,6 +512,17 @@ import { GridLayout } from '@nativescript/core';
           this.totalsales = 'P'+total2;
           this.sales.total_cost = total2;
           console.log("total2: ", total2);
+
+      },
+      getTotalDeliveryCost2(inv) {
+        console.log("increase clicked");
+          const qty = this.items.findIndex(
+              x => x.barcode === inv.barcode)
+              this.items[qty].quantity = inv.quantity
+
+            this.items[qty].total_unitcost = (inv.sales_cost*(this.items[qty].quantity))
+
+        this.getTotalDeliveryCost();
 
       }
 

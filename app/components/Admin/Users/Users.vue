@@ -511,7 +511,7 @@
            if(this.update.username != null && 
                 this.update.employee_code != null &&
                 this.update.role_name != null ){
-
+                this.update.password = '1234';
                 this.update.updated_at = "today";
                 this.update.updated_by = this.$root.localStorage.users_id;
                 console.log("ROLES: ", this.update);

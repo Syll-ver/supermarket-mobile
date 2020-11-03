@@ -356,6 +356,8 @@
     },
     async created() {
       this.inventoryList = this.$root.inventory;
+      var i = new Date();
+      this.delivery.transaction_date = (i).toDateString().split(' ').slice(1).join(' ')
     },
 
     mounted() {
