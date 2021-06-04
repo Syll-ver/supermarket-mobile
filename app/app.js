@@ -46,8 +46,9 @@ new Vue({
         )
       },
       data: {
-        server: "http://172.16.4.182:9000",
-        inventory: [],
+        // server: "http://94.237.65.245:8223/fdss-api",
+        server: "https://fdss-eut.biotechfarms.net/fdss-api",
+        // inventory: [],
         roles: [],
         delivery: [],
         sales: [],

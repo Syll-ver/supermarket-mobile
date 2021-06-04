@@ -155,14 +155,10 @@
         utils.closeDrawer();
       },
       logout(component){
-        // this.$root.localStorage = null;
-        
-
         this.$navigateTo(component, {
           clearHistory: true
         });
         utils.closeDrawer();
-        
       }
     },
     
