@@ -16,7 +16,7 @@
                     <Label col="1" text="Home" class="p-r-10"/>
                 </GridLayout> -->
 
-                <GridLayout v-if="(this.$root.localStorage.role_name==='admin')" columns="auto, *"
+                <!-- <GridLayout v-if="(this.$root.localStorage.role_name==='admin')" columns="auto, *"
                             :class="'nt-drawer__list-item' + (selectedPage === 'Inventory' ? ' -selected': '')"
                             @tap="onNavigationItemTap(Inventory)">
                     <Label col="0" :text="'fa-boxes'|fonticon" class="nt-icon fas"/>
@@ -80,7 +80,7 @@
 
                 <StackLayout 
                   v-if="(this.$root.localStorage.role_name==='admin')"  class="hr" 
-                  color="#05C5AA"/>
+                  color="#05C5AA"/> -->
 
                 <GridLayout columns="auto, *"
                             :class="'nt-drawer__list-item' + (selectedPage === 'Logout' ? ' -selected': '')"
@@ -96,15 +96,15 @@
 
 <script>
   import Home from "./Dashboard";
-  import Inventory from "./Admin/Inventory/Inventory";
-  import Suppliers from "./Admin/Suppliers/Suppliers";
-  import Roles from "./Admin/Roles/Roles";
-  import Users from "./Admin/Users/Users";
-  import Featured from "./Featured";
-  import Search from "./Search";
-  import Settings from "./Settings";
-  import Delivery from "./Transactions/Delivery/Delivery";
-  import Sales from "./Transactions/Sales/Sales";
+  // import Inventory from "./Admin/Inventory/Inventory";
+  // import Suppliers from "./Admin/Suppliers/Suppliers";
+  // import Roles from "./Admin/Roles/Roles";
+  // import Users from "./Admin/Users/Users";
+  // import Featured from "./Featured";
+  // import Search from "./Search";
+  // import Settings from "./Settings";
+  // import Delivery from "./Transactions/Delivery/Delivery";
+  // import Sales from "./Transactions/Sales/Sales";
   import Logout from "./Home";
   import * as utils from "~/shared/utils";
   import SelectedPageService from "~/shared/selected-page-service";
@@ -121,30 +121,30 @@
     data() {
       return {
         Home: Home,
-        Inventory: Inventory,
-        Suppliers: Suppliers,
-        Roles: Roles,
-        Users: Users,
-        Featured: Featured,
-        Search: Search,
-        Settings: Settings,
-        Delivery: Delivery,
-        Sales: Sales,
+        // Inventory: Inventory,
+        // Suppliers: Suppliers,
+        // Roles: Roles,
+        // Users: Users,
+        // Featured: Featured,
+        // Search: Search,
+        // Settings: Settings,
+        // Delivery: Delivery,
+        // Sales: Sales,
         Logout: Logout,
         selectedPage: ""
       };
     },
     components: {
       Home,
-      Inventory,
-      Suppliers,
-      Roles,
-      Users,
-      Featured,
-      Search,
-      Settings,
-      Delivery,
-      Sales,
+      // Inventory,
+      // Suppliers,
+      // Roles,
+      // Users,
+      // Featured,
+      // Search,
+      // Settings,
+      // Delivery,
+      // Sales,
       Logout
     },
     methods: {

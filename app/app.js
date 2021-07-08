@@ -11,6 +11,7 @@ Vue.prototype.$axios.defaults.baseURL = 'http://172.16.4.182:9000'
 
 import App from "./components/App";
 import Home from "./components/Home";
+import Inventory from "./components/Admin/Inventory/Inventory.vue"
 import DrawerContent from "./components/DrawerContent";
 import RadSideDrawer from "nativescript-ui-sidedrawer/vue";
 
@@ -41,7 +42,7 @@ new Vue({
           App,
           [
             h(DrawerContent, { slot: 'drawerContent' }),
-            h(Home, { slot: 'mainContent' })
+            h(Inventory, { slot: 'mainContent' })
           ]
         )
       },

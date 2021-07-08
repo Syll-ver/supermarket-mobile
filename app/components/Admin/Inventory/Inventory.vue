@@ -22,17 +22,9 @@
                   <Label
                       col="1"
                       class="brand-name"
-                      text="INVENTORY"
+                      text="Delivery Transaction"
                       horizontalAlignment="center"
                   />
-                  <!-- <Label
-                      col="2"
-                      class="fas p-20"
-                      fontSize="16"
-                      color="white"
-                      :text=" 'fa-ellipsis-v' | fonticon "
-                      horizontalAlignment="right" 
-                  /> -->
               </GridLayout>
             </StackLayout>
           </GridLayout>
@@ -158,7 +150,8 @@
         add: add,
         edit: edit,
         showLoading: false,
-        blur: false
+        blur: false,
+        items: [],
 
       }
     },
@@ -166,10 +159,12 @@
       add,
       edit,
     },
-
     mounted() {
       SelectedPageService.getInstance().updateSelectedPage("Inventory");
 
+    },
+    async created() {
+      await getTransactions();
     },
     computed: {
       message() {
@@ -180,6 +175,7 @@
       onDrawerButtonTap() {
         utils.showDrawer();
       },
+
       creatingView: function(args) {
         const nativeView = new android.widget.TextView(args.context);
         nativeView.setSingleLine(true);
@@ -187,6 +183,7 @@
         nativeView.setText("Native View - Android");
         args.view = nativeView;
       },
+
       onButtonTap() {
         if(this.floatbutton){
           this.floatbutton = false;
@@ -195,23 +192,76 @@
         }
         
       },
-      update(item) {
-        this.$showModal(edit, {
-          props: {
-              inventory_id: item.inventory_id,
-              barcode: item.barcode,
-              product_description: item.product_description,
-              quantity: item.quantity,
-              unit_cost: item.unit_cost,
-              sales_cost: item.sales_cost,
-              created_by: item.created_by,
-              created_at: item.created_at,
-              updated_by: item.updated_by,
-              updated_at: item.updated_at
-            
-          }
-        })
+
+      async getTransactions() {
+        try {
+          const userDetails = this.$root.localStorage.user_details;
+          const roleDetails = this.$root.localStorage.user_role;
+          const employee_id = userDetails.Code;
+          const employee_role = roleDetails.Name;
+          
+          this.items = [];
+          const res = await axios({
+            method: "POST",
+            url: this.$root.server+`/api/transaction/select`,
+            headers: {
+              Authorization: `B1SESSION=`+this.$root.localStorage.SessionId
+            },
+            data: {
+              date_from: '2021-06-03', // moment(this.datePicker.startDate).format("YYYY-MM-DD"),
+              date_to: '2021-04-01', //moment(this.datePicker.endDate).format("YYYY-MM-DD"),
+              employee_id,
+              employee_role
+            }
+          })
+
+          const v = res.data.view;
+          console.log("xxxxxxxxxxxxxxxxxxxxxxxx",v);
+        } catch (e) {
+          console.log(e);
+        }
       }
+
+      // update(item) {
+      //   this.$showModal(edit, {
+      //     props: {
+      //         inventory_id: item.inventory_id,
+      //         barcode: item.barcode,
+      //         product_description: item.product_description,
+      //         quantity: item.quantity,
+      //         unit_cost: item.unit_cost,
+      //         sales_cost: item.sales_cost,
+      //         created_by: item.created_by,
+      //         created_at: item.created_at,
+      //         updated_by: item.updated_by,
+      //         updated_at: item.updated_at
+            
+      //     }
+      //   })
+      // }
+    },
+    async beforeCreate() {
+      console.log("===============================",this.$root.localStorage.user_actions);
+      console.log("===============================",this.$root.localStorage.SessionId);
+      await axios({
+        method: "POST",
+        url: this.$root.server+`/admin/companies`,
+        headers: {
+          Authorization: this.$root.localStorage.SessionId,
+        },
+        data: (this.$root.localStorage).user_actions,
+        proxy: {
+          host: '172.16.1.6',
+          port: 3128
+        }
+      }).then( res => {
+        console.log("=======================================================",res);
+        if(res.data.companies) {
+          this.listCompany = res.data.companies
+        }
+        this.showLoading = false;
+        this.blur = false;
+      })
     },
   };
 </script>
@@ -227,7 +277,7 @@
     }
 
     .bg-back {
-      background-color: #05C5AA;
+      background-color: #01401f;
       border-radius: 0 0 60 60;
       margin-bottom: 530;
     }
